@@ -27,10 +27,6 @@ void main() {
     vec4 dye = texture2D(uDye, coord) * uDissipation;
     vec4 targetLogo = texture2D(uLogoTexture, vUv);
 
-    // Cohesive return: inside logo body deformation is supple;
-    // outside in the black fluid, elastic tension ramps up so fluid never gets away
-    float outsideFactor = 1.0 - targetLogo.r;
-    float effectiveReturn = uReturn * (1.0 + outsideFactor * 2.5);
-
-    gl_FragColor = mix(dye, targetLogo, clamp(effectiveReturn, 0.0, 1.0));
+    // Uniform cohesive elastic return: pulls the whole fluid body back smoothly without ripping the border
+    gl_FragColor = mix(dye, targetLogo, clamp(uReturn, 0.0, 1.0));
 }

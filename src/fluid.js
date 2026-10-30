@@ -33,17 +33,17 @@ export class FluidSimulation {
 
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
-    // Tuning Knobs: Sticky viscous dye with bounded deformation (packed jar cohesion)
+    // Tuning Knobs: Viscous cohesive fluid with silky-smooth boundary (no bubbles, no murky blending)
     this.config = {
       SIM_RESOLUTION: 128,         // Low-res velocity grid
       DYE_RESOLUTION: isMobile ? 512 : 1024, // High-res dye grid
       PRESSURE_ITERATIONS: isMobile ? 12 : 20, // Jacobi solver iterations
-      CURL_STRENGTH: 10.0,         // Viscous shear (smooth cohesion without wild turbulent eddies)
-      VELOCITY_DISSIPATION: 0.952, // Viscous damping (motion halts smoothly when cursor stops)
-      DYE_DISSIPATION: 0.992,      // Dense cohesive dye retention
+      CURL_STRENGTH: 0.0,          // Laminar flow: eliminates micro-vortices and bubble shedding
+      VELOCITY_DISSIPATION: 0.955, // Viscous damping (motion halts smoothly when cursor stops)
+      DYE_DISSIPATION: 0.998,      // Dense cohesive dye retention (no smoky fading)
       SPLAT_RADIUS: 0.0035,        // Tight, controlled local push
-      SPLAT_FORCE: 2600.0,         // Sticky fluid stirring strength (limited distortion)
-      RETURN_SPEED: 0.035,         // Fast, firm snap-back to logo in ~1 - 1.2 seconds
+      SPLAT_FORCE: 2500.0,         // Sticky fluid stirring strength (limited bounded distortion)
+      RETURN_SPEED: 0.035,         // Firm snap-back to logo in ~1.1 seconds
       MAX_DPR: isMobile ? 1.5 : 2.0,
       ...options,
     };
@@ -475,18 +475,17 @@ void main() {
       if (p.moved) {
         const aspect = this.canvas.clientWidth / this.canvas.clientHeight;
         const dist = Math.hypot(p.dx, p.dy * aspect);
-        // Interpolate splats along pointer trajectory for continuous liquid drag & stretch
         const steps = Math.max(1, Math.min(8, Math.ceil(dist / 0.012)));
-        const startX = p.prevX !== undefined ? p.prevX : (p.x - p.dx);
-        const startY = p.prevY !== undefined ? p.prevY : (p.y - p.dy);
+        const startX = p.x - p.dx;
+        const startY = p.y - p.dy;
         for (let s = 1; s <= steps; s++) {
           const t = s / steps;
           const ix = startX + p.dx * t;
           const iy = startY + p.dy * t;
           this.splat(ix, iy, p.dx, p.dy);
         }
-        p.prevX = p.x;
-        p.prevY = p.y;
+        p.dx = 0;
+        p.dy = 0;
         p.moved = false;
       }
     }
@@ -656,15 +655,13 @@ void main() {
       if (!p.initialized) {
         p.x = x;
         p.y = y;
-        p.prevX = x;
-        p.prevY = y;
+        p.dx = 0;
+        p.dy = 0;
         p.initialized = true;
         return;
       }
-      p.prevX = p.x;
-      p.prevY = p.y;
-      p.dx = (x - p.x);
-      p.dy = (y - p.y);
+      p.dx += (x - p.x);
+      p.dy += (y - p.y);
       p.x = x;
       p.y = y;
       p.moved = true;
