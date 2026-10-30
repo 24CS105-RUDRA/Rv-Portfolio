@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rudra Vaghela — Creative Developer</title>
+    <meta name="description" content="Portfolio of Rudra Vaghela: Creative Full Stack Developer specializing in WebGL, interactive code, and motion design." />
+    <!-- Google Fonts: Syne & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <!-- Custom Interactive Cursor: small dot enclosed by outer circle circumference -->
+    <div id="cursor-dot" class="cursor-dot" aria-hidden="true"></div>
+    <div id="cursor-ring" class="cursor-ring" aria-hidden="true"></div>
+
+    <!-- Top Navigation Header -->
+    <header class="top-nav" role="banner">
+      <div class="nav-brand">
+        <span class="nav-name">Rudra Vaghela</span>
+        <span class="nav-role">Creative Developer</span>
+      </div>
+      <div class="nav-action">
+        <button id="btn-scroll-top" class="btn-scroll-top" aria-label="Scroll top">
+          Scroll top
+        </button>
+      </div>
+    </header>
+
+    <!-- Hero Scroll Track (250vh total, 150vh scrub) -->
+    <main id="hero-wrapper" class="hero-wrapper">
+      <div id="hero-pin" class="hero-pin">
+        <!-- Interactive WebGL Canvas for Stable Fluid Simulation -->
+        <canvas id="fluid-canvas" aria-label="Interactive fluid ink simulation"></canvas>
+
+        <!-- Fallback static logo image for no-JS, reduced motion, or WebGL-unsupported -->
+        <div id="fallback-logo" aria-hidden="true">
+          <img src="./logo-2048.png" alt="Rudra Vaghela Monogram Logo" />
+        </div>
+
+        <!-- Scroll down indicator -->
+        <div id="scroll-down" class="scroll-down-indicator" aria-hidden="true">
+          <span class="scroll-down-label">Scroll down</span>
+          <div class="scroll-down-arrow"></div>
+        </div>
+
+        <!-- 12-Column Headline Section (Scrub reveal from 70% to 100%) -->
+        <section id="headline-container" class="headline-overlay" aria-label="Introduction">
+          <div class="grid-12">
+            <aside class="headline-meta">
+              <div class="meta-item">
+                <span class="meta-label">Discipline</span>
+                <span class="meta-val">Full Stack & Creative Code</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Location</span>
+                <span class="meta-val">India / Remote</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Focus</span>
+                <span class="meta-val">Interactive Systems</span>
+              </div>
+            </aside>
+
+            <div class="headline-main">
+              <h1 class="headline-text">
+                <span class="headline-line">
+                  <span class="mask"><span class="word">ENGINEERING</span></span>
+                  <span class="mask"><span class="word">IMMERSIVE</span></span>
+                </span>
+                <span class="headline-line">
+                  <span class="mask"><span class="word">DIGITAL</span></span>
+                  <span class="mask"><span class="word">EXPERIENCES</span></span>
+                </span>
+                <span class="headline-line">
+                  <span class="mask"><span class="word">THROUGH</span></span>
+                  <span class="mask"><span class="word">CODE</span></span>
+                  <span class="mask"><span class="word">&amp;</span></span>
+                  <span class="mask"><span class="word">MOTION.</span></span>
+                </span>
+              </h1>
+              <p class="headline-tagline">
+                <span class="mask"><span class="word">Bridging</span></span>
+                <span class="mask"><span class="word">generative</span></span>
+                <span class="mask"><span class="word">art,</span></span>
+                <span class="mask"><span class="word">fluid</span></span>
+                <span class="mask"><span class="word">simulations,</span></span>
+                <span class="mask"><span class="word">and</span></span>
+                <span class="mask"><span class="word">robust</span></span>
+                <span class="mask"><span class="word">architecture.</span></span>
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
