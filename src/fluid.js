@@ -38,11 +38,11 @@ export class FluidSimulation {
       SIM_RESOLUTION: 128,         // Low-res velocity grid
       DYE_RESOLUTION: isMobile ? 512 : 1024, // High-res dye grid
       PRESSURE_ITERATIONS: isMobile ? 12 : 20, // Jacobi solver iterations
-      CURL_STRENGTH: 0.0,          // Laminar flow: eliminates micro-vortices and bubble shedding
+      CURL_STRENGTH: 4.0,          // Organic liquid folding (swirls and liquid folds without smoke dissipation)
       VELOCITY_DISSIPATION: 0.955, // Viscous damping (motion halts smoothly when cursor stops)
-      DYE_DISSIPATION: 0.998,      // Dense cohesive dye retention (no smoky fading)
-      SPLAT_RADIUS: 0.0035,        // Tight, controlled local push
-      SPLAT_FORCE: 2500.0,         // Sticky fluid stirring strength (limited bounded distortion)
+      DYE_DISSIPATION: 1.0,        // Solid fluid: no smoky fading
+      SPLAT_RADIUS: 0.0045,        // Supple, smooth local push
+      SPLAT_FORCE: 3200.0,         // Fluid stirring strength
       RETURN_SPEED: 0.035,         // Firm snap-back to logo in ~1.1 seconds
       MAX_DPR: isMobile ? 1.5 : 2.0,
       ...options,
@@ -384,12 +384,16 @@ void main() {
   }
 
   drawLogoInitial() {
-    if (!this.logoTexture) return;
-    // Copy target logo texture into initial dye buffer
+    // Initialize warp displacement field to zero
     const gl = this.gl;
     this.blit(this.dye.write, this.programs.clear, {
-      uTexture: this.bindTexture(this.logoTexture, 0),
-      uDecay: 1.0,
+      uTexture: this.dye.read.attach(0),
+      uDecay: 0.0,
+    });
+    this.dye.swap();
+    this.blit(this.dye.write, this.programs.clear, {
+      uTexture: this.dye.read.attach(0),
+      uDecay: 0.0,
     });
     this.dye.swap();
   }
@@ -552,26 +556,21 @@ void main() {
     });
     this.velocity.swap();
 
-    // 7. Dye Advection + Logo Return Easing
-    // uReturn is scaled by delta time: returns in ~2s when uReturn ~ 0.012
+    // 7. Fluid Warp Displacement Advection + Return Easing
     const returnFactor = this.floodProgress > 0.01
       ? 0.0
       : (1.0 - Math.pow(1.0 - this.config.RETURN_SPEED, dt * 60.0));
 
-    const dyeDissipation = Math.pow(this.config.DYE_DISSIPATION, dt * 60.0);
-
     this.blit(this.dye.write, this.programs.dyeAdvection, {
       uVelocity: this.velocity.read.attach(0),
       uDye: this.dye.read.attach(1),
-      uLogoTexture: this.bindTexture(this.logoTexture, 2),
       uVelocityTexelSize: [this.velocity.read.texelSizeX, this.velocity.read.texelSizeY],
       uDt: dt,
-      uDissipation: dyeDissipation,
       uReturn: returnFactor,
     });
     this.dye.swap();
 
-    // 8. Scroll Flood Emission Pass
+    // 8. Scroll Flood Emission Pass (if active)
     if (this.floodProgress > 0.001) {
       this.blit(this.dye.write, this.programs.flood, {
         uDye: this.dye.read.attach(0),
@@ -585,10 +584,13 @@ void main() {
   }
 
   render() {
-    // Final display onto screen
-    // Paper: #050505 (black background), Ink: #f5f0e6 (rich cream fluid logo)
+    // Final display onto screen:
+    // Samples pristine 2048px high-res monogram through the fluid warp field
+    // Guarantees razor-sharp edges, solid non-blending colors, and zero smoke/fog
     this.blit(null, this.programs.display, {
       uDye: this.dye.read.attach(0),
+      uLogoTexture: this.bindTexture(this.logoTexture, 1),
+      uFlood: this.floodProgress,
       uPaperColor: [5.0 / 255.0, 5.0 / 255.0, 5.0 / 255.0],
       uInkColor: [245.0 / 255.0, 240.0 / 255.0, 230.0 / 255.0],
     });
