@@ -1,9 +1,8 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import logo from '../logo.svg';
 import { initInklingPlay } from './inkling-play';
 
-export function initExpressive() {
+export function initExpressive(scroll) {
   const media = gsap.matchMedia(), events = new AbortController();
   const signal = events.signal;
   const covers = [...document.querySelectorAll('.project-cover')];
@@ -54,57 +53,7 @@ export function initExpressive() {
       {clipPath:'ellipse(80% 0% at 60% 0%)',duration:1.05,ease:'power3.inOut'});
   }, {signal});
 
-  const pet = document.createElement('aside');
-  pet.className = 'inkling';
-  pet.setAttribute('aria-label', 'Inkling companion');
-  pet.innerHTML = `<button class="inkling-hide" aria-label="Hide Inkling" title="Hide Inkling">×</button><button class="inkling-play" aria-label="Play with Inkling" title="Hello, I’m Inkling"><span class="inkling-body"><span class="inkling-eye left"></span><span class="inkling-eye right"></span><img class="inkling-mark" src="${logo}" alt=""/></span><span class="inkling-shadow"></span></button><button class="inkling-show" aria-label="Show Inkling" hidden>Inkling +</button>`;
-  document.body.append(pet);
-  const play=pet.querySelector('.inkling-play'), hide=pet.querySelector('.inkling-hide'), show=pet.querySelector('.inkling-show'), blob=pet.querySelector('.inkling-body');
-  let hidden=false, celebration, sleepTimer;
-  const preference=matchMedia('(prefers-reduced-motion: reduce)');
-  function visibility(value) {
-    hidden=value; pet.classList.toggle('is-hidden',value); play.hidden=hide.hidden=value; show.hidden=!value;
-    try {sessionStorage.setItem('inkling-hidden',String(value));} catch {}
-  }
-  try {visibility(sessionStorage.getItem('inkling-hidden')==='true');} catch {}
-  hide.addEventListener('click',()=>visibility(true),{signal});
-  show.addEventListener('click',()=>visibility(false),{signal});
-  function wake() {
-    pet.classList.remove('is-sleeping');
-    clearTimeout(sleepTimer);
-    sleepTimer=setTimeout(()=>pet.classList.add('is-sleeping'),9000);
-  }
-  function celebrate() {
-    if(hidden||preference.matches)return;
-    wake(); celebration?.kill();
-    celebration=gsap.timeline({onComplete:()=>pet.classList.remove('is-mark')})
-      .to(blob,{scaleX:1.22,scaleY:.78,duration:.15})
-      .call(()=>pet.classList.add('is-mark'))
-      .to(blob,{y:-30,rotation:12,scaleX:.9,scaleY:1.1,duration:.3,ease:'power2.out'})
-      .to(blob,{y:0,rotation:0,scaleX:1,scaleY:1,duration:.65,ease:'elastic.out(1,.45)'});
-  }
-  const destroyPlay = initInklingPlay(pet, {celebrate,wake,preference,signal,
-    cancel: () => { celebration?.kill(); pet.classList.remove('is-mark'); gsap.set(blob,{clearProps:'transform'}); }
-  });
-  document.addEventListener('click',e=>{if(e.target.closest('.project-cover'))celebrate();},{signal});
-  window.addEventListener('pointermove',e=>{
-    if(hidden||preference.matches)return;
-    const r=pet.getBoundingClientRect();
-    pet.style.setProperty('--eye-x',`${gsap.utils.clamp(-3,3,(e.clientX-r.left-r.width/2)/120)}px`);
-    pet.style.setProperty('--eye-y',`${gsap.utils.clamp(-3,3,(e.clientY-r.top-r.height/2)/120)}px`);
-    wake();
-  },{signal,passive:true});
-  const petContrast = () => {
-    const hero = document.querySelector('#hero-visual');
-    pet.classList.toggle('on-opening', getComputedStyle(hero).visibility !== 'hidden' && Number(getComputedStyle(hero).opacity) > .5 && hero.getBoundingClientRect().bottom > 0);
-  };
-  window.addEventListener('scroll', petContrast, {signal, passive:true});
-  petContrast();
-  wake();
-  preference.addEventListener('change',()=>{
-    celebration?.kill();pet.classList.remove('is-mark');
-    gsap.set(blob,{clearProps:'all'});
-  },{signal});
+  const destroyPlay = initInklingPlay(scroll);
 
   media.add('(prefers-reduced-motion: no-preference)', () => {
     gsap.fromTo(letters, {y:i=>80+i*12,x:i=>(i%2?1:-1)*(35+i*8),rotation:i=>(i%2?1:-1)*14,opacity:0},
@@ -118,15 +67,12 @@ export function initExpressive() {
       speed+=(Math.min(1,Math.abs(dy)/Math.max(1,delta)*.22)-speed)*.12;
       const amount=speed<.001?0:speed;
       kinetic.forEach(el=>el.style.scale=`${1+amount*.065} ${1-amount*.04}`);
-      if(!hidden&&!pet.classList.contains('club-open')&&!celebration?.isActive()) {
-        blob.style.rotate=`${gsap.utils.clamp(-12,12,dy*.3)}deg`;
-        play.style.translate=`${amount*12}px 0`;
-      }
+
     };
     gsap.ticker.add(tick);
     const observer=new IntersectionObserver(entries=>entries.forEach(e=>e.target.classList.toggle('is-live',e.isIntersecting)),{threshold:.1});
     covers.forEach(c=>observer.observe(c));
-    return ()=>{gsap.ticker.remove(tick);observer.disconnect();kinetic.forEach(e=>e.style.removeProperty('scale'));covers.forEach(c=>c.classList.remove('is-live'));play.style.removeProperty('translate');blob.style.removeProperty('rotate');};
+    return ()=>{gsap.ticker.remove(tick);observer.disconnect();kinetic.forEach(e=>e.style.removeProperty('scale'));covers.forEach(c=>c.classList.remove('is-live'));};
   });
   media.add('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)',()=>{
     const controller=new AbortController();
@@ -147,5 +93,5 @@ export function initExpressive() {
     });
     return ()=>{controller.abort();covers.forEach(c=>{const nodes=[c,c.querySelector('img'),c.parentElement.querySelector('.project-caption'),c.querySelector('feDisplacementMap')];gsap.killTweensOf(nodes);gsap.set(nodes.slice(0,3),{clearProps:'transform,borderRadius'});c.querySelector('feDisplacementMap').setAttribute('scale','0');});};
   });
-  return ()=>{destroyPlay();media.revert();events.abort();celebration?.kill();waveTween?.kill();clearTimeout(sleepTimer);extras.forEach(e=>e.remove());covers.forEach(c=>c.style.removeProperty('--portal-filter'));pet.remove();wave.remove();heading.innerHTML=originalHeading;heading.removeAttribute('aria-label');};
+  return ()=>{destroyPlay();media.revert();events.abort();waveTween?.kill();extras.forEach(e=>e.remove());covers.forEach(c=>c.style.removeProperty('--portal-filter'));wave.remove();heading.innerHTML=originalHeading;heading.removeAttribute('aria-label');};
 }

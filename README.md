@@ -58,15 +58,15 @@ The website does not claim these prototypes are deployed client engagements.
 
 Run `npm run build` to produce the static site, then use `npm run preview` to review it in a browser. Check the opening in both scroll directions, the work navigation and gallery at phone and desktop widths, and the project links with reduced motion on and off.
 
-## Inkling’s Mischief Club
+## Inkling: a roaming troublemaker
 
-`src/inkling-play.js` owns the optional companion arcade. Open **Dare you ↗** beside Inkling.
+Inkling lives on the portfolio itself. There is no game panel. `src/inkling-play.js` manages roaming, hiding, shape changes, provocation, and the takeover; `src/inkling-dust.js` renders the disintegration particles.
 
-- **Catch me:** five catches, a maximum of two mouse dodges per target, and crowned real blobs among decoys. Keyboard focus prevents dodges; touch catches directly.
-- **Don’t press:** a six-second self-control challenge with deliberately misleading in-game prompts. Clicking loses; waiting wins.
-- **Inkling says:** five instruction puzzles. Only follow commands prefixed with “Inkling says”.
-- Shape-shift through six silhouettes, hold/release the pet to squish it, feed stars, or trigger a spinning tantrum. Poking changes the banter; every fourth poke triggers a meltdown.
-- Human-versus-Inkling scores persist for the browser session. Closing or hiding the club cancels the round without awarding points. Leaving the tab also cancels timers.
-- Reduced motion preserves the games and shape changes while disabling dodges, jumps, spins, and particles. Escape closes the club; hide/show stays available outside the moving targets.
+- He walks across the viewport, perches on visible artwork and headings, peeks from behind their edges, and dodges the pointer. **Inkling ↗** calls him back; the pause and hide controls remain stationary.
+- Six pokes within the cooling period trigger a four-stop rampage. He scrolls through the introduction, work, services, and contact, then jumps onto a visible element in each section. Its actual glyph/artwork colours break into windblown dust.
+- Original DOM nodes retain their layout boxes. A temporary clipping class hides each target; the restore path removes only Inkling’s own classes and properties and restores previous interactivity.
+- **Restore site** or **Escape** immediately ends the takeover and returns to the starting scroll position. Normal navigation, deliberate scrolling, hiding the pet, leaving the tab, resizing, or changing motion preference also cancels the effect. An uninterrupted sequence repairs itself after a six-second victory lap; a 28-second hard deadline provides a fallback.
+- Reduced motion keeps the expressions and teasing without autonomous roaming, automatic scrolling, jumps, or dust. Keyboard focus prevents dodging. Hidden state is stored only for the current browser session.
+- Dust uses one canvas, caps particles at 4,000, and runs its drawing loop only while debris exists. No screenshots, remote assets, chat service, microphone, or backend are required.
 
-The companion has no chat service, microphone, analytics, or backend. Teasing text is authored locally.
+Verify six-poke activation, the four impacts, automatic restoration, Escape during a jump, restored project-link interactivity, mobile bounds, and reduced motion after changing this module.

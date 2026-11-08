@@ -43,7 +43,7 @@ const gallery = initGallery();
 const disposeProjects = initProjects(scroll, gallery);
 const disposeCursor = initCustomCursor();
 const disposeDetails = initDetailsMotion();
-const disposeExpressive = initExpressive();
+const disposeExpressive = initExpressive(scroll);
 const renderFluid = (time, delta) => {
   fluid?.setFloodProgress(flood);
   fluid?.updateFrame(time, delta);
