@@ -1,4 +1,5 @@
 import gsap from 'gsap';
+import { soundCue } from './sound.js';
 import { createInklingDust } from './inkling-dust';
 import { createBanter } from './inkling-banter';
 import { createRampagePlan, chooseRampageTarget, rampageTargetKey } from './inkling-rampage';
@@ -69,6 +70,7 @@ export function initInklingPlay(scroll) {
   }
   const wait=seconds=>animate({}, {duration:seconds});
   function restore({quiet=false,returnScroll=false}={}) {
+    if(!quiet&&raging)soundCue('restore');
     token++;raging=false;clearTimeout(autoRestore);clearTimeout(coolTimer);
     for(const tween of [...animations])tween.kill();animations.clear();stopTravel();dust.clear();
     if(scrollMoved&&scroll.lenis)scroll.lenis.scrollTo(scrollY,{immediate:true,force:true});
@@ -95,6 +97,7 @@ export function initInklingPlay(scroll) {
     const interactive=element.closest('.project-cover')||element;
     damaged.set(element,{cut:element.style.getPropertyValue('--inkling-cut'),priority:element.style.getPropertyPriority('--inkling-cut'),interactive,inert:interactive.inert});
     interactive.inert=true;
+    soundCue('impact');
     dust.burst(element);
     element.classList.add('inkling-vanishing');
     gsap.set(impact,{x:goal.x+38,y:r.top,scale:0,opacity:.7});
@@ -110,6 +113,7 @@ export function initInklingPlay(scroll) {
     stopTravel();clearTimeout(roamTimer);clearTimeout(coolTimer);raging=true;const current=++token;
     originScroll=scrollY;scrollMoved=false;setState('takeover');pet.classList.add('is-furious');blob.dataset.shape='puff';
     document.body.classList.add('inkling-has-control');
+    soundCue('anger');
     say(line('takeover'));
     if(preference.matches){say(line('warning'));autoRestore=setTimeout(()=>restore(),5000);return;}
     const plan=createRampagePlan(previousCount,previousFirst);
@@ -144,6 +148,7 @@ export function initInklingPlay(scroll) {
     } catch { if(token===current)restore(); }
   }
   play.addEventListener('click',()=>{
+    soundCue('pop');
     if(raging){say(line('takeover'));return;}
     stopTravel();clearTimeout(coolTimer);anger=Math.min(6,anger+1);updateHeat();blob.dataset.shape=shapes[anger%shapes.length];
     if(!preference.matches)bounce=gsap.fromTo(blob,{scaleX:1.3,scaleY:.65},{scaleX:1,scaleY:1,duration:.65,ease:'elastic.out(1,.35)'});
@@ -155,6 +160,7 @@ export function initInklingPlay(scroll) {
   play.addEventListener('pointerenter',e=>{
     if(e.pointerType!=='mouse'||raging||preference.matches||anger>=4||performance.now()<nextDodge||play.matches(':focus-visible'))return;
     nextDodge=performance.now()+3500;moveTo(position.x+(position.x>innerWidth/2?-1:1)*130,position.y-65,{duration:.45});
+    soundCue('dodge');
     say(line('dodge'));
   },{signal});
   play.addEventListener('pointerdown',()=>{pointerDown=true;},{signal});

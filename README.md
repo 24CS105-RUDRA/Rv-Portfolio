@@ -71,3 +71,9 @@ Inkling lives on the portfolio itself. There is no game panel. `src/inkling-play
 - Dust uses one canvas, caps particles at 4,000, and runs its drawing loop only while debris exists. No screenshots, remote assets, chat service, microphone, or backend are required.
 
 Verify six-poke activation, varied impact counts and targets, automatic restoration, Escape during a jump, restored project-link interactivity, mobile bounds, and reduced motion after changing this module.
+
+## Sound effects
+
+`src/sound.js` synthesizes original Web Audio cues for navigation, gallery changes, project entry/exit, theme changes, pet pokes/dodges, anger, dust impacts, and restoration. No audio files or external services are used.
+
+Audio unlocks after a trusted pointer or keyboard interaction. **Sound on/off** is available on the main page and inside case studies; the choice persists in local storage. Muting stops active and scheduled voices immediately. Hidden tabs suspend playback, and the next interaction resumes it. Short envelopes, a low master level, a compressor, per-cue rate limits, and a voice cap keep overlapping effects controlled. Browsers without Web Audio retain the visual experience.

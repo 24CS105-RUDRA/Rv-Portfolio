@@ -1,4 +1,5 @@
 import gsap from 'gsap';
+import { initSound } from './sound.js';
 import { initExpressive } from './expressive.js';
 import { initDetailsMotion } from './details-motion.js';
 import { FluidSimulation } from './fluid.js';
@@ -37,6 +38,7 @@ function syncFluid() {
 
 root.classList.replace('no-js', 'js');
 syncFluid();
+const disposeSound = initSound();
 let flood = 0;
 const scroll = initScroll(progress => { flood = progress; }, dark => fluid?.setTheme(dark));
 const gallery = initGallery();
@@ -60,6 +62,7 @@ if (import.meta.hot) import.meta.hot.dispose(() => {
   events.abort();
   gsap.ticker.remove(renderFluid);
   disposeExpressive();
+  disposeSound();
   disposeDetails();
   disposeProjects();
   disposeCursor();

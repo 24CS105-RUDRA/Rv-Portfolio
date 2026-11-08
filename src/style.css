@@ -358,3 +358,13 @@ body.modal-open .inkling,body.modal-open .inkling-bubble { visibility:hidden; }
  .project-live { opacity:.2; }
 }
 @media (prefers-reduced-motion:reduce) { .project-live { opacity:.16; } }
+
+.sound-toggle { position:fixed; bottom:17px; right:18px; z-index:98; display:flex; gap:8px; align-items:center; min-height:40px; padding:9px 13px; border:1px solid var(--line); border-radius:24px; background:var(--paper); color:var(--ink); font:9px var(--mono); box-shadow:0 2px 12px #0001; }
+.sound-toggle:focus-visible { outline:2px dashed currentColor; outline-offset:4px; }
+.sound-bars { display:flex; align-items:center; gap:2px; height:13px; }
+.sound-bars i { display:block; width:2px; height:6px; background:currentColor; border-radius:2px; }
+.sound-bars i:nth-child(2) { height:12px; }
+.sound-bars i:nth-child(3) { height:9px; }
+.sound-toggle[aria-pressed=false] .sound-bars i { height:2px; opacity:.5; }
+body.modal-open > .sound-toggle { visibility:hidden; }
+@media (max-width:600px) { .sound-toggle { bottom:10px; right:10px; min-height:44px; } }

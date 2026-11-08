@@ -1,3 +1,4 @@
+import { soundCue } from './sound.js';
 import gsap from 'gsap';
 
 // Project descriptions are based on the public repository READMEs, reviewed 2026-11-08.
@@ -98,6 +99,7 @@ export function initProjects(scroll, gallery) {
 
   function reveal(id) {
     if (dialog.open && active === id && !closingMotion) return;
+    soundCue('open');
     closingMotion = exiting = false;
     transition?.kill();
     resetArtwork();
@@ -158,6 +160,7 @@ export function initProjects(scroll, gallery) {
 
   function animateExit() {
     if (!dialog.open || closingMotion) return;
+    soundCue('close');
     closingMotion = true;
     transition?.kill();
     resetArtwork();

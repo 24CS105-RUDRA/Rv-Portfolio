@@ -1,3 +1,4 @@
+import { soundCue } from './sound.js';
 import gsap from 'gsap';
 import { closestStop, nextStop, wrap, damp } from './motion.js';
 
@@ -44,6 +45,7 @@ export function initGallery() {
     const local = wrap(closestStop(position, stops, period), period);
     const index = stops.reduce((best, stop, i) => Math.abs(stop - local) < Math.abs(stops[best] - local) ? i : best, 0);
     if (index !== active) {
+      if(active>=0&&Math.abs(position-before)>.1&&!document.body.classList.contains('modal-open'))soundCue('gallery');
       active = index;
       count.textContent = `${String(index + 1).padStart(2, '0')} / ${String(cards.length).padStart(2, '0')}`;
     }
