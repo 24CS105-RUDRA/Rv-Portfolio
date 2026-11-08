@@ -1,3 +1,9 @@
 node_modules/
 dist/
 .DS_Store
+
+# Local design experiments and archived implementations
+.versions/
+logo-edge-crop.png
+retina-crop-test.png
+Screenshot*.png

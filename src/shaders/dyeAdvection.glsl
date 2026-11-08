@@ -1,33 +1,35 @@
-// Fluid warp displacement advection with bounded balloon elasticity
-// Guarantees solid, non-diffusive fluid behavior with razor-sharp edges
 precision highp float;
 varying vec2 vUv;
 uniform sampler2D uVelocity;
-uniform sampler2D uDye; // Current displacement field (Dx, Dy)
+uniform sampler2D uDye;
+uniform sampler2D uLogoTexture;
 uniform vec2 uVelocityTexelSize;
+uniform vec2 uDyeTexelSize;
 uniform float uDt;
 uniform float uReturn;
+uniform float uAspectRatio;
 
 void main() {
-    vec2 vel = texture2D(uVelocity, vUv).xy;
+    vec2 velocity = texture2D(uVelocity, vUv).xy;
+    vec2 previous = clamp(vUv - velocity * uDt * uVelocityTexelSize, 0.001, 0.999);
+    vec2 displacement = texture2D(uDye, previous).xy;
+    displacement += velocity * uDt * uVelocityTexelSize * 0.82;
 
-    // Advect displacement along velocity streamlines
-    vec2 advectCoord = clamp(vUv - vel * uDt * uVelocityTexelSize, 0.001, 0.999);
-    vec2 disp = texture2D(uDye, advectCoord).xy;
-
-    // Add current velocity impulse to displacement
-    disp += vel * uDt * uVelocityTexelSize * 0.75;
-
-    // Bounded balloon elasticity (cannot detach, distort wildly, or fly away)
-    float len = length(disp);
-    float maxStretch = 0.052; // ~60px maximum elastic stretch
-    if (len > 0.00001) {
-        float satLen = maxStretch * tanh(len / maxStretch);
-        disp = disp * (satLen / len);
-    }
-
-    // Elastic snap-back easing: smoothly pulls back to rest in ~1.1s
-    disp *= max(0.0, 1.0 - uReturn);
-
-    gl_FragColor = vec4(disp, 0.0, 1.0);
+    // Preserve small movements instead of compressing them on every frame.
+    // Only extreme strokes reach the elastic safety limit.
+    float distance = length(displacement * vec2(uAspectRatio, 1.0));
+    if (distance > 0.15) displacement *= 0.15 / distance;
+    displacement *= 1.0 - uReturn;
+    float pigment = texture2D(uDye, previous).z;
+    vec2 px = uDyeTexelSize;
+    float neighborhood = .25 * (
+        texture2D(uDye, previous + vec2(px.x, 0.)).z +
+        texture2D(uDye, previous - vec2(px.x, 0.)).z +
+        texture2D(uDye, previous + vec2(0., px.y)).z +
+        texture2D(uDye, previous - vec2(0., px.y)).z);
+    // Gentle viscosity joins small fragments without blurring the final silhouette.
+    pigment = mix(pigment, neighborhood, 1. - exp(-uDt * 9.));
+    float original = texture2D(uLogoTexture, vUv).a;
+    pigment = mix(pigment, original, uReturn);
+    gl_FragColor = vec4(displacement, pigment, 1.0);
 }

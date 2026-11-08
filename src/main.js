@@ -1,47 +1,69 @@
-/**
- * Main application entrypoint
- * Rudra Vaghela — Portfolio Hero
- */
-
-import './style.css';
+import gsap from 'gsap';
+import { initExpressive } from './expressive.js';
+import { initDetailsMotion } from './details-motion.js';
 import { FluidSimulation } from './fluid.js';
 import { initScroll } from './scroll.js';
 import { initCustomCursor } from './cursor.js';
+import { initProjects } from './projects.js';
+import { initGallery } from './gallery.js';
 
-// Mark JavaScript enabled
-document.documentElement.classList.remove('no-js');
-document.documentElement.classList.add('js');
+const root = document.documentElement;
+const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+const events = new AbortController();
+let fluid;
+let triedWebGL = false;
 
-function bootstrap() {
-  const canvas = document.getElementById('fluid-canvas');
-  const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  let fluidSim = null;
-
-  if (!isReducedMotion && canvas) {
-    try {
-      fluidSim = new FluidSimulation(canvas);
-      fluidSim.start();
-    } catch (err) {
-      console.warn('WebGL Fluid simulation unavailable, initializing fallback:', err);
-      const fallbackLogo = document.getElementById('fallback-logo');
-      if (fallbackLogo) fallbackLogo.style.display = 'block';
-    }
-  } else {
-    const fallbackLogo = document.getElementById('fallback-logo');
-    if (fallbackLogo) fallbackLogo.style.display = 'block';
+function syncFluid() {
+  root.classList.toggle('reduced-motion', reduced.matches);
+  if (reduced.matches) {
+    fluid?.pause();
+    root.classList.remove('fluid-ready');
+    return;
   }
-
-  // Initialize smooth scroll & pinned scrub timeline
-  initScroll(fluidSim);
-
-  // Initialize custom interactive cursor (dot enclosed by circle ring)
-  initCustomCursor();
+  if (!triedWebGL) {
+    triedWebGL = true;
+    try {
+      fluid = new FluidSimulation(document.querySelector('#fluid-canvas'), {
+        onReady: () => { if (!reduced.matches) root.classList.add('fluid-ready'); },
+        onError: () => root.classList.remove('fluid-ready'),
+      });
+    } catch {
+      // The static mark and paper wipe are visible if WebGL cannot run.
+    }
+  }
+  fluid?.start();
+  if (fluid?.available) root.classList.add('fluid-ready');
 }
 
-// Ensure DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', bootstrap);
-} else {
-  bootstrap();
-}
+root.classList.replace('no-js', 'js');
+syncFluid();
+let flood = 0;
+const scroll = initScroll(progress => { flood = progress; }, dark => fluid?.setTheme(dark));
+const gallery = initGallery();
+const disposeProjects = initProjects(scroll, gallery);
+const disposeCursor = initCustomCursor();
+const disposeDetails = initDetailsMotion();
+const disposeExpressive = initExpressive();
+const renderFluid = (time, delta) => {
+  fluid?.setFloodProgress(flood);
+  fluid?.updateFrame(time, delta);
+};
+gsap.ticker.add(renderFluid);
+
+document.querySelector('#copyright-year').textContent = new Date().getFullYear();
+reduced.addEventListener('change', () => {
+  syncFluid();
+  requestAnimationFrame(scroll.refresh);
+}, {signal: events.signal});
+
+if (import.meta.hot) import.meta.hot.dispose(() => {
+  events.abort();
+  gsap.ticker.remove(renderFluid);
+  disposeExpressive();
+  disposeDetails();
+  disposeProjects();
+  disposeCursor();
+  gallery.destroy();
+  scroll.destroy();
+  fluid?.destroy();
+});

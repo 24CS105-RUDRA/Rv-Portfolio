@@ -1,102 +1,151 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rudra Vaghela — Creative Developer</title>
-    <meta name="description" content="Portfolio of Rudra Vaghela: Creative Full Stack Developer specializing in WebGL, interactive code, and motion design." />
-    <!-- Google Fonts: Syne & Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./src/style.css" />
-  </head>
-  <body>
-    <!-- Custom Interactive Cursor: small dot enclosed by outer circle circumference -->
-    <div id="cursor-dot" class="cursor-dot" aria-hidden="true"></div>
-    <div id="cursor-ring" class="cursor-ring" aria-hidden="true"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
+  <link rel="stylesheet" href="./src/style.css" />
+  <title>Rudra Vaghela — Creative Developer</title>
+  <meta name="description" content="Rudra Vaghela is a developer based in India. Explore his work in full-stack development, AI applications, data visualization, and creative code." />
+  <link rel="icon" type="image/svg+xml" href="./src/assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62.5..125,900&family=Instrument+Serif&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <a class="skip-link" href="#intro">Skip to content</a>
+  <div id="cursor-dot" class="cursor-dot" aria-hidden="true"></div>
+  <div id="cursor-ring" class="cursor-ring" aria-hidden="true"><span>View</span></div>
 
-    <!-- Top Navigation Header -->
-    <header class="top-nav" role="banner">
-      <div class="nav-brand">
-        <span class="nav-name">Rudra Vaghela</span>
-        <span class="nav-role">Creative Developer</span>
-      </div>
-      <div class="nav-action">
-        <button id="btn-scroll-top" class="btn-scroll-top" aria-label="Scroll top">
-          Scroll top
-        </button>
-      </div>
-    </header>
+  <header class="top-nav">
+    <a class="nav-brand" href="#top" aria-label="Rudra Vaghela, back to top"><img src="./logo.svg" alt="" width="32" height="38" /></a>
+    <nav aria-label="Main navigation">
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-    <!-- Hero Scroll Track (250vh total, 150vh scrub) -->
-    <main id="hero-wrapper" class="hero-wrapper">
-      <div id="hero-pin" class="hero-pin">
-        <!-- Interactive WebGL Canvas for Stable Fluid Simulation -->
-        <canvas id="fluid-canvas" aria-label="Interactive fluid ink simulation"></canvas>
-
-        <!-- Fallback static logo image for no-JS, reduced motion, or WebGL-unsupported -->
-        <div id="fallback-logo" aria-hidden="true">
-          <img src="./logo-2048.png" alt="Rudra Vaghela Monogram Logo" />
+  <main>
+    <section id="top" class="experience" aria-label="Rudra Vaghela — creative developer">
+      <div id="experience-stage" class="experience-stage">
+        <div class="scene-grid" aria-hidden="true">
+          <div class="grid-columns"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="grid-rule rule-top"></div><div class="grid-rule rule-middle"></div><div class="grid-rule rule-bottom"></div>
         </div>
 
-        <!-- Scroll down indicator -->
-        <div id="scroll-down" class="scroll-down-indicator" aria-hidden="true">
-          <span class="scroll-down-label">Scroll down</span>
-          <div class="scroll-down-arrow"></div>
+        <div id="hero-visual" class="hero-visual">
+          <canvas id="fluid-canvas" aria-hidden="true"></canvas>
+          <div id="fallback-logo" aria-hidden="true"><div class="hero-mark"></div></div>
+          <div class="hero-wash" aria-hidden="true"></div>
+        </div>
+        <div class="hero-controls mono">
+          <a class="hero-top" href="#top">Scroll top</a>
+          <a class="hero-down" href="#intro">Scroll down</a>
         </div>
 
-        <!-- 12-Column Headline Section (Scrub reveal from 70% to 100%) -->
-        <section id="headline-container" class="headline-overlay" aria-label="Introduction">
-          <div class="grid-12">
-            <aside class="headline-meta">
-              <div class="meta-item">
-                <span class="meta-label">Discipline</span>
-                <span class="meta-val">Full Stack & Creative Code</span>
-              </div>
-              <div class="meta-item">
-                <span class="meta-label">Location</span>
-                <span class="meta-val">India / Remote</span>
-              </div>
-              <div class="meta-item">
-                <span class="meta-label">Focus</span>
-                <span class="meta-val">Interactive Systems</span>
-              </div>
-            </aside>
+        <section id="intro" class="intro" aria-labelledby="intro-title">
+          <h1 id="intro-title" class="display intro-title">
+            <span class="line-mask"><span>Creative</span></span>
+            <span class="line-mask"><span>web</span></span>
+            <span class="line-mask"><span>development.</span></span>
+          </h1>
+          <p class="sr-only">Rudra Vaghela, a developer based in India, working across full-stack applications, AI, and creative code.</p>
+        </section>
 
-            <div class="headline-main">
-              <h1 class="headline-text">
-                <span class="headline-line">
-                  <span class="mask"><span class="word">ENGINEERING</span></span>
-                  <span class="mask"><span class="word">IMMERSIVE</span></span>
-                </span>
-                <span class="headline-line">
-                  <span class="mask"><span class="word">DIGITAL</span></span>
-                  <span class="mask"><span class="word">EXPERIENCES</span></span>
-                </span>
-                <span class="headline-line">
-                  <span class="mask"><span class="word">THROUGH</span></span>
-                  <span class="mask"><span class="word">CODE</span></span>
-                  <span class="mask"><span class="word">&amp;</span></span>
-                  <span class="mask"><span class="word">MOTION.</span></span>
-                </span>
-              </h1>
-              <p class="headline-tagline">
-                <span class="mask"><span class="word">Bridging</span></span>
-                <span class="mask"><span class="word">generative</span></span>
-                <span class="mask"><span class="word">art,</span></span>
-                <span class="mask"><span class="word">fluid</span></span>
-                <span class="mask"><span class="word">simulations,</span></span>
-                <span class="mask"><span class="word">and</span></span>
-                <span class="mask"><span class="word">robust</span></span>
-                <span class="mask"><span class="word">architecture.</span></span>
-              </p>
+        <section id="work" class="work-section" aria-labelledby="work-title">
+          <div class="work-heading mono"><h2 id="work-title">Selected work</h2><span id="gallery-count" aria-live="polite" aria-atomic="true">01 / 04</span></div>
+          <div id="project-gallery" class="gallery" tabindex="0" role="region" aria-label="Selected work. Drag sideways or use the left and right arrow keys.">
+            <div class="gallery-track">
+          <article class="project">
+            <a class="project-cover" data-project="nagardrishti" href="https://github.com/24CS105-RUDRA/nagardrishti" aria-label="Explore NagarDrishti" target="_blank" rel="noopener noreferrer"><img src="./src/assets/projects/nagardrishti.svg" alt="NagarDrishti artwork: a coral city grid with connected traffic nodes" width="800" height="1000" loading="eager" decoding="async" /></a>
+            <div class="project-caption"><h3>NagarDrishti</h3><span class="mono">01</span></div><p class="project-type mono">Traffic analytics · Frontend prototype</p>
+          </article>
+          <article class="project">
+            <a class="project-cover" data-project="ai-sales" href="https://github.com/24CS105-RUDRA/AI-SALSE" aria-label="Explore AI Sales Intelligence" target="_blank" rel="noopener noreferrer"><img src="./src/assets/projects/ai-sales.svg" alt="AI Sales Intelligence artwork: a lime waveform on a dark background" width="1000" height="800" loading="eager" decoding="async" /></a>
+            <div class="project-caption"><h3>AI Sales Intelligence</h3><span class="mono">02</span></div><p class="project-type mono">Voice agents · Full-stack development</p>
+          </article>
+          <article class="project">
+            <a class="project-cover" data-project="transitops" href="https://github.com/24CS105-RUDRA/transportit" aria-label="Explore TransitOps" target="_blank" rel="noopener noreferrer"><img src="./src/assets/projects/transitops.svg" alt="TransitOps artwork: electric blue routes connecting a transport network" width="800" height="1000" loading="eager" decoding="async" /></a>
+            <div class="project-caption"><h3>TransitOps</h3><span class="mono">03</span></div><p class="project-type mono">Fleet operations · Full-stack development</p>
+          </article>
+          <article class="project">
+            <a class="project-cover" data-project="portfolio" href="https://github.com/24CS105-RUDRA/Rv-Portfolio" aria-label="Explore this portfolio" target="_blank" rel="noopener noreferrer"><img src="./src/assets/projects/portfolio.svg" alt="Portfolio artwork: Rudra's monogram in warm white on black" width="1000" height="800" loading="eager" decoding="async" /></a>
+            <div class="project-caption"><h3>A little controlled chaos</h3><span class="mono">04</span></div><p class="project-type mono">This portfolio · Creative development</p>
+          </article>
             </div>
+          </div>
+          <div class="gallery-footer mono">
+            <button id="gallery-prev" aria-label="Previous project" aria-controls="project-gallery">←</button>
+            <button id="gallery-next" aria-label="Next project" aria-controls="project-gallery">→</button>
+            <span>Drag · ← →</span>
           </div>
         </section>
       </div>
-    </main>
+    </section>
 
-    <script type="module" src="./src/main.js"></script>
-  </body>
+    <div class="paper-content">
+      <section id="services" class="services" aria-labelledby="services-title">
+        <h2 id="services-title" class="sr-only">Development services</h2>
+        <div class="services-grid">
+          <article class="service">
+            <h3 class="display"><span class="line-mask"><span>Web</span></span><span class="line-mask"><span>development</span></span></h3>
+            <p>Interfaces & connected systems</p>
+            <a class="text-link mono" data-project="transitops" href="https://github.com/24CS105-RUDRA/transportit" target="_blank" rel="noopener noreferrer">TransitOps →</a>
+          </article>
+          <article class="service">
+            <h3 class="display"><span class="line-mask"><span>Intelligence</span></span></h3>
+            <p>AI, voice & data visualization</p>
+            <div class="service-links"><a class="text-link mono" data-project="ai-sales" href="https://github.com/24CS105-RUDRA/AI-SALSE" target="_blank" rel="noopener noreferrer">AI Sales →</a><a class="text-link mono" data-project="nagardrishti" href="https://github.com/24CS105-RUDRA/nagardrishti" target="_blank" rel="noopener noreferrer">NagarDrishti →</a></div>
+          </article>
+          <article class="service">
+            <h3 class="display"><span class="line-mask"><span>Interaction</span></span></h3>
+            <p>Creative code & motion</p>
+            <a class="text-link mono" data-project="portfolio" href="https://github.com/24CS105-RUDRA/Rv-Portfolio" target="_blank" rel="noopener noreferrer">This site →</a>
+          </article>
+        </div>
+        <p class="services-note mono">Rudra Vaghela · CHARUSAT · India</p>
+      </section>
+
+      <section id="contact" class="contact" aria-labelledby="contact-title">
+        <p class="contact-note mono">Ideas, collaborations & new possibilities</p>
+        <h2 id="contact-title" class="display"><span class="line-mask"><span>Have a project</span></span><span class="line-mask"><span>in mind?</span></span></h2>
+        <a class="contact-address" href="https://github.com/24CS105-RUDRA" target="_blank" rel="noopener noreferrer">@24CS105-RUDRA <span aria-hidden="true">↗</span></a>
+      </section>
+      <footer class="site-footer mono"><p>Rudra Vaghela · Creative developer · India <span>© <span id="copyright-year">2026</span></span></p><a href="https://github.com/24CS105-RUDRA?tab=repositories" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="#top">Back to top ↑</a></footer>
+    </div>
+    <div class="return-stage" aria-label="Return to the opening">
+      <div class="hero-mark" aria-hidden="true"></div>
+      <div class="hero-controls mono"><a class="hero-top" href="#top">Scroll top</a><a class="hero-down" href="#intro">Scroll down</a></div>
+    </div>
+  </main>
+
+  <dialog id="project-dialog" aria-labelledby="dialog-title" data-lenis-prevent>
+    <div class="project-curtain" aria-hidden="true"></div>
+    <div class="project-page-nav mono">
+      <button class="dialog-close" aria-label="Back to selected work"><img src="./logo.svg" alt="" width="28" height="34" /><span aria-hidden="true">← Work</span></button>
+      <span id="dialog-nav-title"></span>
+    </div>
+    <div class="case-study">
+      <section class="project-opening" aria-labelledby="dialog-title">
+        <div class="project-opening-copy">
+          <p class="mono case-kicker">Selected work / <span id="dialog-number"></span></p>
+          <h2 id="dialog-title" class="display"></h2>
+          <p id="dialog-category" class="mono"></p>
+        </div>
+        <img id="dialog-image" alt="" />
+        <div class="case-scroll mono"><span>Case study</span><button id="case-down" type="button">Scroll down ↓</button></div>
+      </section>
+      <div class="project-page-content" id="case-content" tabindex="-1">
+        <p id="dialog-editorial-title" class="display" aria-hidden="true"></p>
+        <div class="project-description">
+          <div><p class="mono case-kicker">Built with</p><p id="dialog-stack" class="mono"></p></div>
+          <div><h3 id="dialog-tagline"></h3><p id="dialog-description"></p><ul id="dialog-features"></ul><div class="dialog-links"><a id="dialog-source" class="text-link mono" target="_blank" rel="noopener noreferrer">View source ↗</a><a id="dialog-live" class="text-link mono" target="_blank" rel="noopener noreferrer">Live demo ↗</a></div></div>
+        </div>
+        <button id="next-project" class="next-project"><span class="mono">Next project</span><span class="display" id="next-project-title"></span><span aria-hidden="true">→</span></button>
+      </div>
+    </div>
+  </dialog>
+  <script type="module" src="./src/main.js"></script>
+</body>
 </html>
