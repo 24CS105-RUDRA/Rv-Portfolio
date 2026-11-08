@@ -368,3 +368,5 @@ body.modal-open .inkling,body.modal-open .inkling-bubble { visibility:hidden; }
 .sound-toggle[aria-pressed=false] .sound-bars i { height:2px; opacity:.5; }
 body.modal-open > .sound-toggle { visibility:hidden; }
 @media (max-width:600px) { .sound-toggle { bottom:10px; right:10px; min-height:44px; } }
+.music-toggle { right:128px; }
+@media (max-width:600px) { .music-toggle { right:120px; } }
