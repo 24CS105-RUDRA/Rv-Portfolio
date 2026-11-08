@@ -1,6 +1,7 @@
 import gsap from 'gsap';
 import { createInklingDust } from './inkling-dust';
 import { createBanter } from './inkling-banter';
+import { createRampagePlan, chooseRampageTarget, rampageTargetKey } from './inkling-rampage';
 
 const shapes=['blob','drop','square','ghost','puff'];
 const surfaces='.intro-title .line-mask, .project-cover, .service h3, .contact-note, #contact-title .line-mask';
@@ -24,7 +25,8 @@ export function initInklingPlay(scroll) {
   let travel, bounce, speechTimer, roamTimer, coolTimer, autoRestore;
   let raging=false,disposed=false,anger=0,token=0,perch=null;
   let nextDodge=0,roams=0,pointerDown=false,originScroll=0,scrollMoved=false;
-  let lastFrame=0;
+  let lastFrame=0,previousCount=0,previousFirst=null;
+  let previousTargets=new Set();
   const clamp=(v,min,max)=>Math.max(min,Math.min(Math.max(min,max),v));
   function bounds(x,y){return {x:clamp(x,8,innerWidth-84),y:clamp(y,65,innerHeight-112)};}
   function say(text){clearTimeout(speechTimer);bubble.textContent=text;bubble.classList.add('is-speaking');speechTimer=setTimeout(()=>bubble.classList.remove('is-speaking'),4300);}
@@ -71,6 +73,7 @@ export function initInklingPlay(scroll) {
     for(const tween of [...animations])tween.kill();animations.clear();stopTravel();dust.clear();
     if(scrollMoved&&scroll.lenis)scroll.lenis.scrollTo(scrollY,{immediate:true,force:true});
     for(const [el,saved] of damaged){el.classList.remove('inkling-vanishing','inkling-destroyed');if(saved.cut)el.style.setProperty('--inkling-cut',saved.cut,saved.priority);else el.style.removeProperty('--inkling-cut');saved.interactive.inert=saved.inert;}
+    if(damaged.size)previousTargets=new Set([...damaged.keys()].map(rampageTargetKey));
     damaged.clear();
     if(returnScroll&&scrollMoved){if(scroll.lenis)scroll.lenis.scrollTo(originScroll,{immediate:true,force:true});else window.scrollTo({top:originScroll,behavior:'instant'});}
     scrollMoved=false;anger=0;updateHeat();
@@ -109,31 +112,34 @@ export function initInklingPlay(scroll) {
     document.body.classList.add('inkling-has-control');
     say(line('takeover'));
     if(preference.matches){say(line('warning'));autoRestore=setTimeout(()=>restore(),5000);return;}
-    // Hard recovery deadline also covers a missed scroll/animation callback.
-    autoRestore=setTimeout(()=>restore(),28000);
+    const plan=createRampagePlan(previousCount,previousFirst);
+    previousCount=plan.count;previousFirst=plan.route[0].section;
+    // Scale the recovery deadline with the randomly selected number of impacts.
+    autoRestore=setTimeout(()=>restore(),plan.count*5000+10000);
     try {
       await animate(blob,{scale:1.55,rotation:12,duration:.12,repeat:5,yoyo:true});
       if(token!==current)return;
-      // A deliberate, finite route: typography -> artwork -> services -> finale.
-      const scenes=[
-        ['intro','.intro-title .line-mask'],
-        ['work','.project-cover img'],
-        ['services','.service h3'],
-        ['contact','#contact-title .line-mask']
-      ];
-      for(const [section,selector] of scenes) {
+      const hitKeys=new Set();
+      for(const {section,selector} of plan.route) {
+        if(damaged.size>=plan.count)break;
         if(token!==current)return;
         scrollMoved=true;scroll.toSection(section);
         await animate(position,{x:innerWidth-95,y:Math.max(80,innerHeight*.35),duration:.8,ease:'power2.inOut'});
         await wait(.8);
         if(token!==current)return;
-        const candidates=[...document.querySelectorAll(selector)].filter(visible);
-        if(!candidates.length)continue;
-        say(line('impact'));await jumpOn(candidates[0],current);
+        const candidates=[...document.querySelectorAll(selector)]
+          .filter(el=>visible(el)&&![...damaged.keys()].some(hit=>hit===el||hit.contains(el)||el.contains(hit)))
+          .map(element=>({element,key:rampageTargetKey(element)}))
+          .filter(candidate=>!hitKeys.has(candidate.key));
+        const target=chooseRampageTarget(candidates,previousTargets);
+        if(!target)continue;
+        say(line('impact'));await jumpOn(target.element,current);
+        if(damaged.has(target.element))hitKeys.add(target.key);
       }
       if(token!==current)return;
       setState('victory');say(line('corporate'));
       await animate(blob,{rotation:360,scale:1.2,duration:.7,ease:'back.out(2)'});
+      if(token!==current)return;
       clearTimeout(autoRestore);autoRestore=setTimeout(()=>restore(),6000);
     } catch { if(token===current)restore(); }
   }
