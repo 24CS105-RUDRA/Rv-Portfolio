@@ -101,7 +101,7 @@ img { display: block; max-width: 100%; }
 
 .paper-content { position: relative; background: var(--paper); }
 .return-stage { display: none; }
-@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+@media (prefers-reduced-motion: no-preference) {
   .js .return-stage { position: relative; display: grid; place-items: center; height: 100dvh; background: var(--black); }
 }
 .services { padding: clamp(100px, 14vw, 210px) var(--gutter) clamp(100px, 14vw, 200px); border-top: 1px solid var(--line); }

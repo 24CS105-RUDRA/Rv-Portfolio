@@ -26,7 +26,7 @@ Deploy the generated `dist/` directory to a static host. No backend or environme
 - `src/projects.js`: project descriptions, technology lists, repository URLs, and optional live-demo URLs.
 - `src/assets/projects/`: original SVG cover artwork. These are graphic interpretations of the projects, not product screenshots.
 - `src/style.css`: palette, typography, grid, spacing, and mobile breakpoints.
-- `src/scroll.js` and `src/motion.js`: smooth navigation, reversible scene timing, reveals, and the desktop return loop.
+- `src/scroll.js` and `src/motion.js`: smooth navigation, reversible scene timing, reveals, and the alternating-theme return loop.
 - `src/gallery.js`: gallery layout measurement, wraparound, dragging, and keyboard navigation.
 - `src/fluid.js` and `src/shaders/`: fluid interaction and rendering. The pre-existing physical-resolution logo sampling is preserved.
 
@@ -47,7 +47,7 @@ The website does not claim these prototypes are deployed client engagements.
 
 ## Interaction and accessibility
 
-- Wheel and trackpad input drive the opening through the liquid transition, the introduction, and selected work. The desktop wheel wraps between the footer and the opening. Touch and keyboard retain normal vertical scrolling.
+- Wheel and trackpad input drive the opening through the liquid transition, the introduction, and selected work. Scrolling beyond the footer wraps to the live ink opening and alternates the light/dark theme on each circuit. Wheel overshoot is remembered while smooth scrolling settles; touch swipes and keyboard scrolling at the boundary also wrap. Reduced motion retains a regular document layout.
 - The gallery wraps in both directions. Drag or swipe sideways, use the previous and next buttons, or press the arrow keys while focused on the gallery.
 - Case studies have shareable `#project/<slug>` addresses. Browser Back, Escape, and the work button return to the portfolio. Modified clicks on the gallery links still open the repository directly.
 - Reduced motion displays a static opening and a regular document layout. Gallery navigation becomes immediate.

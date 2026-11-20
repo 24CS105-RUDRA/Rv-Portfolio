@@ -18,6 +18,7 @@ export function initScroll(setFlood, onTheme = () => {}) {
   const returnStage = document.querySelector('.return-stage');
   const links = [...header.querySelectorAll('nav a')];
   let active, firstBoundary = true;
+  let loopToOpening = null;
   const changeTheme = () => {
     window.dispatchEvent(new Event("portfolio:theme"));
     const dark = document.documentElement.classList.toggle('theme-dark');
@@ -36,11 +37,10 @@ export function initScroll(setFlood, onTheme = () => {}) {
   media.add('(prefers-reduced-motion: no-preference)', () => {
     const lenis = new Lenis({lerp: 0.09, smoothWheel: true, syncTouch: false, anchors: false});
     state.lenis = lenis;
-    const finePointer = matchMedia('(pointer: fine)');
     const wheelEvents = new AbortController();
     let navMask = -1;
     const updateNavMask = () => {
-      const fraction = finePointer.matches && lenis.progress > 0.7
+      const fraction = lenis.progress > 0.7
         ? Math.max(0, Math.min(1, 1 - returnStage.getBoundingClientRect().top / (innerHeight * 0.8))) : 0;
       if (fraction !== navMask) {
         navMask = fraction;
@@ -48,30 +48,77 @@ export function initScroll(setFlood, onTheme = () => {}) {
         header.inert = fraction > 0.95;
       }
     };
+    let pendingDirection = 0, lockedUntil = 0, touchY = null;
+    const eligible = event => !lenis.isStopped && !lenis.isLocked
+      && !document.body.classList.contains('modal-open')
+      && !event?.target?.closest?.('input, textarea, select, [contenteditable="true"], [data-lenis-prevent]');
+    const crossBoundary = direction => {
+      pendingDirection = 0;
+      lockedUntil = performance.now() + 850;
+      firstBoundary = false;
+      changeTheme();
+      const destination = direction > 0 ? 0 : lenis.limit;
+      lenis.scrollTo(destination, {immediate: true, force: true});
+      // Reset the live opening immediately, rather than waiting for the next RAF.
+      state.timeline?.progress(direction > 0 ? 0 : 1);
+      setFlood(direction > 0 ? 0 : 1);
+      ScrollTrigger.update();
+      updateNavMask();
+      setCurrent(null);
+      if (/^#(?:top|intro|work|services|contact)$/.test(location.hash)) {
+        history.replaceState(null, '', `${location.pathname}${location.search}#top`);
+      }
+    };
+    loopToOpening = () => crossBoundary(1);
     lenis.on('scroll', () => {
       ScrollTrigger.update();
       updateNavMask();
+      if (pendingDirection > 0 && lenis.limit - lenis.actualScroll <= 2) crossBoundary(1);
+      else if (pendingDirection < 0 && lenis.actualScroll <= 2) crossBoundary(-1);
     });
-    // The footer meets a second copy of the opening. At the seam the wheel
-    // crosses to the matching frame, keeping touch and keyboard scrolling native.
-    window.addEventListener('wheel', event => {
-      if (!finePointer.matches || lenis.isStopped || event.ctrlKey || event.shiftKey || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-      const atEnd = lenis.limit - lenis.actualScroll < 1;
-      if (atEnd && event.deltaY > 0) {
-        firstBoundary = false;
-        changeTheme();
-        lenis.scrollTo(0, {immediate: true});
-      } else if (lenis.actualScroll < 1 && event.deltaY < 0) {
-        if (firstBoundary) {
+    function edgeInput(delta, event) {
+      if (!delta || !eligible(event)) { pendingDirection = 0; return false; }
+      if (performance.now() < lockedUntil) return true;
+      const remaining = delta > 0 ? lenis.limit - lenis.actualScroll : lenis.actualScroll;
+      if (remaining <= 2) {
+        if (delta < 0 && firstBoundary) {
           firstBoundary = false;
-          // The first upward gesture reveals the beige footer immediately.
           lenis.scrollTo(Math.max(0, returnStage.offsetTop - innerHeight), {immediate: true});
-        } else {
-          changeTheme();
-          lenis.scrollTo(lenis.limit, {immediate: true});
-        }
+          lockedUntil = performance.now() + 850;
+        } else crossBoundary(Math.sign(delta));
+        return true;
       }
-    }, {capture: true, passive: true, signal: wheelEvents.signal});
+      // Remember overscroll while Lenis eases toward the edge. Otherwise a
+      // trackpad gesture can finish before actualScroll ever reaches the seam.
+      pendingDirection = Math.abs(delta) >= remaining ? Math.sign(delta) : 0;
+      return false;
+    }
+    window.addEventListener('wheel', event => {
+      if (event.ctrlKey || event.shiftKey || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+      const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? innerHeight : 1);
+      if (edgeInput(delta, event)) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    }, {capture: true, passive: false, signal: wheelEvents.signal});
+    window.addEventListener('touchstart', event => {
+      pendingDirection = 0;
+      touchY = event.touches.length === 1 ? event.touches[0].clientY : null;
+    }, {passive: true, signal: wheelEvents.signal});
+    window.addEventListener('touchmove', event => {
+      if (touchY === null || event.touches.length !== 1) return;
+      const delta = touchY - event.touches[0].clientY;
+      if (Math.abs(delta) < 24) return;
+      if (edgeInput(delta, event)) { event.preventDefault(); touchY = null; }
+    }, {passive: false, signal: wheelEvents.signal});
+    window.addEventListener('touchend', () => { touchY = null; }, {signal: wheelEvents.signal});
+    window.addEventListener('keydown', event => {
+      if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey
+        || event.target?.closest?.('button, a, [role="button"], #project-gallery')) return;
+      const delta = ['ArrowDown', 'PageDown'].includes(event.key) || (event.key === ' ' && !event.shiftKey) ? 1
+        : ['ArrowUp', 'PageUp'].includes(event.key) || (event.key === ' ' && event.shiftKey) ? -1 : 0;
+      if (delta && edgeInput(delta, event)) event.preventDefault();
+    }, {signal: wheelEvents.signal});
     const tick = time => lenis.raf(time * 1000);
     gsap.ticker.add(tick, false, true);
     if (document.body.classList.contains('modal-open')) lenis.stop();
@@ -142,6 +189,7 @@ export function initScroll(setFlood, onTheme = () => {}) {
       wheelEvents.abort();
       header.inert = false;
       header.style.removeProperty('--return-mask');
+      loopToOpening = null;
       state.lenis = state.timeline = null;
       controls.inert = work.inert = false;
       setFlood(0);
@@ -180,7 +228,7 @@ export function initScroll(setFlood, onTheme = () => {}) {
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
       const id = link.hash.slice(1);
-      if (link.closest('.return-stage') && state.lenis) { firstBoundary = false; changeTheme(); state.lenis.scrollTo(0, {immediate: true}); }
+      if (link.closest('.return-stage') && loopToOpening) loopToOpening();
       scrollToSection(id, {focus: event.detail === 0, updateHash: true});
     }, {signal: events.signal});
   });
