@@ -225,7 +225,7 @@ export function initScroll(setFlood, onTheme = () => {}) {
 
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener('click', event => {
-      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.hash.startsWith('#project/')) return;
       event.preventDefault();
       const id = link.hash.slice(1);
       if (link.closest('.return-stage') && loopToOpening) loopToOpening();

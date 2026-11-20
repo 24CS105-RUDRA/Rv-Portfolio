@@ -370,3 +370,11 @@ body.modal-open > .sound-toggle { visibility:hidden; }
 @media (max-width:600px) { .sound-toggle { bottom:10px; right:10px; min-height:44px; } }
 .music-toggle { right:128px; }
 @media (max-width:600px) { .music-toggle { right:120px; } }
+
+.cinematic-entrance { position:fixed; inset:0; z-index:1000; background:#050505; color:#f6f5f2; display:grid; place-items:center; }
+.entrance-mark { position:relative; width:min(30vw,215px); aspect-ratio:283/338; filter:url(#entrance-liquid); }
+.entrance-mark img { position:absolute; inset:0; width:100%; height:100%; filter:invert(1); }
+.entrance-filter { position:absolute; width:0; height:0; }
+.entrance-label { position:absolute; bottom:70px; left:20px; right:20px; text-align:center; font:12px/1.6 var(--mono); letter-spacing:.06em; }
+.entrance-skip { position:absolute; bottom:18px; right:22px; min-height:44px; font:12px var(--mono); text-decoration:underline; }
+.entrance-skip:focus-visible { outline:2px dashed currentColor; outline-offset:4px; }

@@ -1,4 +1,5 @@
 import gsap from 'gsap';
+import { initEntrance } from './entrance.js';
 import { initSound } from './sound.js';
 import { initExpressive } from './expressive.js';
 import { initDetailsMotion } from './details-motion.js';
@@ -46,6 +47,7 @@ const disposeProjects = initProjects(scroll, gallery);
 const disposeCursor = initCustomCursor();
 const disposeDetails = initDetailsMotion();
 const disposeExpressive = initExpressive(scroll);
+const disposeEntrance = initEntrance(scroll);
 const renderFluid = (time, delta) => {
   fluid?.setFloodProgress(flood);
   fluid?.updateFrame(time, delta);
@@ -61,6 +63,7 @@ reduced.addEventListener('change', () => {
 if (import.meta.hot) import.meta.hot.dispose(() => {
   events.abort();
   gsap.ticker.remove(renderFluid);
+  disposeEntrance();
   disposeExpressive();
   disposeSound();
   disposeDetails();

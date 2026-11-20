@@ -1,0 +1,148 @@
+{
+  "school-erp": {
+    "number": "05",
+    "title": "School Management System",
+    "category": "Full-stack ERP · In development",
+    "tagline": "Academic operations, connected.",
+    "stack": "Next.js · React · MongoDB Atlas · Cloudinary · Tailwind CSS",
+    "description": "A school ERP in development for Shree Sardar Patel Vidhya Sankool, Navsari. The platform brings academic and administrative workflows into role-based student, faculty, and administrator interfaces. My work focuses on backend logic, database relationships, permissions, authentication, and feature integration.",
+    "features": [
+      "Role-based workflows cover attendance, homework, materials, fees, notices, and academic records.",
+      "MongoDB Atlas stores application data; Cloudinary supports uploaded media.",
+      "In development. Future database migrations and VPS deployment are exploration, not completed features."
+    ],
+    "source": "https://github.com/24CS105-RUDRA/school_managment_system_app-web"
+  },
+  "manoviz": {
+    "number": "06",
+    "title": "ManoViz",
+    "category": "Embedded education · Working prototype",
+    "tagline": "See a computer think.",
+    "stack": "ESP32 · Arduino C++ · FastLED · WS2812B LEDs",
+    "description": "A physical teaching model that makes Morris Mano’s Basic Computer visible through LEDs. Register activations, bus transfers, and instruction-cycle timing translate abstract micro-operations into tangible sequences. My contribution spans hardware planning, LED mapping, firmware, and debugging.",
+    "features": [
+      "Fetch, decode, and execution timing across T0–T6.",
+      "Register and bus visualizations for memory-reference and register-reference instructions.",
+      "Working prototype across several hardware iterations; the final LED count is not fixed."
+    ]
+  },
+  "codeoracle": {
+    "number": "07",
+    "title": "CodeOracle",
+    "category": "AI developer tools · Hackathon prototype",
+    "tagline": "An unfamiliar codebase, explained.",
+    "stack": "Python · JavaScript · LLM APIs · Source analysis",
+    "description": "An AI-assisted developer tool for understanding projects, exploring dependencies, generating tests, and suggesting refactors. The hackathon work combined source inspection with LLM requests and efficiency improvements.",
+    "features": [
+      "Explanation, dependency graph, tests, and refactored-code workflows.",
+      "Reported development test coverage ranged from 86.7% to 100%; one request-path comparison improved from about 43s to 1.76s.",
+      "These are observed development measurements, not general benchmarks or production guarantees."
+    ],
+    "source": "https://github.com/24CS105-RUDRA/final_codeorbit"
+  },
+  "interviewspar": {
+    "number": "08",
+    "title": "InterviewSpar",
+    "category": "AI interview practice · Team development",
+    "tagline": "Practice the conversation before it counts.",
+    "stack": "Full-stack web · MongoDB Atlas · AI APIs",
+    "description": "A collaborative interview-preparation application exploring personalized practice, coding rounds, resume intelligence, and feedback. My role includes frontend experience, integration planning, architecture coordination, and technical presentation.",
+    "features": [
+      "Split-screen interview and coding-round interface work.",
+      "Resume intelligence connected to MongoDB Atlas; feedback and reporting screens were designed.",
+      "Includes team-developed modules and designed workflows; a unified production deployment is not verified."
+    ]
+  },
+  "prezon": {
+    "number": "09",
+    "title": "Prezon",
+    "category": "Biometric IoT · Design & prototyping",
+    "tagline": "Attendance that travels with the teacher.",
+    "stack": "ESP32-S3 · Fingerprint sensors · Wi-Fi · REST APIs",
+    "description": "A portable fingerprint-attendance device concept for classrooms. The design explores faculty authentication, class-session logic, student scans, and offline records. My contribution includes product ideation, sensor testing, firmware exploration, and hardware trade-offs.",
+    "features": [
+      "Planned offline caching and synchronization when connectivity returns.",
+      "Sensor exploration included R307S testing and ESP32 serial interfacing.",
+      "Hardware prototyping and design work; a fully assembled deployable handheld unit is not confirmed."
+    ]
+  },
+  "anpr": {
+    "number": "10",
+    "title": "ANPR Traffic Analytics",
+    "category": "Computer vision · Partial implementation",
+    "tagline": "From road imagery to structured records.",
+    "stack": "Python · Image processing · Computer vision",
+    "description": "A computer-vision exploration of vehicle imagery and automatic number plate recognition, with traffic analytics as the broader direction. My work involved Python experimentation and recognition-workflow exploration.",
+    "features": [
+      "Intended pipeline: vehicle image, plate localization, character recognition, structured records.",
+      "Explored practical constraints including lighting, orientation, occlusion, and image quality.",
+      "Partially implemented. No final OCR pipeline, dataset accuracy, or deployment is verified."
+    ],
+    "source": "https://github.com/24CS105-RUDRA/SIH127"
+  },
+  "light-robot": {
+    "number": "11",
+    "title": "Light-Following Robot",
+    "category": "Robotics · Completed & tested",
+    "tagline": "A little machine, led by light.",
+    "stack": "Arduino Uno · Embedded C/C++ · Light sensors · Motor control",
+    "description": "An autonomous Arduino vehicle that follows a light source and demonstrates self-parking. Developed over approximately four months through sensor calibration, motor-control logic, hardware integration, and practical testing.",
+    "features": [
+      "Converts light-sensor readings into movement decisions.",
+      "Integrates controller code, drive motors, electrical connections, and chassis behavior.",
+      "Completed and tested, with documented light-following and self-parking behavior."
+    ]
+  },
+  "qr-attendance": {
+    "number": "12",
+    "title": "QR Attendance",
+    "category": "Web automation · Unverified concept",
+    "tagline": "A lighter way to check in.",
+    "stack": "QR identification · Attendance records · Web concept",
+    "description": "A concept for digital attendance using QR identification to connect a participant with an attendance session. The documented scope is the high-level purpose, rather than a verified finished implementation.",
+    "features": [
+      "Proposed QR validation and user/session association.",
+      "Potential settings include classrooms, workshops, and campus events.",
+      "Screens, security behavior, database design, and implementation stack remain unverified."
+    ]
+  },
+  "silentguardian": {
+    "number": "13",
+    "title": "SilentGuardian",
+    "category": "Safety technology · Planning",
+    "tagline": "An idea awaiting its first prototype.",
+    "stack": "Technology choices not finalized",
+    "description": "An early safety-oriented technology idea. This entry records the planning direction without presenting an undocumented concept as a finished product.",
+    "features": [
+      "Safety-oriented direction identified during planning.",
+      "Next steps: define specific users, the problem, and a measurable prototype.",
+      "No finalized feature set, technical architecture, or tested implementation is documented."
+    ]
+  },
+  "smoker-prediction": {
+    "number": "14",
+    "title": "Smoker Status Prediction",
+    "category": "Machine learning · Academic exercise",
+    "tagline": "A classification workflow, from the data up.",
+    "stack": "Python · Pandas · NumPy · scikit-learn · Logistic Regression",
+    "description": "An academic binary-classification exercise using structured data and Logistic Regression. My contribution includes dataset inspection, preprocessing decisions, initial model design, and evaluation planning.",
+    "features": [
+      "Training schema: 15,000 records × 24 columns; test schema: 10,000 × 23.",
+      "Studied missing values, identifiers, outliers, feature preparation, and baseline training.",
+      "No verified final accuracy, recall, precision, ROC-AUC, or submission score is claimed."
+    ]
+  },
+  "brainy-beam": {
+    "number": "15",
+    "title": "Brainy Beam ML Internship",
+    "category": "Machine learning · Internship experience",
+    "tagline": "Learning through practical data work.",
+    "stack": "Python · NumPy · Pandas · Matplotlib · scikit-learn",
+    "description": "Dataset-based machine-learning work during a one-month Brainy Beam internship. This is an experience record covering practical Python and ML workflows, rather than a separately named deployed application.",
+    "features": [
+      "Data cleaning, exploration, and feature handling.",
+      "Model-training practice, evaluation, and iteration.",
+      "Individual model titles, datasets, and verified performance statistics are not documented."
+    ]
+  }
+}

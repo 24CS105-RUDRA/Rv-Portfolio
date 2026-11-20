@@ -1,5 +1,6 @@
 import { soundCue } from './sound.js';
 import gsap from 'gsap';
+import additionalProjects from './additional-projects.json';
 
 // Project descriptions are based on the public repository READMEs, reviewed 2026-11-08.
 const artwork = (name) => new URL(`./assets/projects/${name}.svg`, import.meta.url).href;
@@ -39,6 +40,8 @@ export const projects = {
     source: 'https://github.com/24CS105-RUDRA/Rv-Portfolio',
   },
 };
+
+Object.assign(projects, Object.fromEntries(Object.entries(additionalProjects).map(([id, project]) => [id, {...project, image: artwork(id)}])));
 
 export function initProjects(scroll, gallery) {
   const dialog = document.querySelector('#project-dialog');
@@ -88,7 +91,10 @@ export function initProjects(scroll, gallery) {
       item.textContent = text;
       return item;
     }));
-    dialog.querySelector('#dialog-source').href = project.source;
+    const source = dialog.querySelector('#dialog-source');
+    source.hidden = !project.source;
+    if(project.source) source.href = project.source;
+    else source.removeAttribute('href');
     const live = dialog.querySelector('#dialog-live');
     live.hidden = !project.live;
     if (project.live) live.href = project.live;

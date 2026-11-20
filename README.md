@@ -81,3 +81,13 @@ Audio unlocks after a trusted pointer or keyboard interaction. **Sound on/off** 
 ## Background music
 
 `src/music.js` supplies an original 72 BPM ambient soundtrack with four extended chords, soft bass, and sparse synth plucks. It loops on the audio clock with a short scheduling horizon and fades in gently. **Music on/off** is independent of sound effects, appears in case studies too, and remembers its setting. Music begins only after a visitor interaction, stops scheduling when muted or hidden, and restarts on the next interaction after returning to the tab. There are no downloaded songs or third-party music assets.
+
+## Additional work, entrance, and sharing
+
+The gallery contains 15 entries: the original four plus 11 project/concept/experience records from the supplied 2024–2026 portfolio document. `src/additional-projects.json` preserves documented status and contribution boundaries. School ERP, ANPR, and CodeOracle have confirmed public repository matches; unmatched entries omit source links. Artwork is original conceptual illustration, not a screenshot of the finished product.
+
+`src/entrance.js` plays a roughly two-second assembled-monogram/liquid entrance once per browser via local storage. Skip or Escape ends it immediately. Reduced-motion visitors and deep links bypass it. Storage restrictions fall back to playing on a fresh visit. Existing scroll animation remains independent of this overlay.
+
+Sharing uses `public/social-preview.png` (1200×630), Open Graph/Twitter metadata, ProfilePage structured data, a canonical URL, a sitemap, robots.txt, and SVG/ICO/PNG/Apple favicon assets. The current canonical host is `https://rv-portfolio-five.vercel.app/`. When a custom domain is selected, update this host in `index.html`, `public/robots.txt`, and `public/sitemap.xml`, then configure the domain in Vercel. Hash-based case studies share the main portfolio’s preview; distinct per-project social cards would require individual page routes.
+
+To regenerate the raster branding assets on macOS with Pillow installed, run `python3 scripts/generate-brand-assets.py`.
