@@ -7,7 +7,7 @@ export function soundCue(name) {
 
 export function initSound() {
   const events=new AbortController(),{signal}=events;
-  let context,master,noise,music,enabled=true,musicEnabled=true,disposed=false;
+  let context,master,noise,music,enabled=true,musicEnabled=true,disposed=false,rageAudio=false;
   const sources=new Set(),lastPlayed=new Map();
   try{enabled=localStorage.getItem('portfolio-sound')!=='off';musicEnabled=localStorage.getItem('portfolio-music')!=='off';}catch{}
   const buttons=[document.body,document.querySelector('#project-dialog')].filter(Boolean).map(parent=>{
@@ -37,8 +37,8 @@ export function initSound() {
         noise=context.createBuffer(1,Math.ceil(context.sampleRate*1.6),context.sampleRate);
         const data=noise.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=Math.random()*2-1;
       }
-      if(context.state==='suspended')context.resume().then(()=>{if(musicEnabled&&!disposed&&!document.hidden)music.start();}).catch(()=>{});
-      else if(musicEnabled)music.start();
+      if(context.state==='suspended')context.resume().then(()=>{if(musicEnabled&&!rageAudio&&!disposed&&!document.hidden)music.start();}).catch(()=>{});
+      else if(musicEnabled&&!rageAudio)music.start();
     }catch{enabled=musicEnabled=false;update();}
   }
   function voice(source,filter,when,duration,volume) {
@@ -75,7 +75,11 @@ export function initSound() {
       case 'close':air(1500,180,.48,.18);tone(340,130,.3,.17);break;
       case 'pop':tone(380+Math.random()*120,150,.14,.38);break;
       case 'dodge':tone(530,950,.13,.16,'sine');break;
-      case 'anger':tone(95,65,.65,.5,'triangle');tone(145,100,.55,.2,'triangle',.12);air(180,750,.6,.12);break;
+      case 'anger':tone(95,48,.9,.46,'triangle');tone(145,80,.75,.22,'triangle',.12);tone(52,38,.95,.23,'sine');air(180,750,.7,.16);break;
+      case 'charge':tone(66,190,.42,.2,'triangle');air(240,1500,.4,.09);break;
+      case 'crumble':
+        for(let i=0;i<7;i++)air(900+i*230,240+i*50,.25,.09,i*.075);
+        tone(58,30,.65,.21,'sine');break;
       case 'impact':tone(120,42,.3,.55);air(2200,240,.95,.4);air(3600,850,.65,.16,.15);break;
       case 'restore':tone(392,392,.27,.2);tone(494,494,.3,.18,'sine',.1);tone(587,587,.4,.16,'sine',.2);break;
       case 'theme':air(220,2200,.8,.2);tone(130,260,.55,.17);break;
@@ -112,7 +116,8 @@ export function initSound() {
   document.addEventListener('click',e=>{
     if(e.target.closest('.top-nav a,.hero-controls a,.site-footer a'))play('nav');
   },{signal});
-  window.addEventListener('portfolio:sound',e=>play(e.detail),{signal});
+  window.addEventListener('portfolio:sound',e=>{if(e.detail==='anger'){rageAudio=true;music?.stop();}play(e.detail);},{signal});
+  window.addEventListener('portfolio:pet-reset',()=>{stop();if(rageAudio){rageAudio=false;if(musicEnabled&&context?.state==='running'&&!document.hidden)music?.start();}},{signal});
   window.addEventListener('portfolio:theme',()=>play('theme'),{signal});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){stop();music?.stop();context?.suspend().catch(()=>{});}},{signal});
   update();

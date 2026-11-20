@@ -4,6 +4,7 @@
 @import './project-art-experiments.css';
 @import './contact.css';
 @import './mischief.css';
+@import './inkling-rage.css';
 
 :root {
   --black: #050505;
@@ -349,6 +350,7 @@ img { display: block; max-width: 100%; }
 .inkling-dust { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:89; }
 .inkling-impact { position:fixed; left:0; top:0; width:65px; height:18px; margin-left:-32px; margin-top:-9px; border:1px solid var(--ink); border-radius:50%; pointer-events:none; opacity:0; z-index:90; }
 .inkling-vanishing { clip-path:inset(0 0 0 var(--inkling-cut,0%))!important; }
+.inkling-block-hit { will-change:transform,clip-path,filter; }
 .inkling-destroyed { visibility:hidden!important; }
 body.modal-open .inkling,body.modal-open .inkling-bubble { visibility:hidden; }
 @media (prefers-reduced-motion:no-preference) {

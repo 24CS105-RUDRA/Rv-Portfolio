@@ -1,0 +1,35 @@
+/* This state is local to the takeover; neither theme class nor palette is changed. */
+.inkling-rage-atmosphere { position:fixed; inset:0; z-index:40; pointer-events:none; overflow:hidden; color:#a82e28; isolation:isolate; }
+.inkling-rage-atmosphere[hidden] { display:none!important; }
+.rage-wash { position:absolute; inset:-12px; background:radial-gradient(ellipse at 50% 46%,#5d182700 26%,#5d182719 54%,#32101899 88%,#1d0a12e6 115%),linear-gradient(135deg,#d33f2421,#5212240b 42%,#8b1f2b25); }
+.rage-fractures { position:absolute; inset:0; width:100%; height:100%; opacity:.55; }
+.rage-fractures path { vector-effect:non-scaling-stroke; }
+.rage-word { position:absolute; left:-.03em; bottom:-.19em; font:900 clamp(95px,20vw,330px)/1 var(--display); letter-spacing:-.055em; color:#9b3027; opacity:.095; white-space:nowrap; }
+.rage-aside { position:absolute; left:var(--gutter,32px); bottom:84px; font:italic clamp(18px,2.5vw,31px)/1.2 Georgia,serif; color:#a12f27; opacity:.8; rotate:-5deg; }
+.rage-impact-wave,.rage-impact-core { position:absolute; top:0; left:0; width:64px; height:64px; margin:-32px 0 0 -32px; border:2px solid #d64f32; border-radius:50%; opacity:0; }
+.rage-impact-core { width:38px; height:38px; margin:-19px 0 0 -19px; border:1px dashed #f38b58; }
+body.rage-atmosphere-active .paper-content,body.rage-atmosphere-active .experience-stage { background-color:#ead1c8; }
+.theme-dark body.rage-atmosphere-active .paper-content,.theme-dark body.rage-atmosphere-active .experience-stage { background-color:#211218; }
+.theme-dark .inkling-rage-atmosphere { color:#df714b; }
+.theme-dark .rage-wash { background:radial-gradient(ellipse at 50% 46%,#3a071800 20%,#4a13202e 52%,#3b071a99 87%,#19040ee6 110%),linear-gradient(135deg,#b5342029,#52122415 42%,#98263530); }
+.theme-dark .rage-word { color:#ea7049; opacity:.13; }
+.theme-dark .rage-aside { color:#f1a07f; }
+body.inkling-has-control .inkling.is-furious { --ink:#381516; --paper:#ffe1b7; }
+body.inkling-has-control .inkling.is-furious .inkling-body { width:66px; height:59px; left:5px; top:3px; border-color:#f48755; background:linear-gradient(150deg,#63231c,#321216 75%); box-shadow:0 0 0 3px #b3422329,0 0 34px #e65b344d; }
+body.inkling-has-control .inkling.is-furious .inkling-eye { top:18px; width:11px; height:7px; background:#ffc775; box-shadow:0 0 8px #ee693c66; }
+body.inkling-has-control .inkling.is-furious .inkling-eye.left { left:16px; rotate:22deg; }
+body.inkling-has-control .inkling.is-furious .inkling-eye.right { right:15px; rotate:-22deg; }
+body.inkling-has-control .inkling.is-furious .inkling-body::before,body.inkling-has-control .inkling.is-furious .inkling-body::after { content:''; position:absolute; top:11px; width:18px; height:4px; border-radius:4px; background:#fa925d; }
+body.inkling-has-control .inkling.is-furious .inkling-body::before { left:11px; rotate:22deg; }
+body.inkling-has-control .inkling.is-furious .inkling-body::after { right:10px; rotate:-22deg; }
+body.inkling-has-control .inkling.is-furious .inkling-mouth { left:25px; top:38px; width:17px; height:7px; border-top:3px solid #ffc775; border-bottom:0; border-radius:55% 55% 0 0; }
+body.inkling-has-control .inkling.is-furious .inkling-shadow { width:62px; left:7px; background:#b13324; opacity:.3; }
+body.inkling-has-control .inkling-bubble { border-color:#c76848; background:#381516; color:#ffe1b7; font-size:14px; }
+.inkling-rage-atmosphere[data-reduced=true] .rage-wash { background:linear-gradient(120deg,#9c332519,#6e1e2912); }
+.inkling-rage-atmosphere[data-reduced=true] :is(.rage-fractures,.rage-word,.rage-aside,.rage-impact-wave,.rage-impact-core) { display:none; }
+@media(max-width:600px) { .rage-aside { bottom:82px; font-size:20px; } .rage-fractures { opacity:.4; } }
+@media(prefers-reduced-motion:reduce) {
+  .inkling-rage-atmosphere * { animation:none!important; transition:none!important; }
+  .inkling-rage-atmosphere .rage-wash { background:linear-gradient(120deg,#9c332519,#6e1e2912); }
+  .inkling-rage-atmosphere :is(.rage-fractures,.rage-word,.rage-aside,.rage-impact-wave,.rage-impact-core) { display:none; }
+}

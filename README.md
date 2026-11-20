@@ -63,7 +63,7 @@ Run `npm run build` to produce the static site, then use `npm run preview` to re
 Inkling lives on the portfolio itself. There is no game panel. `src/inkling-play.js` manages roaming, hiding, shape changes, provocation, and the takeover; `src/inkling-dust.js` renders the disintegration particles.
 
 - He walks across the viewport, perches on visible artwork and headings, peeks from behind their edges, and dodges the pointer. There are no visible name, pause, hide, or restore panels. His angry form is a rounded puff, with no spiked silhouette.
-- Six pokes within the cooling period trigger a randomized two-to-five-impact rampage. Consecutive rampages request different impact counts and start in different sections. He shuffles the section order and chooses visible text, captions, descriptions, or artwork, preferring targets spared in the previous rampage. The same element (including gallery clones) cannot be hit twice in one rampage. Its actual glyph/artwork colours break into windblown dust.
+- Six pokes within the cooling period trigger a randomized two-to-four-impact rampage. Consecutive rampages request different impact counts and start in different sections. Targets are complete project cards, the visible gallery, service blocks or the whole service grid, the play poster, workshop portions, or entire large headings. Each plan mixes blocks and larger portions, prefers targets spared in the previous rampage, and excludes overlapping targets and duplicate gallery clones. Public contact details, navigation, and the dedicated form are protected. Its visible backgrounds, borders, artwork and text break into chunks and windblown dust.
 - Original DOM nodes retain their layout boxes. A temporary clipping class hides each target; the restore path removes only Inkling’s own classes and properties and restores previous interactivity.
 - **Escape** immediately ends the takeover and returns to the starting scroll position. Normal navigation, deliberate scrolling, leaving the tab, resizing, or changing motion preference also cancels the effect. An uninterrupted sequence repairs itself after a six-second victory lap; a count-scaled hard deadline provides a fallback.
 - Reduced motion keeps the expressions and teasing without autonomous roaming, automatic scrolling, jumps, or dust. Keyboard focus prevents dodging.
@@ -74,7 +74,7 @@ Verify six-poke activation, varied impact counts and targets, automatic restorat
 
 ## Sound effects
 
-`src/sound.js` synthesizes original Web Audio cues for navigation, gallery changes, project entry/exit, theme changes, pet pokes/dodges, anger, dust impacts, and restoration. No audio files or external services are used.
+`src/sound.js` synthesizes original Web Audio cues for navigation, gallery changes, project entry/exit, theme changes, pet pokes/dodges, anger, charging jumps, granular crumbling, dust impacts, and restoration. No audio files or external services are used.
 
 Audio unlocks after a trusted pointer or keyboard interaction. **Sound on/off** is available on the main page and inside case studies; the choice persists in local storage. Muting stops active and scheduled voices immediately. Hidden tabs suspend playback, and the next interaction resumes it. Short envelopes, a low master level, a compressor, per-cue rate limits, and a voice cap keep overlapping effects controlled. Browsers without Web Audio retain the visual experience.
 
@@ -144,3 +144,11 @@ The main playground is one opt-in encounter, mounted by `src/mischief.js` and st
 Inkling steals the button label, dodges a mouse at most twice, and then becomes catchable. Touch, keyboard, reduced-motion users, and the visible “Catch Inkling” control can catch him directly. Catching produces a short celebration from the existing capped creative canvas and leaves real work/contact links in the section. Escape, Finish playing, navigation, scrolling, tab hiding, resize, case-study opening, the ink loop, and a 20-second timeout return the page to normal. No scroll lock, external network, score storage, or permanent document damage is involved. Normal roaming, repairs and takeover input are suspended during the encounter; previous machine parts remain collected.
 
 Old route/mixer/lab hashes resolve to `#playground` for previously shared links. The custom form stays on `/idea/`, with public email and phone on both pages. `src/idea-bridge.js` still accepts existing encoded brief links, and the form clears the fragment only after accepted submission. Both HTML entries remain in `vite.config.js`, and the main portfolio keeps its resisted ink loop.
+
+## Large-block angry takeover
+
+`src/inkling-rampage.js` selects complete visual units with stable logical keys. `src/inkling-play.js` computes each candidate’s visible intersection with the viewport and clipping ancestors before choosing a landing point. Large wrappers can be partly offscreen; the impact lands in their visible area. Impact shake, shrinking, desaturation and a clipping wipe leave layout boxes intact. Previous inline transforms, origins, opacity, filters, clip custom properties and interactivity are restored on every exit.
+
+`src/inkling-rage.js` adds a reversible burgundy/ember wash, fractured edges and finite impact rings. Its classes do not change the ink loop’s theme state. Inkling gains a rounded angry silhouette, slanted eyes, brows and a glow. Reduced motion and the dedicated form page keep a mild static expression/tint without destruction or automatic scrolling. Escape, navigation, scrolling, tab hiding and motion changes still cancel the takeover.
+
+The anger event pauses ambient music independently of the effects mute/context state; reset resumes it only when enabled, running and visible. All charge/impact/crumble cues share existing mute, rate limits, compressor and voice cap. Reset stops their tails before the repair jingle begins. There is no continuous rumble loop or strobing flash.
