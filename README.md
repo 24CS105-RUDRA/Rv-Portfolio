@@ -110,3 +110,15 @@ To regenerate the raster branding assets on macOS with Pillow installed, run `py
 A shared canvas caps these decorative particles at 180 and limits pixel density to 1.5. Its ticker runs only while particles exist and stops in hidden tabs. Reduced motion removes the moving particle effects, theft, magnetic response, ink gathering, elastic stretching, and floating nodes while retaining static technology controls. Cleanup removes generated markup, timers, observers, event handlers, and animation state during development reloads.
 
 The loop gathering state clears on completion, Escape, resize, tab hiding, reduced-motion changes, and development cleanup. WebGL-unavailable browsers use the same live opening container with a fading monogram fallback.
+
+## The Unfinished Machine
+
+The full-width `#workshop` section sits between services and contact. `src/workshop.js` turns explored projects into six kinds of component: register, sensor, logic engine, route switch, wheel, and interface. The collection lives in session storage, is validated against known parts, and does not duplicate components when a project is revisited. The final idea socket always stays empty and links to contact. **See what we made** runs the visitor’s current machine and prints an invitation without requiring a complete collection.
+
+`src/machine-art.js` draws the original SVG machine and exports a self-contained SVG postcard using the actual collected parts. **Keep the postcard** generates the file locally; nothing is uploaded. The root illustration adapts to the site’s theme; exported postcards use fixed cream and ink colours.
+
+Inkling carries souvenirs in a tiny hardhat. At the workshop he fumbles, catches, installs, and celebrates a component. When its socket is offscreen, a visitor-triggered run can use the machine’s intake instead. Repairs stop on Escape, navigation, modal opening, resize, tab hiding, reduced-motion changes, and the ink loop; collected parts remain available. New pickup, clank, squeak, startup, and printer cues use the existing sound toggle, limiter, and voice cap. A running machine’s wheel makes a small escape attempt before returning.
+
+`src/project-notes.js` contains six factual **Under the polish** notebooks. They expose a constraint, the approach, a small process sketch, and the current boundary. They do not invent failed attempts or personal anecdotes absent from the project record.
+
+Motion runs only during a short user-triggered sequence and while the workshop is visible. Reduced motion keeps collection, the static illustration, immediate print output, notes, and postcard export. A cancelled print returns to an idle invitation instead of staying stuck on a loading message.

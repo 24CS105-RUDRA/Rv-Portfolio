@@ -123,7 +123,7 @@ export function initProjects(scroll, gallery) {
         dialog.scrollTop = 0;
       }
       close.focus({preventScroll: true});
-      window.dispatchEvent(new CustomEvent('portfolio:project-art',{detail:{project:projects[id],rect:sourceRect,closing:false}}));
+      window.dispatchEvent(new CustomEvent('portfolio:project-art',{detail:{id,project:projects[id],rect:sourceRect,closing:false}}));
     };
     if (!motion.matches) {show(); return;}
     // Reset the pixel offset GSAP reads from the curtain's CSS transform.

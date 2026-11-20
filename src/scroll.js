@@ -55,7 +55,7 @@ export function initScroll(setFlood, onTheme = () => {}, onGather = () => {}) {
       hero.classList.remove('loop-gathering');hero.style.removeProperty('--gather-progress');
       heroHome.prepend(hero);onGather(null);gsap.set(hero,{autoAlpha:1});
       resetPull();updateNavMask();setCurrent(null);lockedUntil=performance.now()+650;
-      if(/^#(?:top|intro|work|services|contact)$/.test(location.hash))history.replaceState(null,'',`${location.pathname}${location.search}#top`);
+      if(/^#(?:top|intro|work|services|workshop|contact)$/.test(location.hash))history.replaceState(null,'',`${location.pathname}${location.search}#top`);
       window.dispatchEvent(new Event('portfolio:loop-end'));
     }
     function beginGather(){
@@ -255,7 +255,7 @@ export function initScroll(setFlood, onTheme = () => {}, onGather = () => {}) {
     if (events.signal.aborted) return;
     ScrollTrigger.refresh();
     const id = location.hash.slice(1);
-    if (['intro', 'work', 'services', 'contact'].includes(id)) scrollToSection(id, {immediate: true});
+    if (['intro', 'work', 'services', 'workshop', 'contact'].includes(id)) scrollToSection(id, {immediate: true});
   });
   state.toSection = scrollToSection;
   state.refresh = () => ScrollTrigger.refresh();

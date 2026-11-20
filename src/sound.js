@@ -65,7 +65,7 @@ export function initSound() {
   }
   function play(name) {
     if(!enabled||disposed||document.hidden||context?.state!=='running')return;
-    const now=performance.now(),gap=name==='impact'?700:name==='pop'?95:180;
+    const now=performance.now(),gap=['machine','print'].includes(name)?1400:name==='impact'?700:name==='pop'?95:180;
     if(now-(lastPlayed.get(name)??-Infinity)<gap)return;
     lastPlayed.set(name,now);
     switch(name){
@@ -79,6 +79,23 @@ export function initSound() {
       case 'impact':tone(120,42,.3,.55);air(2200,240,.95,.4);air(3600,850,.65,.16,.15);break;
       case 'restore':tone(392,392,.27,.2);tone(494,494,.3,.18,'sine',.1);tone(587,587,.4,.16,'sine',.2);break;
       case 'theme':air(220,2200,.8,.2);tone(130,260,.55,.17);break;
+      // Small engineer gestures share the effect bus, mute, limiter and voice cap.
+      case 'pickup':
+        tone(310,570,.12,.18,'sine');tone(740,900,.1,.08,'sine',.09);break;
+      case 'clank':
+        tone(240,160,.1,.2,'triangle');tone(970,720,.13,.07,'sine',.015);
+        air(1800,850,.08,.1);tone(380,320,.06,.09,'triangle',.12);break;
+      case 'squeak':
+        tone(1020,370,.28,.13,'sine');tone(470,250,.16,.07,'triangle',.16);break;
+      case 'machine':
+        tone(72,110,.7,.18,'triangle');air(220,700,.5,.08);
+        [262,330,392,523].forEach((note,index)=>tone(note,note*1.01,.28,.1,'sine',.18+index*.12));break;
+      case 'print':
+        for(let i=0;i<5;i++){
+          air(1300+i*120,650,.055,.07,i*.085);
+          tone(i%2?230:280,190,.045,.06,'triangle',i*.085);
+        }
+        tone(660,660,.17,.08,'sine',.45);break;
     }
   }
   function toggle(){enabled=!enabled;try{localStorage.setItem('portfolio-sound',enabled?'on':'off');}catch{}update();if(enabled){unlock();context?.resume().then(()=>play('restore')).catch(()=>{});}else{stop();if(!musicEnabled)context?.suspend().catch(()=>{});}}
