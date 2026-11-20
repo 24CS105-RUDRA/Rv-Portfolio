@@ -44,8 +44,6 @@ export function initWorkshop(scroll) {
     section.classList.add('is-running');printTimer=setTimeout(print,1500);finishTimer=setTimeout(stop,3100);
   },{signal});
   download.addEventListener('click',()=>{try{downloadMachinePostcard([...parts]);soundCue('print');status.textContent='Your curiosity postcard is ready. Keep a little piece of the workshop.';}catch{status.textContent='Your browser could not save the postcard. You can still explore the machine here.';}},{signal});
-  section.querySelector('.machine-contact').addEventListener('click',e=>{e.preventDefault();scroll.toSection('contact',{focus:true,updateHash:true});},{signal});
-  drawing.addEventListener('click',e=>{if(e.target.closest('[data-contact-socket]')){e.preventDefault();scroll.toSection('contact',{focus:true,updateHash:true});}},{signal});
   window.addEventListener('portfolio:project-art',e=>{
     if(e.detail.closing)return;
     stop();

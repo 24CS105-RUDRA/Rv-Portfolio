@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050505" />
+  <link rel="stylesheet" href="/src/style.css" />
+  <link rel="stylesheet" href="/src/idea-page.css" />
+  <title>Share an idea — Rudra Vaghela</title>
+  <meta name="description" content="Have an idea? Send Rudra a short project brief, or connect directly by email and phone." />
+  <link rel="canonical" href="https://rv-portfolio-five.vercel.app/idea/" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="author" content="Rudra Vaghela" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_IN" />
+  <meta property="og:site_name" content="Rudra Vaghela — Portfolio" />
+  <meta property="og:title" content="Share an idea — Rudra Vaghela" />
+  <meta property="og:description" content="A small beginning for your next project. Share a brief with Rudra Vaghela." />
+  <meta property="og:url" content="https://rv-portfolio-five.vercel.app/idea/" />
+  <meta property="og:image" content="https://rv-portfolio-five.vercel.app/social-preview.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Rudra Vaghela monogram with Code. Motion. Curiosity. on a cream editorial grid" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Share an idea — Rudra Vaghela" />
+  <meta name="twitter:description" content="Share a project idea, question, or collaboration with Rudra Vaghela." />
+  <meta name="twitter:image" content="https://rv-portfolio-five.vercel.app/social-preview.png" />
+  <meta name="twitter:image:alt" content="Share an idea — Rudra Vaghela" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/svg+xml" href="/src/assets/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62.5..125,900&family=Instrument+Serif&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body class="idea-page">
+  <a class="skip-link" href="#idea-form">Skip to the idea form</a>
+  <header class="idea-page-nav"><a href="/#contact" class="idea-back"><img src="/logo.svg" width="29" height="35" alt="Rudra Vaghela"/><span>Back to the portfolio</span></a><span>A little beginning.</span></header>
+  <main>
+    <section id="contact" class="contact" aria-labelledby="contact-title">
+      <p class="contact-note mono">A note, a sketch, a wonderfully odd what if.</p>
+      <h1 id="contact-title">Good things start<br><em>with a conversation.</em></h1>
+      <div class="contact-connect">
+        <aside class="contact-details" aria-label="Contact Rudra">
+          <p class="contact-kicker">Prefer a conversation?</p>
+          <a class="contact-email" data-contact-email href="mailto:rudravaghela1052007@gmail.com">rudravaghela1052007@gmail.com</a>
+          <a class="contact-phone" data-contact-phone href="tel:+916351860059">+91 63518 60059</a>
+          <p class="contact-detail-note">A polished proposal is optional. A real problem and a little curiosity are enough.</p>
+          <a class="contact-github" href="https://github.com/24CS105-RUDRA" target="_blank" rel="noopener noreferrer">Find me on GitHub</a>
+          <a class="idea-back-to-play" href="/#idea-mixer">Need a spark? Try the idea mixer.</a>
+        </aside>
+          <div class="idea-desk" data-pet-safe>
+            <form id="idea-form" class="idea-form" method="post" aria-labelledby="idea-form-title">
+              <div class="idea-form-heading"><span>A note to Rudra</span><h3 id="idea-form-title">Tell me the almost-idea.</h3></div>
+              <div class="idea-fields-two">
+                <div class="idea-field"><label for="idea-name">Your name</label><input id="idea-name" name="name" autocomplete="name" maxlength="80" required /></div>
+                <div class="idea-field"><label for="idea-email">Your email</label><input id="idea-email" name="email" type="email" autocomplete="email" maxlength="254" required /></div>
+              </div>
+              <fieldset class="idea-topics"><legend>What are you thinking?</legend>
+                <label class="idea-topic"><input type="radio" name="interest" value="Web app" checked /><span>Web app</span></label>
+                <label class="idea-topic"><input type="radio" name="interest" value="AI" /><span>AI</span></label>
+                <label class="idea-topic"><input type="radio" name="interest" value="Hardware" /><span>Hardware</span></label>
+                <label class="idea-topic"><input type="radio" name="interest" value="Something strange" /><span>Something strange</span></label>
+              </fieldset>
+              <div class="idea-field"><label for="idea-message">What’s the idea?</label><textarea id="idea-message" name="message" rows="5" minlength="15" maxlength="4000" placeholder="Who is it for? What would you love it to do? A few lines are enough." data-lenis-prevent required></textarea></div>
+              <div class="idea-honey" aria-hidden="true" hidden><label for="idea-website">Leave this field empty</label><input id="idea-website" name="_honey" tabindex="-1" autocomplete="off" /></div>
+              <p class="idea-form-setup" role="status" hidden>The idea form is being connected. Please use the email or phone link.</p>
+              <div class="idea-form-footer"><button id="idea-submit" type="submit" disabled><span>Send my idea</span><svg viewBox="0 0 32 32" width="25" height="25" aria-hidden="true"><path d="m4 14 24-9-9 24-4-10-11-5Zm11 5L28 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button><p id="idea-form-status" role="status" aria-live="polite"></p></div>
+              <p class="idea-form-note">Your name, email and idea are sent through FormSubmit so Rudra can reply. No mailing list.</p>
+              <noscript><p>Please use the contact links. The idea form needs JavaScript to send your note.</p></noscript>
+            </form>
+            <div class="idea-receipt" hidden><svg viewBox="0 0 160 120" width="160" height="120" aria-hidden="true"><path d="m24 56 116-36-42 94-22-38-52-20Zm52 20 64-56" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m24 95 17-5m-24-7 11-3m15 30 17-9" fill="none" stroke="currentColor" stroke-width="2"/></svg><h4 tabindex="-1">Your idea is on its way.</h4><p>Thanks for sharing the beginning of something. Rudra will have your email to reply.</p><button type="button" data-idea-reset>Write another note</button></div>
+          </div>
+      </div>
+    </section>
+  </main>
+  <footer class="idea-page-footer"><p>Rudra Vaghela · Code, motion &amp; curiosity.</p><a href="/">Back to the beginning</a></footer>
+  <script type="module" src="/src/idea-page.js"></script>
+</body>
+</html>

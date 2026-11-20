@@ -28,7 +28,7 @@ export function initInklingPlay(scroll) {
   let nextDodge=0,roams=0,pointerDown=false,originScroll=0,scrollMoved=false;
   let lastFrame=0,previousCount=0,previousFirst=null;
   let previousTargets=new Set();
-  let engineering=false,engineerTween,writing=false;
+  let engineering=false,engineerTween,writing=false,lastLabReaction=-Infinity;
   const engineerQueue=[],cargo=pet.querySelector('.inkling-cargo');
   const partIcons={cpu:'▦',sensor:'◎',logic:'⌘',route:'⌁',wheel:'◉',interface:'▤'};
   const clamp=(v,min,max)=>Math.max(min,Math.min(Math.max(min,max),v));
@@ -107,7 +107,8 @@ export function initInklingPlay(scroll) {
   },{signal});
   window.addEventListener('portfolio:machine-run',()=>{
     if(writing||raging||engineering||document.hidden||preference.matches)return;
-    const machine=document.querySelector('#machine-drawing'),r=machine.getBoundingClientRect();
+    const machine=document.querySelector('#machine-drawing');if(!machine)return;
+    const r=machine.getBoundingClientRect();
     if(r.bottom<90||r.top>innerHeight)return;
     if(engineerQueue.length&&installPart(true))return;
     stopTravel();engineering=true;clearTimeout(roamTimer);pet.classList.add('is-engineer');setState('engineering');
@@ -238,6 +239,20 @@ export function initInklingPlay(scroll) {
     if(writing){restore({quiet:true});clearTimeout(roamTimer);}
     else scheduleRoam(3500);
   },{signal});
+  // The lab can surprise Inkling, without triggering a takeover or a scroll.
+  window.addEventListener('portfolio:lab-reaction',e=>{
+    if(writing||raging||engineering||document.hidden||document.body.classList.contains('modal-open')||performance.now()-lastLabReaction<1800)return;
+    const reactions={overload:['Server ko bhi Monday lag gaya.','Bhai, queue hai. Buffet nahi.'],recovery:['Cache lagaya. Chai ka time bachaya.','Architecture thoda sambhal gaya.'],success:['Request delivered. Credit mera.','Sab green. Screenshot le lo jaldi.']};
+    const mood=e.detail.mood,lines=reactions[mood];if(!lines)return;
+    lastLabReaction=performance.now();stopTravel();
+    blob.dataset.shape=mood==='overload'?'puff':mood==='recovery'?'drop':'blob';
+    say(lines[Math.floor(Math.random()*lines.length)]);soundCue(mood==='overload'?'squeak':'pickup');
+    if(!preference.matches)bounce=gsap.fromTo(blob,{y:0,rotation:mood==='overload'?-9:0,scaleX:1.15,scaleY:.85},{y:mood==='overload'?-8:-18,rotation:0,scaleX:.9,scaleY:1.1,duration:.22,yoyo:true,repeat:1,ease:'power2.out'});
+    scheduleRoam(3500);
+  },{signal});
+  const protectControls=e=>{if(e.target.closest('[data-pet-safe]')&&(raging||engineering))restore({quiet:true});};
+  document.addEventListener('pointerdown',protectControls,{signal,capture:true});
+  document.addEventListener('focusin',protectControls,{signal});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){restore({quiet:true});clearTimeout(roamTimer);}else scheduleRoam();},{signal});
   preference.addEventListener('change',()=>{restore({quiet:true});Object.assign(position,bounds(24,innerHeight-155));},{signal});
   window.addEventListener('wheel',()=>{if(raging)restore({quiet:true});},{signal,passive:true,capture:true});

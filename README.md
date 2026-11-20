@@ -32,7 +32,7 @@ Deploy the generated `dist/` directory to a static host. No backend or environme
 
 When adding a project, update its HTML card and its `src/projects.js` entry together. The gallery calculates its count from the cards.
 
-The contact desk includes email and telephone links plus an idea form. Public contact details and an activated FormSubmit AJAX endpoint belong in `src/contact-config.js`. Until those details are supplied, the links remain hidden, submission stays disabled, and GitHub remains available. No placeholder recipient is used.
+The main contact section shows public email/telephone links and opens the dedicated `/idea/` page. That page contains the custom idea form, with no Google Forms embed. Public contact details and the FormSubmit AJAX endpoint live in `src/contact-config.js`. FormSubmit delivery requires the recipient's inbox activation; no placeholder recipient is used.
 
 ## Project sources
 
@@ -131,8 +131,18 @@ Every gallery copy namespaces SVG IDs and local paint/clip references independen
 
 ## Contact desk
 
-`src/contact.js` validates the idea form and posts a name, reply email, topic, and message to the configured HTTPS FormSubmit AJAX endpoint. Before publishing, set the owner-approved public email and international phone number in `src/contact-config.js`, activate that recipient through FormSubmit's confirmation email, and verify a real submission reaches the inbox. No API secret belongs in this public configuration.
+`idea/index.html` is a separate Vite page with its own `src/idea-page.js` entry. `src/contact.js` validates the idea form and posts a name, reply email, topic, and message to the configured HTTPS FormSubmit AJAX endpoint. Set owner-approved public details in `src/contact-config.js`, activate the recipient through FormSubmit's confirmation email, and verify a real submission reaches the inbox. No API secret belongs in this public configuration. The previous automated setup test was rejected with HTTP403, so inbox delivery has not yet been confirmed.
 
 The form only shows its animated paper receipt after an OK response with `success` equal to boolean `true` or string `"true"`. HTTP200 alone and string `"false"` are not success. Failed or timed-out requests preserve the draft; duplicate clicks are blocked; controls lock while a request is in flight; cleanup aborts the request and restores the neutral UI. Name/email validation is native and the idea needs 15 characters after trimming. The local honeypot never produces a receipt. Nothing is written to browser storage.
 
 Contact focus quietly cancels Inkling's takeover and pauses his roaming/engineering until focus leaves the desk. The form is outside all dust targets, the textarea retains native inner scrolling, and reduced motion skips the paper arrival/stamp. Drafts survive theme and loop changes. Contact styling is in `src/contact.css`.
+
+## Routes, ideas, and a little systems trouble
+
+`src/visitor-adventure.js` offers hiring, idea, and curiosity routes through three real projects per route, preserving their documented development statuses. A finite printed ticket reveals the route. Its case-study links use the existing project dialog; its next action leads to the mixer or a starter brief on `/idea/`. The Explore navigation link opens this section.
+
+`src/idea-mixer.js` combines a problem, an approach, and a constraint. Visitors can keep individual cards, shuffle the others, edit the result, and carry it to the form. Every unlocked card changes on a shuffle; keeping all cards explains how to release them. `src/idea-bridge.js` encodes only the chosen brief/topic/source in a URL fragment, so the brief works in another tab without being sent to the hosting server. The new page reads it into native form fields as plain text. A successful submission clears that fragment and its prefill note. Name/email form fields are never added to the link.
+
+`src/systems-playground.js` is an explicitly labelled toy request queue, not a real server benchmark. A batch contains six repeating keys; the queue has12 spaces; each fifth request fails its first uncached worker attempt. The visitor can enable exact-key response caching and one retry. Completed includes cached responses; failed and queue-full requests are counted separately. Every admitted original request terminates once, with retries capped. A reset clears the queue, counters, cache, and options. Only one finite worker timer exists while visible and queued; hiding the tab, opening a case study, leaving the section, or disposing pauses it. Reduced motion removes flying tokens and processes with static state changes. Inkling's throttled reaction events are expressive only and never initiate a takeover or scroll.
+
+Playground controls cancel an existing takeover before interaction; editing the mixer pauses pet roaming. A separate stylesheet accompanies each section. Both portfolio and idea entries are declared in `vite.config.js`; build outputs include `dist/index.html` and `dist/idea/index.html`. The paper theme is retained across these pages within the tab. The original resisted ink return loop remains on the main portfolio.

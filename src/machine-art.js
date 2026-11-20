@@ -83,7 +83,7 @@ export function renderMachine(parts, { compact = false } = {}) {
     ${moduleBox('route', 87, 320, 180, 107, collected.has('route'), drawRoute())}
     ${moduleBox('wheel', 294, 320, 136, 107, collected.has('wheel'), drawWheel())}
     ${moduleBox('interface', 478, 320, 171, 112, collected.has('interface'), drawInterface())}
-    <a class="machine-idea-socket" data-contact-socket="" href="#contact" aria-label="Your idea goes here — contact Rudra" transform="translate(766 213)" style="color:#a54e36">
+    <a class="machine-idea-socket" data-contact-socket="" href="https://rv-portfolio-five.vercel.app/idea/" aria-label="Your idea goes here — contact Rudra" transform="translate(766 213)" style="color:#a54e36">
       <rect x="0" y="0" width="182" height="145" rx="17" fill="var(--paper,#f6f5f2)" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 7"/>
       <circle cx="91" cy="59" r="24" fill="none" stroke="currentColor" stroke-width="1.3"/>
       <path d="M80 59h22M91 48v22" ${line}/>

@@ -55,7 +55,7 @@ export function initScroll(setFlood, onTheme = () => {}, onGather = () => {}) {
       hero.classList.remove('loop-gathering');hero.style.removeProperty('--gather-progress');
       heroHome.prepend(hero);onGather(null);gsap.set(hero,{autoAlpha:1});
       resetPull();updateNavMask();setCurrent(null);lockedUntil=performance.now()+650;
-      if(/^#(?:top|intro|work|services|workshop|contact)$/.test(location.hash))history.replaceState(null,'',`${location.pathname}${location.search}#top`);
+      if(/^#(?:top|intro|work|services|visitor-route|idea-mixer|systems-lab|workshop|contact)$/.test(location.hash))history.replaceState(null,'',`${location.pathname}${location.search}#top`);
       window.dispatchEvent(new Event('portfolio:loop-end'));
     }
     function beginGather(){
@@ -248,14 +248,14 @@ export function initScroll(setFlood, onTheme = () => {}, onGather = () => {}) {
 
   const observer = new IntersectionObserver(entries => {
     const entry = entries.find(entry => entry.isIntersecting);
-    if (entry && (!state.timeline || !state.timeline.scrollTrigger.isActive)) setCurrent(entry.target.id);
+    if (entry && (!state.timeline || !state.timeline.scrollTrigger.isActive)) setCurrent(entry.target.id==='systems-lab' ? 'idea-mixer' : entry.target.id);
   }, {rootMargin: '-12% 0px -63% 0px'});
-  document.querySelectorAll('#work, #services, #contact').forEach(section => observer.observe(section));
+  document.querySelectorAll('#work, #visitor-route, #services, #idea-mixer, #systems-lab, #contact').forEach(section => observer.observe(section));
   document.fonts.ready.then(() => {
     if (events.signal.aborted) return;
     ScrollTrigger.refresh();
     const id = location.hash.slice(1);
-    if (['intro', 'work', 'services', 'workshop', 'contact'].includes(id)) scrollToSection(id, {immediate: true});
+    if (['intro', 'work', 'services', 'visitor-route', 'idea-mixer', 'systems-lab', 'workshop', 'contact'].includes(id)) scrollToSection(id, {immediate: true});
   });
   state.toSection = scrollToSection;
   state.refresh = () => ScrollTrigger.refresh();

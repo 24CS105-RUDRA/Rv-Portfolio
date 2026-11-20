@@ -54,7 +54,7 @@ export function initContact(config = contactConfig) {
     }
     const payload = {name: name.value, email: email.value, message: message.value, interest: interest.value,
       _subject: `A portfolio idea · ${interest.value}`, _template: 'table', _honey: '',
-      _url: 'https://rv-portfolio-five.vercel.app/#contact'};
+      _url: 'https://rv-portfolio-five.vercel.app/idea/'};
     sending = true; submit.disabled = true; label.textContent = 'Sending your idea…';
     fields.forEach(field => {field.disabled = true;});
     form.setAttribute('aria-busy', 'true'); status.textContent = 'Sending. Keep this page open for a moment.';
@@ -66,6 +66,7 @@ export function initContact(config = contactConfig) {
       if (!response.ok || !(data.success === true || data.success === 'true')) throw new Error('Submission was not accepted.');
       if (disposed) return;
       form.reset(); form.hidden = true; receipt.hidden = false; desk.classList.add('is-delivered');
+      window.dispatchEvent(new Event('portfolio:idea-sent'));
       receipt.querySelector('h4').focus({preventScroll: true}); soundCue('print');
     } catch {
       if (!disposed) {

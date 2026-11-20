@@ -31,6 +31,14 @@
 .contact-email:hover, .contact-phone:hover { color:var(--contact-accent); }
 .contact-detail-note { max-width:32ch; margin-top:28px; color:var(--muted); font-size:16px; line-height:1.65; }
 .contact-github { display:inline-flex; align-items:center; min-height:44px; margin-top:22px; font:400 14px/1.5 var(--mono); text-decoration:underline; text-underline-offset:5px; }
+.contact-invitation { min-width:0; border-top:1px solid var(--ink); padding:25px 0 30px; }
+.contact-invitation-label, .contact-invitation-note { display:block; color:var(--muted); font:14px/1.6 var(--mono); }
+.contact-invitation h3 { margin-top:22px; font:500 clamp(38px,4.6vw,68px)/1.03 var(--body); letter-spacing:-.045em; }
+.contact-invitation h3 em { font-family:Georgia,serif; font-weight:400; }
+.contact-invitation p { max-width:42ch; margin-top:24px; font-size:18px; line-height:1.6; color:var(--muted); }
+.idea-page-link { display:inline-flex; justify-content:space-between; align-items:center; gap:40px; min-height:56px; padding:14px 25px; margin:30px 0 16px; border:1px solid var(--ink); border-radius:30px; color:var(--paper); background:var(--ink); font-size:16px; }
+.idea-page-link:hover { color:var(--ink); background:var(--paper); }
+.idea-page-link span { font-size:22px; }
 .idea-desk { position:relative; min-width:0; border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); padding:25px 0 30px; }
 .idea-form { display:grid; gap:26px; }
 .idea-form-heading > span { color:var(--muted); font:400 14px/1.6 var(--mono); letter-spacing:.08em; text-transform:uppercase; }
