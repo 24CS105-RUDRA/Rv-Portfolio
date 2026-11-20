@@ -3,9 +3,7 @@
 @import './project-art-hardware.css';
 @import './project-art-experiments.css';
 @import './contact.css';
-@import './idea-mixer.css';
-@import './systems-playground.css';
-@import './visitor-adventure.css';
+@import './mischief.css';
 
 :root {
   --black: #050505;

@@ -82,6 +82,14 @@ export function initCreativeMotion() {
   media.add('(prefers-reduced-motion: no-preference)',()=>{
     const local=new AbortController(),s=local.signal;let lastX=null,lastY=null,lastTime=0;
     ink=getComputedStyle(document.documentElement).getPropertyValue('--ink');
+    window.addEventListener('portfolio:mischief-burst',e=>{
+      const {x,y}=e.detail,colors=[getComputedStyle(document.documentElement).getPropertyValue('--ink'),'#e6573d','#e8c978','#b9d5ca'];
+      for(let i=0;i<90;i++){
+        const angle=i/90*Math.PI*2,distance=75+Math.random()*230;
+        add({x,y,vx:Math.cos(angle)*distance,vy:Math.sin(angle)*distance+65,r:2+Math.random()*5,flat:i%3===0,angle,life:.75+Math.random()*.7,alpha:.8,color:colors[i%colors.length],fixed:true});
+      }
+    },{signal:s});
+    window.addEventListener('portfolio:mischief-state',e=>{if(e.detail?.phase==='cancelled')clear();},{signal:s});
     window.addEventListener('portfolio:pet-step',e=>{
       const p=e.detail,t=performance.now();if(t-lastFoot.time<140||Math.hypot(p.x-lastFoot.x,p.y-lastFoot.y)<15)return;
       lastFoot={...p,time:t};add({x:p.x+28+(Math.round(t/140)%2)*15,y:p.y+78,r:p.angry?6:3.5,flat:true,life:p.angry?3:1.8,alpha:.2,color:getComputedStyle(document.querySelector('.inkling')).getPropertyValue('--ink')});

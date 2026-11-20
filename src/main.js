@@ -1,8 +1,5 @@
 import gsap from 'gsap';
-import { initIdeaMixer } from './idea-mixer.js';
-import { initSystemsPlayground } from './systems-playground.js';
-import { initVisitorAdventure } from './visitor-adventure.js';
-import { initPlayFocus } from './play-focus.js';
+import { initMischief } from './mischief.js';
 import { initWorkshop } from './workshop.js';
 import { initCreativeMotion } from './creative-motion.js';
 import { initEntrance } from './entrance.js';
@@ -16,6 +13,7 @@ import { initProjects } from './projects.js';
 import { initGallery } from './gallery.js';
 
 const root = document.documentElement;
+if (['#visitor-route', '#idea-mixer', '#systems-lab'].includes(location.hash)) history.replaceState(history.state, '', `${location.pathname}${location.search}#playground`);
 try { root.classList.toggle('theme-dark', sessionStorage.getItem('rudra-paper-theme') === 'dark'); } catch {}
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const events = new AbortController();
@@ -56,10 +54,7 @@ const disposeDetails = initDetailsMotion();
 const disposeExpressive = initExpressive(scroll);
 const disposeCreative = initCreativeMotion();
 const disposeWorkshop = initWorkshop(scroll);
-const disposeAdventure = initVisitorAdventure({scroll, gallery});
-const disposeMixer = initIdeaMixer();
-const disposeSystems = initSystemsPlayground();
-const disposePlayFocus = initPlayFocus();
+const disposeMischief = initMischief({scroll});
 const disposeProjects = initProjects(scroll, gallery);
 const disposeEntrance = initEntrance(scroll);
 const renderFluid = (time, delta) => {
@@ -78,10 +73,7 @@ if (import.meta.hot) import.meta.hot.dispose(() => {
   events.abort();
   gsap.ticker.remove(renderFluid);
   disposeEntrance();
-  disposePlayFocus();
-  disposeSystems();
-  disposeMixer();
-  disposeAdventure();
+  disposeMischief();
   disposeWorkshop();
   disposeCreative();
   disposeExpressive();

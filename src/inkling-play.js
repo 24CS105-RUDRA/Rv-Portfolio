@@ -3,6 +3,7 @@ import { soundCue } from './sound.js';
 import { createInklingDust } from './inkling-dust';
 import { createBanter } from './inkling-banter';
 import { createRampagePlan, chooseRampageTarget, rampageTargetKey } from './inkling-rampage';
+import { createInklingMischief } from './inkling-mischief';
 
 const shapes=['blob','drop','square','ghost','puff'];
 const surfaces='.intro-title .line-mask, .project-cover, .service h3, .contact-note, #contact-title .line-mask';
@@ -28,7 +29,7 @@ export function initInklingPlay(scroll) {
   let nextDodge=0,roams=0,pointerDown=false,originScroll=0,scrollMoved=false;
   let lastFrame=0,previousCount=0,previousFirst=null;
   let previousTargets=new Set();
-  let engineering=false,engineerTween,writing=false,lastLabReaction=-Infinity;
+  let engineering=false,engineerTween,writing=false,mischief;
   const engineerQueue=[],cargo=pet.querySelector('.inkling-cargo');
   const partIcons={cpu:'▦',sensor:'◎',logic:'⌘',route:'⌁',wheel:'◉',interface:'▤'};
   const clamp=(v,min,max)=>Math.max(min,Math.min(Math.max(min,max),v));
@@ -63,7 +64,7 @@ export function initInklingPlay(scroll) {
   function scheduleRoam(delay=3500){clearTimeout(roamTimer);if(!disposed)roamTimer=setTimeout(roam,delay);}
   function roam() {
     if(disposed)return;
-    if(writing||raging||engineering||preference.matches||document.hidden||document.body.classList.contains('modal-open')||pointerDown||play.matches(':focus-visible')){scheduleRoam();return;}
+    if(mischief?.active||writing||raging||engineering||preference.matches||document.hidden||document.body.classList.contains('modal-open')||pointerDown||play.matches(':focus-visible')){scheduleRoam();return;}
     if(engineerQueue.length&&installPart())return;
     const candidates=targets(),target=candidates[Math.floor(Math.random()*candidates.length)];
     roams++;blob.dataset.shape=shapes[roams%shapes.length];
@@ -106,7 +107,7 @@ export function initInklingPlay(scroll) {
     engineerQueue.push(part);updateCargo();soundCue('pickup');
   },{signal});
   window.addEventListener('portfolio:machine-run',()=>{
-    if(writing||raging||engineering||document.hidden||preference.matches)return;
+    if(mischief?.active||writing||raging||engineering||document.hidden||preference.matches)return;
     const machine=document.querySelector('#machine-drawing');if(!machine)return;
     const r=machine.getBoundingClientRect();
     if(r.bottom<90||r.top>innerHeight)return;
@@ -129,6 +130,7 @@ export function initInklingPlay(scroll) {
   }
   const wait=seconds=>animate({}, {duration:seconds});
   function restore({quiet=false,returnScroll=false}={}) {
+    if(mischief?.active)mischief.stop('reset');
     if(!quiet&&raging)soundCue('restore');
     window.dispatchEvent(new Event('portfolio:pet-reset'));
     stopEngineer();
@@ -146,6 +148,11 @@ export function initInklingPlay(scroll) {
     if(!quiet)say(line('restore'));
     scheduleRoam(4500);
   }
+  mischief=createInklingMischief({pet,play,blob,position,moveTo,stopTravel,say,bounds,preference,setState,
+    reset:restore,pauseRoam(){clearTimeout(roamTimer);stopEngineer();stopTravel();},resumeRoam(){scheduleRoam(3500);}});
+  window.addEventListener('portfolio:mischief-start',e=>{if(!writing&&!document.hidden&&!document.body.classList.contains('modal-open'))mischief.start(e.detail);},{signal});
+  window.addEventListener('portfolio:mischief-catch',()=>{if(mischief.active)mischief.catchPet({detail:0});},{signal});
+  window.addEventListener('portfolio:mischief-stop',e=>mischief.stop(e.detail?.reason||'user'),{signal});
   async function jumpOn(element,current) {
     if(token!==current||!visible(element))return;
     const r=element.getBoundingClientRect(),goal=bounds(r.left+r.width*.5-38,r.top-70);
@@ -210,7 +217,8 @@ export function initInklingPlay(scroll) {
       clearTimeout(autoRestore);autoRestore=setTimeout(()=>restore(),6000);
     } catch { if(token===current)restore(); }
   }
-  play.addEventListener('click',()=>{
+  play.addEventListener('click',e=>{
+    if(mischief.active){mischief.catchPet(e);return;}
     soundCue('pop');
     if(raging){say(line('takeover'));return;}
     stopEngineer();
@@ -222,6 +230,7 @@ export function initInklingPlay(scroll) {
     coolTimer=setTimeout(()=>{anger=0;updateHeat();pet.classList.remove('is-furious');},18000);
   },{signal});
   play.addEventListener('pointerenter',e=>{
+    if(mischief.active){mischief.dodge(e);return;}
     if(e.pointerType!=='mouse'||raging||engineering||preference.matches||anger>=4||performance.now()<nextDodge||play.matches(':focus-visible'))return;
     nextDodge=performance.now()+3500;moveTo(position.x+(position.x>innerWidth/2?-1:1)*130,position.y-65,{duration:.45});
     soundCue('dodge');
@@ -239,17 +248,6 @@ export function initInklingPlay(scroll) {
     if(writing){restore({quiet:true});clearTimeout(roamTimer);}
     else scheduleRoam(3500);
   },{signal});
-  // The lab can surprise Inkling, without triggering a takeover or a scroll.
-  window.addEventListener('portfolio:lab-reaction',e=>{
-    if(writing||raging||engineering||document.hidden||document.body.classList.contains('modal-open')||performance.now()-lastLabReaction<1800)return;
-    const reactions={overload:['Server ko bhi Monday lag gaya.','Bhai, queue hai. Buffet nahi.'],recovery:['Cache lagaya. Chai ka time bachaya.','Architecture thoda sambhal gaya.'],success:['Request delivered. Credit mera.','Sab green. Screenshot le lo jaldi.']};
-    const mood=e.detail.mood,lines=reactions[mood];if(!lines)return;
-    lastLabReaction=performance.now();stopTravel();
-    blob.dataset.shape=mood==='overload'?'puff':mood==='recovery'?'drop':'blob';
-    say(lines[Math.floor(Math.random()*lines.length)]);soundCue(mood==='overload'?'squeak':'pickup');
-    if(!preference.matches)bounce=gsap.fromTo(blob,{y:0,rotation:mood==='overload'?-9:0,scaleX:1.15,scaleY:.85},{y:mood==='overload'?-8:-18,rotation:0,scaleX:.9,scaleY:1.1,duration:.22,yoyo:true,repeat:1,ease:'power2.out'});
-    scheduleRoam(3500);
-  },{signal});
   const protectControls=e=>{if(e.target.closest('[data-pet-safe]')&&(raging||engineering))restore({quiet:true});};
   document.addEventListener('pointerdown',protectControls,{signal,capture:true});
   document.addEventListener('focusin',protectControls,{signal});
@@ -264,8 +262,8 @@ export function initInklingPlay(scroll) {
     if(time-lastFrame>.1) {
       lastFrame=time;
       window.dispatchEvent(new CustomEvent('portfolio:pet-position',{detail:{...position}}));
-      if(travel?.isActive()||raging||engineering)window.dispatchEvent(new CustomEvent('portfolio:pet-step',{detail:{...position,angry:raging||anger>=4}}));
-      if(perch&&!raging&&!travel?.isActive()){
+      if(!mischief.active&&(travel?.isActive()||raging||engineering))window.dispatchEvent(new CustomEvent('portfolio:pet-step',{detail:{...position,angry:raging||anger>=4}}));
+      if(!mischief.active&&perch&&!raging&&!travel?.isActive()){
         if(visible(perch)){const r=perch.getBoundingClientRect();Object.assign(position,bounds(position.x,r.top-(pet.classList.contains('is-hiding')?58:80)));}
         else {perch=null;pet.classList.remove('is-hiding');scheduleRoam(600);}
       }
@@ -273,12 +271,20 @@ export function initInklingPlay(scroll) {
       const darkOpening=hero&&getComputedStyle(hero).visibility!=='hidden'&&Number(getComputedStyle(hero).opacity)>.5&&hero.getBoundingClientRect().bottom>position.y;
       pet.classList.toggle('on-opening',darkOpening);
       // Keep speech readable on both sides of the screen and below the header.
-      bubble.style.left=`${clamp(position.x-65,12,innerWidth-252)}px`;
-      bubble.style.top=`${position.y<145?position.y+88:position.y-68}px`;
+      if(mischief.active){
+        const width=Math.min(220,Math.max(120,innerWidth-168));
+        bubble.style.width=`${width}px`;
+        bubble.style.left=`${clamp(position.x<innerWidth/2?position.x+142:position.x-width-12,12,innerWidth-width-12)}px`;
+        bubble.style.top=`${clamp(position.y+12,85,innerHeight-190)}px`;
+      }else{
+        bubble.style.removeProperty('width');
+        bubble.style.left=`${clamp(position.x-65,12,innerWidth-252)}px`;
+        bubble.style.top=`${position.y<145?position.y+88:position.y-68}px`;
+      }
     }
     pet.style.transform=`translate3d(${position.x}px,${position.y}px,0)`;
   }
   gsap.ticker.add(frame);updateHeat();setState('roaming');
   say(line('roam'));scheduleRoam(2200);
-  return()=>{disposed=true;restore({quiet:true});events.abort();clearTimeout(roamTimer);clearTimeout(speechTimer);gsap.ticker.remove(frame);dust.destroy();pet.remove();bubble.remove();instructions.remove();impact.remove();};
+  return()=>{disposed=true;mischief.destroy();restore({quiet:true});events.abort();clearTimeout(roamTimer);clearTimeout(speechTimer);gsap.ticker.remove(frame);dust.destroy();pet.remove();bubble.remove();instructions.remove();impact.remove();};
 }

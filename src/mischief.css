@@ -1,0 +1,97 @@
+/* The toy is the roaming pet and the whole page. This is just the invitation. */
+.mischief { --mischief-red:#bd3526; --mischief-deep:#742119; position:relative; min-height:90svh; padding:58px var(--gutter) 52px; border-block:1px solid var(--line); overflow:hidden; }
+.mischief [hidden], .mischief-hud[hidden] { display:none!important; }
+.mischief-topline { display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px 30px; color:var(--muted); font:14px/1.5 var(--mono); }
+.mischief-topline > span:first-child { text-transform:uppercase; letter-spacing:.07em; }
+.mischief-topline > span:last-child { font:italic 18px/1.4 Georgia,serif; }
+.mischief-poster { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(230px,.8fr); gap:6vw; align-items:center; min-height:540px; padding:62px 0 42px; }
+.mischief-copy { min-width:0; }
+#playground-title { font:900 clamp(65px,10.5vw,164px)/.8 var(--display); font-stretch:62.5%; letter-spacing:-.055em; text-transform:uppercase; }
+#playground-title > span { display:block; }
+.mischief-title-outline { color:transparent; -webkit-text-stroke:1.5px var(--ink); padding-bottom:.14em; }
+.mischief-title-solid { color:var(--ink); }
+.mischief-one-liner { max-width:31ch; font:italic clamp(20px,2.5vw,33px)/1.3 Georgia,serif; letter-spacing:-.025em; margin-top:32px; }
+.mischief-pedestal { min-width:0; position:relative; display:flex; align-items:center; flex-direction:column; padding:26px 0 30px; }
+.mischief-button-note { display:block; align-self:flex-start; margin:0 0 13px 30px; color:var(--muted); font:italic 22px/1.3 Georgia,serif; rotate:-9deg; }
+.mischief-button-space { position:relative; display:grid; place-items:center; width:clamp(215px,25vw,365px); height:clamp(230px,26vw,380px); }
+.mischief-launch { z-index:1; position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:14px; width:clamp(210px,25vw,350px); height:clamp(210px,25vw,350px); padding:28px; border:1px solid #60221b; border-radius:50%; color:#fff8ee; background:var(--mischief-red); box-shadow:0 5px 0 #e9715f inset,0 -9px 0 #952c20 inset,0 12px 0 var(--mischief-deep),0 17px 0 #29211d,0 25px 0 12px #0000000d; touch-action:manipulation; transition:translate .16s,box-shadow .16s,background .16s; }
+.mischief-launch > span { font:900 clamp(32px,4.2vw,57px)/.88 var(--display); font-stretch:75%; letter-spacing:-.035em; }
+.mischief-launch > svg { position:absolute; right:22px; bottom:24px; width:24px; height:24px; rotate:-25deg; opacity:.5; }
+.mischief-launch:hover:not(:disabled) { translate:0 3px; background:#c93a2a; box-shadow:0 4px 0 #e9715f inset,0 -6px 0 #952c20 inset,0 9px 0 var(--mischief-deep),0 14px 0 #29211d,0 21px 0 12px #0000000d; }
+.mischief-launch:active:not(:disabled) { translate:0 11px; box-shadow:0 2px 0 #e9715f inset,0 -4px 0 #952c20 inset,0 1px 0 var(--mischief-deep),0 5px 0 #29211d; }
+.mischief-launch.is-stolen { opacity:0; pointer-events:none; }
+.mischief-stolen-mark { position:absolute; top:42%; left:0; right:0; color:var(--mischief-red); text-align:center; font:italic 35px/1.2 Georgia,serif; rotate:-13deg; opacity:0; }
+.mischief[data-mischief=chase] .mischief-stolen-mark { opacity:1; }
+.mischief-reward { width:min(100%,290px); color:var(--mischief-red); position:relative; rotate:-9deg; }
+.mischief-reward > svg { display:block; width:100%; height:auto; }
+.mischief-reward > span { position:absolute; top:71%; left:0; right:0; text-align:center; background:var(--paper); padding:8px; font:italic 38px/1 Georgia,serif; }
+.mischief-bottom { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px; border-top:1px solid var(--line); padding-top:25px; }
+.mischief-status { max-width:49ch; font-size:17px; line-height:1.5; }
+.mischief-side-note { color:var(--muted); font:14px/1.5 var(--mono); }
+.mischief-result-actions { display:flex; align-items:center; flex-wrap:wrap; gap:15px 25px; }
+.mischief-result-actions a,.mischief-result-actions button { display:inline-flex; align-items:center; min-height:46px; font:14px/1.5 var(--mono); text-decoration:underline; text-underline-offset:5px; }
+.mischief-result-actions .mischief-see-work { padding:11px 20px; border:1px solid var(--ink); border-radius:28px; color:var(--paper); background:var(--ink); text-decoration:none; }
+.mischief-result-actions .mischief-see-work:hover { color:var(--ink); background:var(--paper); }
+.mischief :is(button,a):focus-visible,.mischief-hud button:focus-visible { outline:2px dashed currentColor; outline-offset:7px; }
+#playground-title:focus-visible { outline:2px dashed var(--ink); outline-offset:10px; }
+.mischief-hud { position:fixed; z-index:109; top:calc(var(--header-height,64px) + 20px); left:var(--gutter); right:var(--gutter); display:flex; justify-content:space-between; align-items:flex-start; gap:25px; pointer-events:none; }
+.mischief-hud-copy { max-width:440px; color:var(--ink); background:var(--paper); padding:10px 14px; border-left:3px solid #bd3526; }
+.mischief-hud-copy > p { font:600 clamp(24px,3vw,40px)/1.05 var(--body); letter-spacing:-.045em; }
+.mischief-hud-copy > span { display:block; margin-top:7px; color:var(--muted); font:14px/1.5 var(--body); }
+.mischief-hud-actions { display:flex; gap:10px; pointer-events:auto; flex:none; }
+.mischief-hud-actions button { display:inline-flex; justify-content:center; align-items:center; gap:12px; min-height:46px; padding:10px 17px; border:1px solid var(--ink); border-radius:25px; background:var(--paper); color:var(--ink); font:14px/1.5 var(--mono); }
+.mischief-hud-actions [data-mischief-catch] { color:var(--paper); background:var(--ink); }
+.mischief-hud-actions [data-mischief-stop] > span { font:22px/1 var(--body); }
+.inkling.is-mischief { z-index:110; }
+.inkling.is-mischief .inkling-play { scale:1.5; transform-origin:0 0; }
+.inkling.is-mischief :is(.inkling-hardhat,.inkling-cargo,.inkling-heat) { display:none; }
+.inkling-stolen { position:absolute; left:5px; top:120px; width:145px; min-height:35px; display:grid; place-items:center; border:1px solid #72261e; border-radius:5px; padding:8px 10px; background:#bd3526; color:#fff8ee; font:700 14px/1.2 var(--mono); letter-spacing:.02em; rotate:-7deg; box-shadow:2px 3px 0 #0002; pointer-events:none; }
+.inkling-stolen[hidden] { display:none!important; }
+.mischief-active .inkling-bubble { font-size:14px; line-height:1.45; }
+.inkling.is-mischief-caught .inkling-eye { height:17px; width:11px; top:15px; }
+.inkling.is-mischief-caught .inkling-mouth { height:10px; width:10px; left:26px; top:34px; border:2px solid var(--paper); border-radius:50%; }
+.theme-dark .mischief { --mischief-red:#bd3526; }
+.theme-dark .mischief-title-outline { -webkit-text-stroke-width:1px; }
+.theme-dark .mischief-reward,.theme-dark .mischief-stolen-mark { color:#f08f75; }
+@media(max-width:850px) {
+  .mischief-poster { gap:25px; grid-template-columns:minmax(0,1fr) 240px; min-height:430px; }
+  #playground-title { font-size:clamp(65px,10vw,100px); }
+  .mischief-button-space { width:230px; height:250px; }
+  .mischief-launch { width:220px; height:220px; }
+  .mischief-launch > span { font-size:40px; }
+  .mischief-hud { gap:15px; }
+  .mischief-hud-actions { flex-direction:column; gap:7px; }
+}
+@media(max-width:600px) {
+  .mischief { padding-top:38px; padding-bottom:42px; min-height:90svh; }
+  .mischief-topline > span:last-child { display:none; }
+  .mischief-topline > span:first-child { font-size:14px; max-width:24ch; }
+  .mischief-poster { grid-template-columns:1fr; gap:18px; padding:45px 0 35px; }
+  #playground-title { font-size:clamp(65px,17vw,105px); line-height:.83; }
+  .mischief-one-liner { margin-top:23px; font-size:23px; }
+  .mischief-pedestal { padding:0 0 18px; }
+  .mischief-button-note { margin-left:calc(50% - 125px); margin-bottom:8px; font-size:21px; }
+  .mischief-button-space { width:240px; height:250px; }
+  .mischief-launch { width:230px; height:230px; }
+  .mischief-launch > span { font-size:42px; }
+  .mischief-reward { width:230px; }
+  .mischief-status { font-size:16px; }
+  .mischief-result-actions { width:100%; }
+  .mischief-result-actions .mischief-see-work { width:100%; justify-content:center; }
+  .mischief-hud { top:calc(var(--header-height,64px) + 12px); flex-direction:column; gap:10px; }
+  .mischief-hud-copy { max-width:100%; }
+  .mischief-hud-copy > p { font-size:25px; }
+  .mischief-hud-actions { flex-direction:row; flex-wrap:wrap; }
+  .mischief-hud-actions button { min-height:44px; padding:10px 12px; font-size:14px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .mischief-launch { transition:none; }
+  .mischief-button-note,.mischief-reward,.mischief-stolen-mark,.inkling-stolen { rotate:0deg; }
+}
+@media(max-height:500px) {
+  .mischief-hud { top:calc(var(--header-height,64px) + 8px); flex-direction:row; }
+  .mischief-hud-copy { padding:7px 10px; }
+  .mischief-hud-copy > p { font-size:22px; }
+  .mischief-hud-copy > span { display:none; }
+  .mischief-hud-actions { flex-direction:row; }
+}
