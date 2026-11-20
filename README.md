@@ -122,3 +122,9 @@ Inkling carries souvenirs in a tiny hardhat. At the workshop he fumbles, catches
 `src/project-notes.js` contains six factual **Under the polish** notebooks. They expose a constraint, the approach, a small process sketch, and the current boundary. They do not invent failed attempts or personal anecdotes absent from the project record.
 
 Motion runs only during a short user-triggered sequence and while the workshop is visible. Reduced motion keeps collection, the static illustration, immediate print output, notes, and postcard export. A cancelled print returns to an idle invitation instead of staying stuck on a loading message.
+
+## Project illustration and motion
+
+All 15 projects have their own original conceptual SVG poster in `src/assets/projects/`. The case study and flying open/close transition use that same static asset. `src/project-art.js` mounts an inline version in each gallery card so CSS can animate the illustration itself. The motion sheets are split into systems, hardware, and experiments; each subject has a distinct sequence rather than a shared orbit overlay. Alternative text describes each scene, and the artwork labels preserve documented prototype/concept statuses.
+
+Every gallery copy namespaces SVG IDs and local paint/clip references independently. The existing liquid hover and depth movement apply to the whole illustration. Intersection, the work section's inert state, document visibility, modal state, and reduced-motion preferences gate playback. Cleanup disconnects observers, removes SVGs and restores the static image and background. Reduced motion and JavaScript-disabled viewing retain complete static artwork.

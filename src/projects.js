@@ -85,7 +85,7 @@ export function initProjects(scroll, gallery) {
     image.width = ['ai-sales', 'portfolio'].includes(id) ? 1000 : 800;
     image.height = ['ai-sales', 'portfolio'].includes(id) ? 800 : 1000;
     image.src = project.image;
-    image.alt = `${project.title} project artwork`;
+    image.alt = document.querySelector(`.project-cover[data-project="${id}"] img`)?.alt || `${project.title} project artwork`;
     dialog.querySelector('#dialog-features').replaceChildren(...project.features.map(text => {
       const item = document.createElement('li');
       item.textContent = text;

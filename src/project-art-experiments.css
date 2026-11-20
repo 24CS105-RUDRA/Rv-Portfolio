@@ -1,0 +1,47 @@
+/* The artwork's moving details tell five different project stories. */
+.project-illustration .art-robot-drive { animation: art-robot-seek 8s ease-in-out infinite paused; transform-box: fill-box; transform-origin: center bottom; }
+.project-illustration .art-robot-tread { animation: art-robot-roll 8s ease-in-out infinite paused; transform-box: fill-box; transform-origin: center; }
+.project-illustration .art-robot-beam { animation: art-robot-light 8s ease-in-out infinite paused; }
+.project-illustration .art-robot-sensor { animation: art-robot-sense 2s steps(2,end) infinite paused; }
+@keyframes art-robot-seek { 0%,12% { transform: translate(-35px,0) rotate(-2deg); } 43% { transform: translate(95px,-12px) rotate(2deg); } 58%,78% { transform: translate(125px,-12px) rotate(0); } 100% { transform: translate(-35px,0) rotate(-2deg); } }
+@keyframes art-robot-roll { 0%,12% { transform: rotate(0); } 43% { transform: rotate(225deg); } 58%,78% { transform: rotate(270deg); } 100% { transform: rotate(0); } }
+@keyframes art-robot-light { 0%,10%,80%,100% { opacity: .55; } 35%,65% { opacity: 1; } }
+@keyframes art-robot-sense { 0%,80% { opacity: 1; } 81%,100% { opacity: .35; } }
+
+.project-illustration .art-qr-scan { animation: art-qr-traverse 5s ease-in-out infinite paused; }
+.project-illustration .art-qr-ticket { animation: art-qr-issue 5s ease-in-out infinite paused; transform-box: fill-box; transform-origin: center top; }
+.project-illustration .art-qr-tick { stroke-dasharray: 70; animation: art-qr-confirm 5s ease-in-out infinite paused; }
+@keyframes art-qr-traverse { 0%,12% { transform: translateY(-140px); opacity: .45; } 56% { transform: translateY(170px); opacity: 1; } 72%,100% { transform: translateY(-140px); opacity: .45; } }
+@keyframes art-qr-issue { 0%,40%,100% { transform: translateY(-14px) rotate(-2deg); } 62%,88% { transform: translateY(8px) rotate(2deg); } }
+@keyframes art-qr-confirm { 0%,50% { stroke-dashoffset: 70; } 68%,95% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 70; } }
+
+.project-illustration .art-guardian-piece { animation: art-guardian-consider 7s ease-in-out infinite paused; transform-box: fill-box; transform-origin: center; }
+.project-illustration .art-guardian-seam { animation: art-guardian-outline 7s linear infinite paused; }
+.project-illustration .art-guardian-pencil { stroke-dasharray: 215; animation: art-guardian-sketch 7s ease-in-out infinite paused; }
+@keyframes art-guardian-consider { 0%,100% { transform: translate(0,0) rotate(0); } 45%,65% { transform: translate(-21px,13px) rotate(-4deg); } }
+@keyframes art-guardian-outline { to { stroke-dashoffset: -60; } }
+@keyframes art-guardian-sketch { 0%,20%,100% { stroke-dashoffset: 215; opacity: .4; } 44%,80% { stroke-dashoffset: 0; opacity: 1; } }
+
+.project-illustration .art-classify-curve { stroke-dasharray: 600; animation: art-classify-fit 6.5s ease-in-out infinite paused; }
+.project-illustration .art-classify-transfer { animation: art-classify-flow 3s linear infinite paused; }
+.project-illustration .art-classify-chip { animation: art-classify-settle 6.5s ease-in-out infinite paused; transform-box: fill-box; transform-origin: center; }
+.project-illustration .art-classify-point { animation: art-classify-observe 6.5s ease-in-out infinite paused; }
+@keyframes art-classify-fit { 0%,12% { stroke-dashoffset: 600; opacity: .35; } 58%,88% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 600; opacity: .35; } }
+@keyframes art-classify-flow { to { stroke-dashoffset: -100; } }
+@keyframes art-classify-settle { 0%,40%,100% { transform: translateY(9px); opacity: .55; } 60%,85% { transform: translateY(0); opacity: 1; } }
+@keyframes art-classify-observe { 0%,100% { opacity: .4; } 35%,85% { opacity: 1; } }
+
+.project-illustration .art-beam-clean { animation: art-beam-mark 7s ease-in-out infinite paused; }
+.project-illustration .art-beam-features { animation: art-beam-features 7s ease-in-out infinite paused; transform-box: fill-box; transform-origin: center bottom; }
+.project-illustration .art-beam-iteration { animation: art-beam-loop 5s linear infinite paused; }
+.project-illustration .art-beam-note { stroke-dasharray: 160; animation: art-beam-write 7s ease-in-out infinite paused; }
+@keyframes art-beam-mark { 0%,10%,100% { opacity: .2; } 25%,85% { opacity: 1; } }
+@keyframes art-beam-features { 0%,28%,100% { transform: scaleY(.5); opacity: .6; } 50%,87% { transform: scaleY(1); opacity: 1; } }
+@keyframes art-beam-loop { to { stroke-dashoffset: -102; } }
+@keyframes art-beam-write { 0%,58%,100% { stroke-dashoffset: 160; } 80%,90% { stroke-dashoffset: 0; } }
+
+.project-cover.is-live .project-illustration :is(.art-robot-drive,.art-robot-tread,.art-robot-beam,.art-robot-sensor,.art-qr-scan,.art-qr-ticket,.art-qr-tick,.art-guardian-piece,.art-guardian-seam,.art-guardian-pencil,.art-classify-curve,.art-classify-transfer,.art-classify-chip,.art-classify-point,.art-beam-clean,.art-beam-features,.art-beam-iteration,.art-beam-note) { animation-play-state: running; }
+.project-cover.is-art-paused .project-illustration :is(.art-robot-drive,.art-robot-tread,.art-robot-beam,.art-robot-sensor,.art-qr-scan,.art-qr-ticket,.art-qr-tick,.art-guardian-piece,.art-guardian-seam,.art-guardian-pencil,.art-classify-curve,.art-classify-transfer,.art-classify-chip,.art-classify-point,.art-beam-clean,.art-beam-features,.art-beam-iteration,.art-beam-note) { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+ .project-illustration :is(.art-robot-drive,.art-robot-tread,.art-robot-beam,.art-robot-sensor,.art-qr-scan,.art-qr-ticket,.art-qr-tick,.art-guardian-piece,.art-guardian-seam,.art-guardian-pencil,.art-classify-curve,.art-classify-transfer,.art-classify-chip,.art-classify-point,.art-beam-clean,.art-beam-features,.art-beam-iteration,.art-beam-note) { animation: none; }
+}

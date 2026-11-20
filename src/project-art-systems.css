@@ -1,0 +1,54 @@
+/* Each illustration tells its project's story; the card controller owns when it plays. */
+.project-illustration .art-city-signal { transform-box:fill-box; transform-origin:center; animation:art-city-signal 3.8s var(--art-delay,0s) ease-in-out infinite; }
+.project-illustration .art-city-trace { animation:art-city-traffic-trace 5s linear infinite; }
+.project-illustration .art-city-car { animation:art-city-car 6s ease-in-out infinite; }
+.project-illustration .art-city-crossing { animation:art-city-crossing 5.3s ease-in-out infinite; }
+.project-illustration .art-city-frame { animation:art-city-focus 3.8s ease-in-out infinite; }
+@keyframes art-city-signal { 0%,65%,100% { scale:1; opacity:1; } 30% { scale:1.55; opacity:.35; } }
+@keyframes art-city-traffic-trace { to { stroke-dashoffset:-872; } }
+@keyframes art-city-car { 0% { transform:translateY(0); opacity:0; } 8%,12% { transform:translateY(0); opacity:1; } 75%,90% { transform:translateY(-224px); opacity:1; } 100% { transform:translateY(-224px); opacity:0; } }
+@keyframes art-city-crossing { 0% { transform:translateX(0); opacity:0; } 8%,12% { transform:translateX(0); opacity:1; } 80%,90% { transform:translateX(-120px); opacity:1; } 100% { transform:translateX(-120px); opacity:0; } }
+@keyframes art-city-focus { 0%,100% { opacity:.4; } 35%,75% { opacity:1; } }
+
+.project-illustration .art-sales-wave { transform-box:fill-box; transform-origin:center; animation:art-sales-voice 1.25s var(--art-delay,0s) ease-in-out infinite alternate; }
+.project-illustration .art-sales-lead { animation:art-sales-arrival 5.5s ease-in-out infinite; }
+.project-illustration .art-sales-packet { animation:art-sales-handoff 4.8s ease-in-out infinite; }
+.project-illustration .art-sales-check { transform-box:fill-box; transform-origin:center; animation:art-sales-qualified 4.8s ease-in-out infinite; }
+@keyframes art-sales-voice { from { scale:1 .4; } to { scale:1 1; } }
+@keyframes art-sales-arrival { 0%,100% { transform:translateY(0) rotate(0deg); } 45% { transform:translateY(-10px) rotate(-1deg); } }
+@keyframes art-sales-handoff { 0%,8% { transform:translateX(0); opacity:0; } 15% { opacity:1; } 80% { transform:translateX(590px); opacity:1; } 90%,100% { transform:translateX(590px); opacity:0; } }
+@keyframes art-sales-qualified { 0%,62%,100% { scale:1; } 76% { scale:1.3; } }
+
+.project-illustration .art-transit-vehicle { animation:art-transit-dispatch 11s ease-in-out infinite; }
+.project-illustration .art-transit-route { animation:art-transit-flow 5s linear infinite; }
+.project-illustration .art-transit-ticket { animation:art-transit-manifest 7s ease-in-out infinite; }
+.project-illustration .art-transit-ledger { animation:art-transit-status 4s var(--art-delay,0s) ease-in-out infinite; }
+@keyframes art-transit-dispatch { 0% { transform:translate(0,0); opacity:0; } 3%,6% { transform:translate(0,0); opacity:1; } 28% { transform:translate(445px,0); } 32% { transform:translate(445px,0); } 43% { transform:translate(445px,150px); } 47% { transform:translate(445px,150px); } 63% { transform:translate(160px,150px); } 67% { transform:translate(160px,150px); } 78% { transform:translate(160px,340px); } 82% { transform:translate(160px,340px); } 97% { transform:translate(530px,340px); opacity:1; } 100% { transform:translate(530px,340px); opacity:0; } }
+@keyframes art-transit-flow { to { stroke-dashoffset:-230; } }
+@keyframes art-transit-manifest { 0%,65%,100% { transform:translateY(0); } 78% { transform:translateY(-7px); } }
+@keyframes art-transit-status { 0%,100% { opacity:.45; } 50% { opacity:1; } }
+
+.project-illustration .art-portfolio-logo { transform-box:fill-box; transform-origin:center; animation:art-portfolio-liquid 6s ease-in-out infinite; }
+.project-illustration .art-portfolio-contour { transform-box:fill-box; transform-origin:center; animation:art-portfolio-contour 7s ease-in-out infinite; }
+.project-illustration .art-portfolio-droplet { animation:art-portfolio-drop 6s ease-in-out infinite; }
+.project-illustration .art-portfolio-satellite { animation:art-portfolio-satellite 6s ease-in-out infinite; }
+@keyframes art-portfolio-liquid { 0%,100% { transform:scale(1,1) skewX(0deg); } 38% { transform:scale(.96,1.04) skewX(-2deg); } 68% { transform:scale(1.035,.975) skewX(2deg); } }
+@keyframes art-portfolio-contour { 0%,100% { transform:scale(1); opacity:.45; } 50% { transform:scale(1.045,.96); opacity:.7; } }
+@keyframes art-portfolio-drop { 0%,100% { translate:0 0; } 45% { translate:-11px 19px; } }
+@keyframes art-portfolio-satellite { 0%,100% { translate:0 0; } 55% { translate:8px -14px; } }
+
+.project-illustration .art-school-permission { animation:art-school-access 5.5s linear infinite; }
+.project-illustration .art-school-ledger { animation:art-school-record 6s ease-in-out infinite; }
+.project-illustration .art-school-check { transform-box:fill-box; transform-origin:center; animation:art-school-checked 4.5s var(--art-delay,0s) ease-in-out infinite; }
+.project-illustration .art-school-stamp { animation:art-school-approved 6s ease-in-out infinite; }
+@keyframes art-school-access { to { stroke-dashoffset:-534; } }
+@keyframes art-school-record { 0%,100% { transform:translateY(0); } 40% { transform:translateY(-7px); } }
+@keyframes art-school-checked { 0%,100% { scale:1; opacity:.65; } 40% { scale:1.12; opacity:1; } }
+@keyframes art-school-approved { 0%,100% { translate:0 0; } 40% { translate:0 -16px; } 48% { translate:0 3px; } 58% { translate:0 0; } }
+
+.project-illustration :is([class^="art-city-"],[class^="art-sales-"],[class^="art-transit-"],[class^="art-portfolio-"],[class^="art-school-"]) { animation-play-state:paused; }
+.project-cover.is-live .project-illustration :is([class^="art-city-"],[class^="art-sales-"],[class^="art-transit-"],[class^="art-portfolio-"],[class^="art-school-"]) { animation-play-state:running; }
+.project-cover.is-art-paused .project-illustration :is([class^="art-city-"],[class^="art-sales-"],[class^="art-transit-"],[class^="art-portfolio-"],[class^="art-school-"]) { animation-play-state:paused; }
+@media (prefers-reduced-motion:reduce) {
+ .project-illustration :is([class^="art-city-"],[class^="art-sales-"],[class^="art-transit-"],[class^="art-portfolio-"],[class^="art-school-"]) { animation:none; }
+}
