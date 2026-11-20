@@ -1,4 +1,5 @@
 import gsap from 'gsap';
+import { initContact } from './contact.js';
 import { initWorkshop } from './workshop.js';
 import { initCreativeMotion } from './creative-motion.js';
 import { initEntrance } from './entrance.js';
@@ -50,6 +51,7 @@ const disposeDetails = initDetailsMotion();
 const disposeExpressive = initExpressive(scroll);
 const disposeCreative = initCreativeMotion();
 const disposeWorkshop = initWorkshop(scroll);
+const disposeContact = initContact();
 const disposeProjects = initProjects(scroll, gallery);
 const disposeEntrance = initEntrance(scroll);
 const renderFluid = (time, delta) => {
@@ -68,6 +70,7 @@ if (import.meta.hot) import.meta.hot.dispose(() => {
   events.abort();
   gsap.ticker.remove(renderFluid);
   disposeEntrance();
+  disposeContact();
   disposeWorkshop();
   disposeCreative();
   disposeExpressive();

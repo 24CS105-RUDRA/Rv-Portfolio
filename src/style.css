@@ -2,6 +2,7 @@
 @import './project-art-systems.css';
 @import './project-art-hardware.css';
 @import './project-art-experiments.css';
+@import './contact.css';
 
 :root {
   --black: #050505;

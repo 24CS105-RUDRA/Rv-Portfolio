@@ -152,7 +152,37 @@
       <section id="contact" class="contact" aria-labelledby="contact-title">
         <p class="contact-note mono">Ideas, collaborations & new possibilities</p>
         <h2 id="contact-title" class="display"><span class="line-mask"><span>Have a project</span></span><span class="line-mask"><span>in mind?</span></span></h2>
-        <a class="contact-address" href="https://github.com/24CS105-RUDRA" target="_blank" rel="noopener noreferrer">@24CS105-RUDRA <span aria-hidden="true">↗</span></a>
+        <div class="contact-connect">
+          <aside class="contact-details" aria-label="Contact Rudra">
+            <p class="contact-kicker">A good conversation starts somewhere.</p>
+            <a class="contact-email" data-contact-email href="mailto:rudravaghela1052007@gmail.com">rudravaghela1052007@gmail.com</a>
+            <a class="contact-phone" data-contact-phone href="tel:+916351860059">+91 63518 60059</a>
+            <p class="contact-detail-note">A rough sketch, a real problem, or a wonderfully odd “what if?”—I’d like to hear it.</p>
+            <a class="contact-github" href="https://github.com/24CS105-RUDRA" target="_blank" rel="noopener noreferrer">Find me on GitHub</a>
+          </aside>
+          <div class="idea-desk" data-pet-safe>
+            <form id="idea-form" class="idea-form" method="post" aria-labelledby="idea-form-title">
+              <div class="idea-form-heading"><span>A note to Rudra</span><h3 id="idea-form-title">Tell me the almost-idea.</h3></div>
+              <div class="idea-fields-two">
+                <div class="idea-field"><label for="idea-name">Your name</label><input id="idea-name" name="name" autocomplete="name" maxlength="80" required /></div>
+                <div class="idea-field"><label for="idea-email">Your email</label><input id="idea-email" name="email" type="email" autocomplete="email" maxlength="254" required /></div>
+              </div>
+              <fieldset class="idea-topics"><legend>What are you thinking?</legend>
+                <label class="idea-topic"><input type="radio" name="interest" value="Web app" checked /><span>Web app</span></label>
+                <label class="idea-topic"><input type="radio" name="interest" value="AI" /><span>AI</span></label>
+                <label class="idea-topic"><input type="radio" name="interest" value="Hardware" /><span>Hardware</span></label>
+                <label class="idea-topic"><input type="radio" name="interest" value="Something strange" /><span>Something strange</span></label>
+              </fieldset>
+              <div class="idea-field"><label for="idea-message">What’s the idea?</label><textarea id="idea-message" name="message" rows="5" minlength="15" maxlength="4000" placeholder="Who is it for? What would you love it to do? A few lines are enough." data-lenis-prevent required></textarea></div>
+              <div class="idea-honey" aria-hidden="true" hidden><label for="idea-website">Leave this field empty</label><input id="idea-website" name="_honey" tabindex="-1" autocomplete="off" /></div>
+              <p class="idea-form-setup" role="status" hidden>The idea form is being connected. Please use the email or phone link.</p>
+              <div class="idea-form-footer"><button id="idea-submit" type="submit" disabled><span>Send my idea</span><svg viewBox="0 0 32 32" width="25" height="25" aria-hidden="true"><path d="m4 14 24-9-9 24-4-10-11-5Zm11 5L28 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button><p id="idea-form-status" role="status" aria-live="polite"></p></div>
+              <p class="idea-form-note">Your name, email and idea are sent through FormSubmit so Rudra can reply. No mailing list.</p>
+              <noscript><p>Please use the contact links. The idea form needs JavaScript to send your note.</p></noscript>
+            </form>
+            <div class="idea-receipt" hidden><svg viewBox="0 0 160 120" width="160" height="120" aria-hidden="true"><path d="m24 56 116-36-42 94-22-38-52-20Zm52 20 64-56" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m24 95 17-5m-24-7 11-3m15 30 17-9" fill="none" stroke="currentColor" stroke-width="2"/></svg><h4 tabindex="-1">Your idea is on its way.</h4><p>Thanks for sharing the beginning of something. Rudra will have your email to reply.</p><button type="button" data-idea-reset>Write another note</button></div>
+          </div>
+        </div>
       </section>
       <footer class="site-footer mono"><p>Rudra Vaghela · Creative developer · India <span>© <span id="copyright-year">2026</span></span></p><a href="https://github.com/24CS105-RUDRA?tab=repositories" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="#top">Back to top ↑</a></footer>
     </div>

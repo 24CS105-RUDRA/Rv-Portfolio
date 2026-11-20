@@ -32,7 +32,7 @@ Deploy the generated `dist/` directory to a static host. No backend or environme
 
 When adding a project, update its HTML card and its `src/projects.js` entry together. The gallery calculates its count from the cards.
 
-Contact links currently point to the verified GitHub profile. Replace them with a preferred `mailto:` address or social URL when one is available.
+The contact desk includes email and telephone links plus an idea form. Public contact details and an activated FormSubmit AJAX endpoint belong in `src/contact-config.js`. Until those details are supplied, the links remain hidden, submission stays disabled, and GitHub remains available. No placeholder recipient is used.
 
 ## Project sources
 
@@ -128,3 +128,11 @@ Motion runs only during a short user-triggered sequence and while the workshop i
 All 15 projects have their own original conceptual SVG poster in `src/assets/projects/`. The case study and flying open/close transition use that same static asset. `src/project-art.js` mounts an inline version in each gallery card so CSS can animate the illustration itself. The motion sheets are split into systems, hardware, and experiments; each subject has a distinct sequence rather than a shared orbit overlay. Alternative text describes each scene, and the artwork labels preserve documented prototype/concept statuses.
 
 Every gallery copy namespaces SVG IDs and local paint/clip references independently. The existing liquid hover and depth movement apply to the whole illustration. Intersection, the work section's inert state, document visibility, modal state, and reduced-motion preferences gate playback. Cleanup disconnects observers, removes SVGs and restores the static image and background. Reduced motion and JavaScript-disabled viewing retain complete static artwork.
+
+## Contact desk
+
+`src/contact.js` validates the idea form and posts a name, reply email, topic, and message to the configured HTTPS FormSubmit AJAX endpoint. Before publishing, set the owner-approved public email and international phone number in `src/contact-config.js`, activate that recipient through FormSubmit's confirmation email, and verify a real submission reaches the inbox. No API secret belongs in this public configuration.
+
+The form only shows its animated paper receipt after an OK response with `success` equal to boolean `true` or string `"true"`. HTTP200 alone and string `"false"` are not success. Failed or timed-out requests preserve the draft; duplicate clicks are blocked; controls lock while a request is in flight; cleanup aborts the request and restores the neutral UI. Name/email validation is native and the idea needs 15 characters after trimming. The local honeypot never produces a receipt. Nothing is written to browser storage.
+
+Contact focus quietly cancels Inkling's takeover and pauses his roaming/engineering until focus leaves the desk. The form is outside all dust targets, the textarea retains native inner scrolling, and reduced motion skips the paper arrival/stamp. Drafts survive theme and loop changes. Contact styling is in `src/contact.css`.

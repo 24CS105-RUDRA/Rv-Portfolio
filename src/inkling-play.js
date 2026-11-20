@@ -28,7 +28,7 @@ export function initInklingPlay(scroll) {
   let nextDodge=0,roams=0,pointerDown=false,originScroll=0,scrollMoved=false;
   let lastFrame=0,previousCount=0,previousFirst=null;
   let previousTargets=new Set();
-  let engineering=false,engineerTween;
+  let engineering=false,engineerTween,writing=false;
   const engineerQueue=[],cargo=pet.querySelector('.inkling-cargo');
   const partIcons={cpu:'▦',sensor:'◎',logic:'⌘',route:'⌁',wheel:'◉',interface:'▤'};
   const clamp=(v,min,max)=>Math.max(min,Math.min(Math.max(min,max),v));
@@ -63,7 +63,7 @@ export function initInklingPlay(scroll) {
   function scheduleRoam(delay=3500){clearTimeout(roamTimer);if(!disposed)roamTimer=setTimeout(roam,delay);}
   function roam() {
     if(disposed)return;
-    if(raging||engineering||preference.matches||document.hidden||document.body.classList.contains('modal-open')||pointerDown||play.matches(':focus-visible')){scheduleRoam();return;}
+    if(writing||raging||engineering||preference.matches||document.hidden||document.body.classList.contains('modal-open')||pointerDown||play.matches(':focus-visible')){scheduleRoam();return;}
     if(engineerQueue.length&&installPart())return;
     const candidates=targets(),target=candidates[Math.floor(Math.random()*candidates.length)];
     roams++;blob.dataset.shape=shapes[roams%shapes.length];
@@ -106,7 +106,7 @@ export function initInklingPlay(scroll) {
     engineerQueue.push(part);updateCargo();soundCue('pickup');
   },{signal});
   window.addEventListener('portfolio:machine-run',()=>{
-    if(raging||engineering||document.hidden||preference.matches)return;
+    if(writing||raging||engineering||document.hidden||preference.matches)return;
     const machine=document.querySelector('#machine-drawing'),r=machine.getBoundingClientRect();
     if(r.bottom<90||r.top>innerHeight)return;
     if(engineerQueue.length&&installPart(true))return;
@@ -233,6 +233,11 @@ export function initInklingPlay(scroll) {
   window.addEventListener('keydown',e=>{if(e.key==='Escape'&&(raging||engineering||damaged.size)){restore({returnScroll:true});play.focus({preventScroll:true});}},{signal});
   document.addEventListener('click',e=>{if(e.target.closest('a, .dialog-close')&&(raging||engineering||damaged.size))restore({quiet:true});},{signal,capture:true});
   window.addEventListener('portfolio:loop-start',()=>restore({quiet:true}),{signal});
+  window.addEventListener('portfolio:contact-focus',e=>{
+    writing=!!e.detail.focused;
+    if(writing){restore({quiet:true});clearTimeout(roamTimer);}
+    else scheduleRoam(3500);
+  },{signal});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){restore({quiet:true});clearTimeout(roamTimer);}else scheduleRoam();},{signal});
   preference.addEventListener('change',()=>{restore({quiet:true});Object.assign(position,bounds(24,innerHeight-155));},{signal});
   window.addEventListener('wheel',()=>{if(raging)restore({quiet:true});},{signal,passive:true,capture:true});
