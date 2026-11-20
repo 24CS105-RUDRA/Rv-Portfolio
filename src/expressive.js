@@ -41,18 +41,6 @@ export function initExpressive(scroll) {
     }));
   });
 
-  const wave = document.createElement('div');
-  wave.className = 'theme-wave'; wave.setAttribute('aria-hidden', 'true');
-  document.body.append(wave);
-  let waveTween;
-  window.addEventListener('portfolio:theme', () => {
-    if (!matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
-    waveTween?.kill();
-    wave.style.background = getComputedStyle(document.documentElement).getPropertyValue('--black');
-    waveTween = gsap.fromTo(wave, {clipPath:'ellipse(150% 150% at 45% 0%)'},
-      {clipPath:'ellipse(80% 0% at 60% 0%)',duration:1.05,ease:'power3.inOut'});
-  }, {signal});
-
   const destroyPlay = initInklingPlay(scroll);
 
   media.add('(prefers-reduced-motion: no-preference)', () => {
@@ -93,5 +81,5 @@ export function initExpressive(scroll) {
     });
     return ()=>{controller.abort();covers.forEach(c=>{const nodes=[c,c.querySelector('img'),c.parentElement.querySelector('.project-caption'),c.querySelector('feDisplacementMap')];gsap.killTweensOf(nodes);gsap.set(nodes.slice(0,3),{clearProps:'transform,borderRadius'});c.querySelector('feDisplacementMap').setAttribute('scale','0');});};
   });
-  return ()=>{destroyPlay();media.revert();events.abort();waveTween?.kill();extras.forEach(e=>e.remove());covers.forEach(c=>c.style.removeProperty('--portal-filter'));wave.remove();heading.innerHTML=originalHeading;heading.removeAttribute('aria-label');};
+  return ()=>{destroyPlay();media.revert();events.abort();extras.forEach(e=>e.remove());covers.forEach(c=>c.style.removeProperty('--portal-filter'));heading.innerHTML=originalHeading;heading.removeAttribute('aria-label');};
 }

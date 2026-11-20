@@ -378,3 +378,34 @@ body.modal-open > .sound-toggle { visibility:hidden; }
 .entrance-label { position:absolute; bottom:70px; left:20px; right:20px; text-align:center; font:12px/1.6 var(--mono); letter-spacing:.06em; }
 .entrance-skip { position:absolute; bottom:18px; right:22px; min-height:44px; font:12px var(--mono); text-decoration:underline; }
 .entrance-skip:focus-visible { outline:2px dashed currentColor; outline-offset:4px; }
+
+/* Shared motion layers stay outside layout and never capture page gestures. */
+.creative-canvas { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:66; }
+.magnetic-letter { display:inline-block; transform-origin:center 80%; }
+.letter-stolen { opacity:0!important; }
+.stolen-letter { position:fixed; z-index:93; pointer-events:none; transform-origin:top left; }
+.liquid-eclipse { position:fixed; inset:0; z-index:251; display:grid; place-items:center; pointer-events:none; overflow:hidden; opacity:0; background:var(--eclipse-paper,#f6f5f2); }
+.liquid-eclipse img { width:min(30vw,230px); filter:var(--eclipse-filter,none); will-change:transform; }
+.project-shard { position:fixed; left:0; top:0; width:8px; height:3px; background:#f6f5f2; pointer-events:none; z-index:30; }
+.project-constellation { border-top:1px solid #ffffff26; padding:40px 0; margin-top:45px; }
+.project-constellation h3 { font:400 clamp(22px,3vw,38px)/1.1 var(--body); margin-bottom:25px; }
+.constellation-graph { display:flex; position:relative; flex-wrap:wrap; align-items:center; justify-content:center; gap:16px; min-height:170px; padding:22px 6px; }
+.constellation-graph svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; fill:none; stroke:#f6f5f244; stroke-width:1; }
+.constellation-graph button { position:relative; border:1px solid #f6f5f24d; border-radius:30px; padding:12px 18px; min-height:44px; font:12px var(--mono); color:#f6f5f2; background:#101010; }
+.constellation-graph button[aria-pressed=true] { background:#f6f5f2; color:#050505; border-color:#f6f5f2; }
+.constellation-graph button:focus-visible { outline:2px dashed #f6f5f2; outline-offset:4px; }
+.constellation-description { min-height:48px; text-align:center; font:14px/1.6 var(--body); color:#bdbbb5; }
+#dialog-features li.tech-feature-active { color:#d6ecb8; }
+@media (prefers-reduced-motion:no-preference) {
+ .constellation-graph button { transition:background .2s,color .2s; }
+ .constellation-graph button:hover { transform:translateY(-4px); }
+}
+@media (max-width:600px) { .constellation-graph { gap:10px; } .project-constellation { padding-block:25px; } }
+@media (prefers-reduced-motion:no-preference) {
+ .is-missing-letter .magnetic-letter:not(.letter-stolen) { animation:missing-letter-wiggle .7s ease-in-out infinite alternate; }
+ @keyframes missing-letter-wiggle { from { translate:-2px 0; rotate:-1deg; } to { translate:2px 1px; rotate:1deg; } }
+}
+@media (prefers-reduced-motion:no-preference) {
+ .is-constellation-live .constellation-graph button { animation:constellation-drift 4s calc(var(--node-index)*-.45s) ease-in-out infinite alternate; }
+ @keyframes constellation-drift { to { translate:0 -5px; } }
+}

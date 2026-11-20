@@ -56,6 +56,7 @@ export function initScroll(setFlood, onTheme = () => {}) {
       pendingDirection = 0;
       lockedUntil = performance.now() + 850;
       firstBoundary = false;
+      window.dispatchEvent(new CustomEvent('portfolio:edge-stretch',{detail:{direction}}));
       changeTheme();
       const destination = direction > 0 ? 0 : lenis.limit;
       lenis.scrollTo(destination, {immediate: true, force: true});
@@ -80,6 +81,7 @@ export function initScroll(setFlood, onTheme = () => {}) {
       if (!delta || !eligible(event)) { pendingDirection = 0; return false; }
       if (performance.now() < lockedUntil) return true;
       const remaining = delta > 0 ? lenis.limit - lenis.actualScroll : lenis.actualScroll;
+      if (remaining < innerHeight * .35) window.dispatchEvent(new CustomEvent('portfolio:edge-stretch',{detail:{direction:Math.sign(delta)}}));
       if (remaining <= 2) {
         if (delta < 0 && firstBoundary) {
           firstBoundary = false;

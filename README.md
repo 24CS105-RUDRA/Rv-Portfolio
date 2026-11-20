@@ -91,3 +91,20 @@ The gallery contains 15 entries: the original four plus 11 project/concept/exper
 Sharing uses `public/social-preview.png` (1200×630), Open Graph/Twitter metadata, ProfilePage structured data, a canonical URL, a sitemap, robots.txt, and SVG/ICO/PNG/Apple favicon assets. The current canonical host is `https://rv-portfolio-five.vercel.app/`. When a custom domain is selected, update this host in `index.html`, `public/robots.txt`, and `public/sitemap.xml`, then configure the domain in Vercel. Hash-based case studies share the main portfolio’s preview; distinct per-project social cards would require individual page routes.
 
 To regenerate the raster branding assets on macOS with Pillow installed, run `python3 scripts/generate-brand-assets.py`.
+
+## Connected creative motion
+
+`src/creative-motion.js` coordinates the additional motion with the existing scroll, project, and pet controllers:
+
+1. Inkling leaves short-lived footprints; angry movement creates heavier marks.
+2. Project transitions shed 18 border fragments that gather at the case-study title.
+3. The intro heading’s letters gently follow nearby pointer movement and spring home.
+4. A zooming monogram eclipse carries the alternating-theme seam into the next opening.
+5. Inkling occasionally borrows a visible intro letter while its neighbours wobble; the letter returns after 3.2 seconds. Escape, theme changes, project navigation, tab hiding, and pet reset also return it. The accessible heading remains intact.
+6. The grid and footer logo stretch near a scroll boundary and settle elastically.
+7. Case studies include a technology constellation with keyboard/touch buttons, a role description, and matching feature highlighting. Node drift runs only while the constellation is in view.
+8. A capped debris field gathers at the contact words as the existing finale reveals them.
+9. Slow pointer movement over the opening creates ripples; fast movement creates a fading liquid wake alongside the existing fluid simulation.
+10. Occasional Inkling arrivals drop, squeeze, or emerge from the page’s visible surfaces.
+
+A shared canvas caps these decorative particles at 180 and limits pixel density to 1.5. Its ticker runs only while particles exist and stops in hidden tabs. Reduced motion removes the moving particle effects, theft, magnetic response, eclipse, elastic stretching, and floating nodes while retaining static technology controls. Cleanup removes generated markup, timers, observers, event handlers, and animation state during development reloads.

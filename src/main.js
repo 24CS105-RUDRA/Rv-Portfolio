@@ -1,4 +1,5 @@
 import gsap from 'gsap';
+import { initCreativeMotion } from './creative-motion.js';
 import { initEntrance } from './entrance.js';
 import { initSound } from './sound.js';
 import { initExpressive } from './expressive.js';
@@ -43,10 +44,11 @@ const disposeSound = initSound();
 let flood = 0;
 const scroll = initScroll(progress => { flood = progress; }, dark => fluid?.setTheme(dark));
 const gallery = initGallery();
-const disposeProjects = initProjects(scroll, gallery);
 const disposeCursor = initCustomCursor();
 const disposeDetails = initDetailsMotion();
 const disposeExpressive = initExpressive(scroll);
+const disposeCreative = initCreativeMotion();
+const disposeProjects = initProjects(scroll, gallery);
 const disposeEntrance = initEntrance(scroll);
 const renderFluid = (time, delta) => {
   fluid?.setFloodProgress(flood);
@@ -64,6 +66,7 @@ if (import.meta.hot) import.meta.hot.dispose(() => {
   events.abort();
   gsap.ticker.remove(renderFluid);
   disposeEntrance();
+  disposeCreative();
   disposeExpressive();
   disposeSound();
   disposeDetails();

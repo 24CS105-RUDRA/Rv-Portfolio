@@ -41,7 +41,7 @@ export function initInklingPlay(scroll) {
   function targets(){return [...document.querySelectorAll(surfaces)].filter(visible);}
   function setState(state){pet.dataset.state=state;}
   function stopTravel(){travel?.kill();bounce?.kill();gsap.set(blob,{clearProps:'transform'});perch=null;pet.classList.remove('is-running','is-hiding');}
-  function moveTo(x,y,{duration=.95,hideBehind=null,peek=true}={}) {
+  function moveTo(x,y,{duration=.95,hideBehind=null,peek=true,entrance=null,steal=false}={}) {
     stopTravel();const goal=bounds(x,y);
     if(preference.matches){Object.assign(position,goal);return;}
     pet.classList.add('is-running');
@@ -49,6 +49,11 @@ export function initInklingPlay(scroll) {
     travel=gsap.to(position,{...goal,duration,ease:'power2.inOut',onComplete:()=>{
       pet.classList.remove('is-running');perch=hideBehind;
       if(perch){pet.classList.toggle('is-hiding',peek);setState(peek?'hiding':'perched');}else setState('roaming');
+      if(entrance==='drop')bounce=gsap.fromTo(blob,{y:-100,scaleX:.8,scaleY:1.2},{y:0,scaleX:1,scaleY:1,duration:.8,ease:'bounce.out'});
+      if(entrance==='squeeze')bounce=gsap.fromTo(blob,{scaleX:.15,scaleY:1.7},{scaleX:1,scaleY:1,duration:.8,ease:'elastic.out(1,.4)'});
+      if(entrance==='emerge')bounce=gsap.fromTo(blob,{y:35,scale:.1,rotation:-90},{y:0,scale:1,rotation:0,duration:.7,ease:'back.out(2)'});
+      if(steal){window.dispatchEvent(new CustomEvent('portfolio:pet-steal',{detail:{...position}}));say('Bas ek letter udhaar liya. EMI pe wapas karunga.');}
+
     }});
     bounce=gsap.fromTo(blob,{rotation:goal.x<position.x?-12:12},{rotation:0,duration,ease:'power2.out'});
   }
@@ -58,7 +63,7 @@ export function initInklingPlay(scroll) {
     if(raging||preference.matches||document.hidden||document.body.classList.contains('modal-open')||pointerDown||play.matches(':focus-visible')){scheduleRoam();return;}
     const candidates=targets(),target=candidates[Math.floor(Math.random()*candidates.length)];
     roams++;blob.dataset.shape=shapes[roams%shapes.length];
-    if(target){const r=target.getBoundingClientRect();const hiding=roams%3===0;moveTo(r.left+Math.random()*Math.max(0,r.width-76),r.top-(hiding?58:80),{hideBehind:target,peek:hiding});}
+    if(target){const r=target.getBoundingClientRect();const hiding=roams%3===0;moveTo(r.left+Math.random()*Math.max(0,r.width-76),r.top-(hiding?58:80),{hideBehind:target,peek:hiding,entrance:roams%4===0?['drop','squeeze','emerge'][Math.floor(Math.random()*3)]:null,steal:!!target.closest('.intro')&&roams%2===0});}
     else moveTo(20+Math.random()*(innerWidth-110),90+Math.random()*(innerHeight-230));
     if(roams%3===0)say(line(roams%2?'roam':'corporate'));
     scheduleRoam(3800+Math.random()*2400);
@@ -71,6 +76,7 @@ export function initInklingPlay(scroll) {
   const wait=seconds=>animate({}, {duration:seconds});
   function restore({quiet=false,returnScroll=false}={}) {
     if(!quiet&&raging)soundCue('restore');
+    window.dispatchEvent(new Event('portfolio:pet-reset'));
     token++;raging=false;clearTimeout(autoRestore);clearTimeout(coolTimer);
     for(const tween of [...animations])tween.kill();animations.clear();stopTravel();dust.clear();
     if(scrollMoved&&scroll.lenis)scroll.lenis.scrollTo(scrollY,{immediate:true,force:true});
@@ -110,6 +116,7 @@ export function initInklingPlay(scroll) {
   }
   async function takeover() {
     if(raging)return;
+    window.dispatchEvent(new Event('portfolio:pet-reset'));
     stopTravel();clearTimeout(roamTimer);clearTimeout(coolTimer);raging=true;const current=++token;
     originScroll=scrollY;scrollMoved=false;setState('takeover');pet.classList.add('is-furious');blob.dataset.shape='puff';
     document.body.classList.add('inkling-has-control');
@@ -179,6 +186,8 @@ export function initInklingPlay(scroll) {
     if(document.hidden)return;
     if(time-lastFrame>.1) {
       lastFrame=time;
+      window.dispatchEvent(new CustomEvent('portfolio:pet-position',{detail:{...position}}));
+      if(travel?.isActive()||raging)window.dispatchEvent(new CustomEvent('portfolio:pet-step',{detail:{...position,angry:raging||anger>=4}}));
       if(perch&&!raging&&!travel?.isActive()){
         if(visible(perch)){const r=perch.getBoundingClientRect();Object.assign(position,bounds(position.x,r.top-(pet.classList.contains('is-hiding')?58:80)));}
         else {perch=null;pet.classList.remove('is-hiding');scheduleRoam(600);}

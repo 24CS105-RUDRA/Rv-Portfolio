@@ -123,6 +123,7 @@ export function initProjects(scroll, gallery) {
         dialog.scrollTop = 0;
       }
       close.focus({preventScroll: true});
+      window.dispatchEvent(new CustomEvent('portfolio:project-art',{detail:{project:projects[id],rect:sourceRect,closing:false}}));
     };
     if (!motion.matches) {show(); return;}
     // Reset the pixel offset GSAP reads from the curtain's CSS transform.
@@ -174,6 +175,7 @@ export function initProjects(scroll, gallery) {
 
     const image = dialog.querySelector('#dialog-image');
     const source = image.getBoundingClientRect();
+    window.dispatchEvent(new CustomEvent('portfolio:project-art',{detail:{project:projects[active],rect:source,closing:true}}));
     // The destination must be the currently displayed project, even after Next.
     opener = gallery.reveal(active);
     scroll.toSection('work', {immediate: true});
