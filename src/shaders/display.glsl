@@ -1,7 +1,7 @@
 precision highp float;
 varying vec2 vUv;
 uniform sampler2D uDye, uLogoTexture, uDistance;
-uniform float uRest, uFlood, uTime, uAspectRatio;
+uniform float uRest, uFlood, uGather, uTime, uAspectRatio;
 uniform vec3 uBackground, uPaper;
 float hash(vec2 p) { return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
 float noise(vec2 p) {
@@ -41,6 +41,23 @@ void main() {
         float wet=max(core,wash);
         wet=mix(wet,1.,smoothstep(.89,1.,uFlood));
         ink=mix(mark,max(mark,wet),smoothstep(0.,.035,uFlood));
+    }
+    if(uGather>=0.) {
+        float g=clamp(uGather,0.,1.);
+        vec2 plane=(vUv-.5)*vec2(uAspectRatio,1.);
+        float scatter=1.-smoothstep(.12,.94,g);
+        vec2 swirl=vec2(cloud(plane*4.+g*2.),cloud(plane*4.+8.-g*2.))-.5;
+        float bounce=sin(max(0.,g-.72)*34.)*(1.-g)*.16;
+        vec2 sampleUV=clamp(.5+(vUv-.5)/(1.+bounce)+swirl*scatter*.22,.001,.999);
+        vec2 packed=texture2D(uDistance,sampleUV).rg;
+        float sd=((packed.r*65280.+packed.g*255.)/65535.-.5)*4.;
+        float radius=scatter*.38;
+        float wet=1.-smoothstep(-.014,.014,sd-radius);
+        float flecks=cloud(plane*(8.+g*5.)+swirl*2.+g*3.);
+        float drops=smoothstep(.47,.62,flecks)*wet;
+        float gathering=mix(drops,wet,smoothstep(.22,.76,g));
+        float finalMark=texture2D(uLogoTexture,sampleUV).a;
+        ink=smoothstep(.48,.52,mix(gathering,finalMark,smoothstep(.84,1.,g))*smoothstep(0.,.12,g));
     }
     gl_FragColor=vec4(mix(uBackground,uPaper,clamp(ink,0.,1.)),1.);
 }

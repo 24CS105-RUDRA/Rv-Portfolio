@@ -1,6 +1,5 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import logo from '../logo.svg';
 
 // One bounded canvas for cursor wake, footprints, and the contact debris field.
 export function initCreativeMotion() {
@@ -43,21 +42,8 @@ export function initCreativeMotion() {
     stealTimer=setTimeout(returnLetter,3200);
   },{signal});
   window.addEventListener('portfolio:pet-position',e=>{if(stolenCopy&&!stealTween?.isActive()){gsap.set(stolenCopy,{left:e.detail.x+45,top:e.detail.y-5,x:0,y:0});}},{signal});
-  for(const name of ['portfolio:pet-reset','portfolio:theme','portfolio:project-art'])window.addEventListener(name,returnLetter,{signal});
+  for(const name of ['portfolio:pet-reset','portfolio:theme','portfolio:project-art','portfolio:loop-start'])window.addEventListener(name,returnLetter,{signal});
   window.addEventListener('keydown',e=>{if(e.key==='Escape')returnLetter();},{signal});
-
-  // A liquid monogram aperture preserves the matching frame at the scroll seam.
-  const eclipse=document.createElement('div');eclipse.className='liquid-eclipse';eclipse.setAttribute('aria-hidden','true');
-  eclipse.innerHTML=`<img src="${logo}" alt=""/>`;document.body.append(eclipse);let eclipseTween;
-  window.addEventListener('portfolio:theme',()=>{
-    if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-    eclipseTween?.kill();const dark=document.documentElement.classList.contains('theme-dark');
-    eclipse.style.setProperty('--eclipse-paper',dark?'#050505':'#f6f5f2');
-    eclipse.style.setProperty('--eclipse-filter',dark?'invert(1)':'none');
-    eclipseTween=gsap.timeline().set(eclipse,{opacity:1,clipPath:'circle(150% at 50% 50%)'})
-      .fromTo(eclipse.querySelector('img'),{scale:.7,rotation:-8},{scale:14,rotation:2,duration:.85,ease:'power3.in'})
-      .to(eclipse,{opacity:0,duration:.35},.65);
-  },{signal});
 
   const dialog=document.querySelector('#project-dialog');
   const constellation=document.createElement('section');constellation.className='project-constellation';constellation.setAttribute('aria-label','Explore the project technologies');
@@ -114,7 +100,7 @@ export function initCreativeMotion() {
     const heading=document.querySelector('.intro-title');
     heading.addEventListener('pointermove',e=>{if(performance.now()-pointerFrame<45)return;pointerFrame=performance.now();magnetic.forEach(letter=>{if(letter===stolen)return;const r=letter.getBoundingClientRect(),dx=e.clientX-r.left-r.width/2,dy=e.clientY-r.top-r.height/2,d=Math.hypot(dx,dy),f=Math.max(0,1-d/170);gsap.to(letter,{x:dx*f*.1,y:dy*f*.12,rotation:dx*f*.025,duration:.35,overwrite:true});});},{signal:s});
     heading.addEventListener('pointerleave',resetLetters,{signal:s});
-    const grid=document.querySelector('.scene-grid'),edgeNodes=[grid,document.querySelector('.return-stage .hero-mark')];let edgeTween,lastEdge=0;
+    const grid=document.querySelector('.scene-grid'),edgeNodes=[grid,document.querySelector('.site-footer')];let edgeTween,lastEdge=0;
     window.addEventListener('portfolio:edge-stretch',e=>{if(performance.now()-lastEdge<180)return;lastEdge=performance.now();edgeTween?.kill();edgeTween=gsap.timeline().to(edgeNodes,{scaleY:1.025,skewX:e.detail.direction*1.2,duration:.13}).to(edgeNodes,{scaleY:1,skewX:0,duration:.7,ease:'elastic.out(1,.45)'});},{signal:s});
     const constellationObserver=new IntersectionObserver(entries=>entries.forEach(entry=>constellation.classList.toggle('is-constellation-live',entry.isIntersecting)),{threshold:.15});
     constellationObserver.observe(constellation);
@@ -123,7 +109,7 @@ export function initCreativeMotion() {
       const r=contact.getBoundingClientRect(),wordRects=[...contact.querySelectorAll('.finale-word')].filter(w=>w.textContent.trim()).map(w=>w.getBoundingClientRect());ink=getComputedStyle(contact).color;
       for(let i=0;i<42;i++)add({x:Math.random()*innerWidth,y:innerHeight+Math.random()*80,toX:(wordRects[i%wordRects.length]||r).left+Math.random()*(wordRects[i%wordRects.length]||r).width,toY:(wordRects[i%wordRects.length]||r).top+Math.random()*(wordRects[i%wordRects.length]||r).height,r:2+Math.random()*4,life:1.4+Math.random()*.5,alpha:.5,color:ink});
     }});
-    return()=>{local.abort();contactTrigger.kill();constellationObserver.disconnect();constellation.classList.remove('is-constellation-live');clear();returnLetter();edgeTween?.kill();gsap.set(edgeNodes,{clearProps:'transform'});gsap.killTweensOf(magnetic);gsap.set(magnetic,{clearProps:'transform'});eclipseTween?.kill();gsap.set(eclipse,{opacity:0});shardTween?.kill();shards.forEach(s=>s.remove());};
+    return()=>{local.abort();contactTrigger.kill();constellationObserver.disconnect();constellation.classList.remove('is-constellation-live');clear();returnLetter();edgeTween?.kill();gsap.set(edgeNodes,{clearProps:'transform'});gsap.killTweensOf(magnetic);gsap.set(magnetic,{clearProps:'transform'});shardTween?.kill();shards.forEach(s=>s.remove());};
   });
-  return()=>{media.revert();events.abort();graphEvents.abort();if(introLabel===null)introHeading.removeAttribute('aria-label');else introHeading.setAttribute('aria-label',introLabel);returnLetter();clear();eclipseTween?.kill();shardTween?.kill();shards.forEach(s=>s.remove());canvas.remove();eclipse.remove();constellation.remove();originals.forEach(({el,html,label})=>{el.innerHTML=html;if(label===null)el.removeAttribute('aria-label');else el.setAttribute('aria-label',label);});};
+  return()=>{media.revert();events.abort();graphEvents.abort();if(introLabel===null)introHeading.removeAttribute('aria-label');else introHeading.setAttribute('aria-label',introLabel);returnLetter();clear();shardTween?.kill();shards.forEach(s=>s.remove());canvas.remove();constellation.remove();originals.forEach(({el,html,label})=>{el.innerHTML=html;if(label===null)el.removeAttribute('aria-label');else el.setAttribute('aria-label',label);});};
 }

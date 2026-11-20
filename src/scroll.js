@@ -5,7 +5,7 @@ import { scene } from './motion.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function initScroll(setFlood, onTheme = () => {}) {
+export function initScroll(setFlood, onTheme = () => {}, onGather = () => {}) {
   const state = {lenis: null, timeline: null};
   const events = new AbortController();
   const media = gsap.matchMedia();
@@ -15,12 +15,12 @@ export function initScroll(setFlood, onTheme = () => {}) {
   const work = document.querySelector('#work');
   const hero = document.querySelector('#hero-visual');
   const controls = document.querySelector('#top .hero-controls');
-  const returnStage = document.querySelector('.return-stage');
+  const heroHome=hero.parentElement;
+  const footer=document.querySelector('.site-footer');
   const links = [...header.querySelectorAll('nav a')];
   let active, firstBoundary = true;
-  let loopToOpening = null;
-  const changeTheme = () => {
-    window.dispatchEvent(new Event("portfolio:theme"));
+  const changeTheme = (quiet=false) => {
+    if(!quiet) window.dispatchEvent(new Event("portfolio:theme"));
     const dark = document.documentElement.classList.toggle('theme-dark');
     onTheme(dark);
     document.querySelector('meta[name="theme-color"]').content = dark ? '#f6f5f2' : '#050505';
@@ -38,63 +38,73 @@ export function initScroll(setFlood, onTheme = () => {}) {
     const lenis = new Lenis({lerp: 0.09, smoothWheel: true, syncTouch: false, anchors: false});
     state.lenis = lenis;
     const wheelEvents = new AbortController();
-    let navMask = -1;
-    const updateNavMask = () => {
-      const fraction = lenis.progress > 0.7
-        ? Math.max(0, Math.min(1, 1 - returnStage.getBoundingClientRect().top / (innerHeight * 0.8))) : 0;
-      if (fraction !== navMask) {
-        navMask = fraction;
-        header.style.setProperty('--return-mask', (1 - fraction).toFixed(3));
-        header.inert = fraction > 0.95;
-      }
+    let navMask=-1;
+    const updateNavMask=()=>{
+      const fraction=0;
+      if(fraction!==navMask){navMask=fraction;header.style.setProperty('--return-mask','1');header.inert=false;}
     };
-    let pendingDirection = 0, lockedUntil = 0, touchY = null;
-    const eligible = event => !lenis.isStopped && !lenis.isLocked
+    let pendingDirection=0,lockedUntil=0,touchY=null,pull=0,lastPull=0;
+    let gathering=false,gatherTween,releaseTween;
+    const gather={progress:0};
+    function resetPull(){pull=0;releaseTween?.kill();gsap.set(footer,{clearProps:'transform'});}
+    function finishGather(){
+      if(!gathering)return;
+      gathering=false;gatherTween?.kill();
+      lenis.scrollTo(0,{immediate:true,force:true});
+      state.timeline?.progress(0);setFlood(0);ScrollTrigger.update();
+      hero.classList.remove('loop-gathering');hero.style.removeProperty('--gather-progress');
+      heroHome.prepend(hero);onGather(null);gsap.set(hero,{autoAlpha:1});
+      resetPull();updateNavMask();setCurrent(null);lockedUntil=performance.now()+650;
+      if(/^#(?:top|intro|work|services|contact)$/.test(location.hash))history.replaceState(null,'',`${location.pathname}${location.search}#top`);
+      window.dispatchEvent(new Event('portfolio:loop-end'));
+    }
+    function beginGather(){
+      if(gathering)return;
+      resetPull();pendingDirection=0;firstBoundary=false;gathering=true;
+      window.dispatchEvent(new Event('portfolio:loop-start'));
+      // The next opening's background matches the current page's paper.
+      // A single live canvas paints ink onto that same surface, then contracts.
+      changeTheme(true);gather.progress=0;setFlood(0);onGather(0);
+      document.body.append(hero);hero.classList.add('loop-gathering');gsap.set(hero,{autoAlpha:1});
+      gatherTween=gsap.to(gather,{progress:1,duration:1.65,ease:'sine.inOut',onUpdate:()=>{onGather(gather.progress);hero.style.setProperty('--gather-progress',gather.progress);},onComplete:finishGather});
+    }
+    const eligible = event => !gathering && !lenis.isStopped && !lenis.isLocked
       && !document.body.classList.contains('modal-open')
       && !event?.target?.closest?.('input, textarea, select, [contenteditable="true"], [data-lenis-prevent]');
-    const crossBoundary = direction => {
-      pendingDirection = 0;
-      lockedUntil = performance.now() + 850;
-      firstBoundary = false;
-      window.dispatchEvent(new CustomEvent('portfolio:edge-stretch',{detail:{direction}}));
-      changeTheme();
-      const destination = direction > 0 ? 0 : lenis.limit;
-      lenis.scrollTo(destination, {immediate: true, force: true});
-      // Reset the live opening immediately, rather than waiting for the next RAF.
-      state.timeline?.progress(direction > 0 ? 0 : 1);
-      setFlood(direction > 0 ? 0 : 1);
-      ScrollTrigger.update();
-      updateNavMask();
-      setCurrent(null);
-      if (/^#(?:top|intro|work|services|contact)$/.test(location.hash)) {
-        history.replaceState(null, '', `${location.pathname}${location.search}#top`);
-      }
+    const crossBoundary=direction=>{
+      if(direction>0){beginGather();return;}
+      resetPull();pendingDirection=0;lockedUntil=performance.now()+850;firstBoundary=false;
+      changeTheme();lenis.scrollTo(lenis.limit,{immediate:true,force:true});state.timeline?.progress(1);setFlood(1);ScrollTrigger.update();updateNavMask();
     };
-    loopToOpening = () => crossBoundary(1);
-    lenis.on('scroll', () => {
-      ScrollTrigger.update();
-      updateNavMask();
-      if (pendingDirection > 0 && lenis.limit - lenis.actualScroll <= 2) crossBoundary(1);
-      else if (pendingDirection < 0 && lenis.actualScroll <= 2) crossBoundary(-1);
+    lenis.on('scroll',()=>{
+      ScrollTrigger.update();updateNavMask();
+      if(gathering){gsap.set(hero,{autoAlpha:1});return;}
+      if(pendingDirection>0&&lenis.limit-lenis.actualScroll<=2){pendingDirection=0;}
+      else if(pendingDirection<0&&lenis.actualScroll<=2)crossBoundary(-1);
+      if(lenis.limit-lenis.actualScroll>30&&pull)resetPull();
     });
-    function edgeInput(delta, event) {
-      if (!delta || !eligible(event)) { pendingDirection = 0; return false; }
-      if (performance.now() < lockedUntil) return true;
-      const remaining = delta > 0 ? lenis.limit - lenis.actualScroll : lenis.actualScroll;
-      if (remaining < innerHeight * .35) window.dispatchEvent(new CustomEvent('portfolio:edge-stretch',{detail:{direction:Math.sign(delta)}}));
-      if (remaining <= 2) {
-        if (delta < 0 && firstBoundary) {
-          firstBoundary = false;
-          lenis.scrollTo(Math.max(0, returnStage.offsetTop - innerHeight), {immediate: true});
-          lockedUntil = performance.now() + 850;
-        } else crossBoundary(Math.sign(delta));
+    function edgeInput(delta,event){
+      if(gathering)return true;
+      if(!delta||!eligible(event)){pendingDirection=0;return false;}
+      if(performance.now()<lockedUntil)return true;
+      const remaining=delta>0?lenis.limit-lenis.actualScroll:lenis.actualScroll;
+      if(delta<0&&pull){resetPull();return false;}
+      if(remaining<=2){
+        if(delta>0){
+          const now=performance.now();if(now-lastPull>700)pull=0;lastPull=now;
+          pull=Math.min(240,pull+Math.min(60,delta));releaseTween?.kill();
+          releaseTween=gsap.to(footer,{y:-Math.min(20,pull*.085),scaleX:1+pull*.00004,duration:.15,overwrite:true});
+          if(pull>=240)beginGather();
+          else releaseTween=gsap.to(footer,{y:0,scaleX:1,duration:.5,delay:.25,ease:'elastic.out(1,.5)',overwrite:'auto'});
+        }else if(firstBoundary){firstBoundary=false;lenis.scrollTo(lenis.limit,{immediate:true});lockedUntil=performance.now()+850;}
+        else crossBoundary(-1);
         return true;
       }
-      // Remember overscroll while Lenis eases toward the edge. Otherwise a
-      // trackpad gesture can finish before actualScroll ever reaches the seam.
-      pendingDirection = Math.abs(delta) >= remaining ? Math.sign(delta) : 0;
-      return false;
+      pendingDirection=Math.abs(delta)>=remaining?Math.sign(delta):0;return false;
     }
+    window.addEventListener('resize',()=>{if(gathering)finishGather();},{signal:wheelEvents.signal});
+    document.addEventListener('visibilitychange',()=>{if(document.hidden&&gathering)finishGather();},{signal:wheelEvents.signal});
+    window.addEventListener('keydown',event=>{if(event.key==='Escape'&&gathering)finishGather();},{signal:wheelEvents.signal});
     window.addEventListener('wheel', event => {
       if (event.ctrlKey || event.shiftKey || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
       const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? innerHeight : 1);
@@ -110,15 +120,16 @@ export function initScroll(setFlood, onTheme = () => {}) {
     window.addEventListener('touchmove', event => {
       if (touchY === null || event.touches.length !== 1) return;
       const delta = touchY - event.touches[0].clientY;
-      if (Math.abs(delta) < 24) return;
-      if (edgeInput(delta, event)) { event.preventDefault(); touchY = null; }
+      if (Math.abs(delta) < 8) return;
+      touchY=event.touches[0].clientY;
+      if (edgeInput(delta, event)) event.preventDefault();
     }, {passive: false, signal: wheelEvents.signal});
     window.addEventListener('touchend', () => { touchY = null; }, {signal: wheelEvents.signal});
     window.addEventListener('keydown', event => {
       if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey
         || event.target?.closest?.('button, a, [role="button"], #project-gallery')) return;
-      const delta = ['ArrowDown', 'PageDown'].includes(event.key) || (event.key === ' ' && !event.shiftKey) ? 1
-        : ['ArrowUp', 'PageUp'].includes(event.key) || (event.key === ' ' && event.shiftKey) ? -1 : 0;
+      const delta = ['ArrowDown', 'PageDown'].includes(event.key) || (event.key === ' ' && !event.shiftKey) ? 80
+        : ['ArrowUp', 'PageUp'].includes(event.key) || (event.key === ' ' && event.shiftKey) ? -80 : 0;
       if (delta && edgeInput(delta, event)) event.preventDefault();
     }, {signal: wheelEvents.signal});
     const tick = time => lenis.raf(time * 1000);
@@ -186,12 +197,12 @@ export function initScroll(setFlood, onTheme = () => {}) {
     }
 
     return () => {
+      finishGather();gatherTween?.kill();resetPull();onGather(null);
       gsap.ticker.remove(tick);
       lenis.destroy();
       wheelEvents.abort();
       header.inert = false;
       header.style.removeProperty('--return-mask');
-      loopToOpening = null;
       state.lenis = state.timeline = null;
       controls.inert = work.inert = false;
       setFlood(0);
@@ -199,6 +210,7 @@ export function initScroll(setFlood, onTheme = () => {}) {
   });
 
   function scrollToSection(id, {focus = false, updateHash = false, immediate = false} = {}) {
+    if(document.querySelector('.loop-gathering'))return;
     const target = document.getElementById(id);
     if (!target) return;
     let destination = target;
@@ -230,7 +242,6 @@ export function initScroll(setFlood, onTheme = () => {}) {
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.hash.startsWith('#project/')) return;
       event.preventDefault();
       const id = link.hash.slice(1);
-      if (link.closest('.return-stage') && loopToOpening) loopToOpening();
       scrollToSection(id, {focus: event.detail === 0, updateHash: true});
     }, {signal: events.signal});
   });

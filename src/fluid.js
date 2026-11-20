@@ -634,6 +634,7 @@ void main() {
       uDistance: this.bindTexture(this.distanceTexture, 2),
       uRest: Math.min(1, Math.max(0, (this.idleTime - 1.5) / 2)),
       uFlood: this.floodProgress,
+      uGather: this.gatherProgress ?? -1,
       uTime: this.time,
       uAspectRatio: this.aspect,
       uBackground: this.darkTheme ? [246/255,245/255,242/255] : [5/255,5/255,5/255],
@@ -649,10 +650,10 @@ void main() {
     const elapsed = frameMs / 1000;
     const dt = Math.max(0.001, Math.min(elapsed, 1 / 30));
     const stirring = this.pointers.some(pointer => pointer.moved);
-    const flooding = this.floodProgress > 0 && this.floodProgress < 1;
+    const flooding = (this.floodProgress > 0 && this.floodProgress < 1) || this.gatherProgress != null;
     this.idleTime = stirring || flooding ? 0 : this.idleTime + dt;
     // Freeze settled or fully covered artwork, without running any GPU passes.
-    if (this.floodProgress >= 0.999 || this.idleTime > 4) {
+    if ((this.floodProgress >= 0.999 && this.gatherProgress == null) || this.idleTime > 4) {
       if (this.needsRender) this.render();
       this.needsRender = false;
       return;
@@ -682,6 +683,13 @@ void main() {
     const p = this.pointers[0];
     p.initialized = p.moved = false;
     p.dx = p.dy = 0;
+  }
+
+  setGatherProgress(progress) {
+    this.gatherProgress = progress;
+    this.needsRender = true;
+    if(progress != null) this.idleTime = 0;
+    if(this.available && this.logoTexture) this.render();
   }
 
   setFloodProgress(progress) {

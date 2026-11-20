@@ -176,6 +176,7 @@ export function initInklingPlay(scroll) {
   play.addEventListener('focus',()=>{if(play.matches(':focus-visible')&&!raging)stopTravel();},{signal});
   window.addEventListener('keydown',e=>{if(e.key==='Escape'&&(raging||damaged.size)){restore({returnScroll:true});play.focus({preventScroll:true});}},{signal});
   document.addEventListener('click',e=>{if(e.target.closest('a, .dialog-close')&&(raging||damaged.size))restore({quiet:true});},{signal,capture:true});
+  window.addEventListener('portfolio:loop-start',()=>restore({quiet:true}),{signal});
   document.addEventListener('visibilitychange',()=>{if(document.hidden){restore({quiet:true});clearTimeout(roamTimer);}else scheduleRoam();},{signal});
   preference.addEventListener('change',()=>{restore({quiet:true});Object.assign(position,bounds(24,innerHeight-155));},{signal});
   window.addEventListener('wheel',()=>{if(raging)restore({quiet:true});},{signal,passive:true,capture:true});

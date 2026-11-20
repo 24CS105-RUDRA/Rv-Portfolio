@@ -42,7 +42,7 @@ root.classList.replace('no-js', 'js');
 syncFluid();
 const disposeSound = initSound();
 let flood = 0;
-const scroll = initScroll(progress => { flood = progress; }, dark => fluid?.setTheme(dark));
+const scroll = initScroll(progress => { flood = progress; }, dark => fluid?.setTheme(dark), progress => fluid?.setGatherProgress(progress));
 const gallery = initGallery();
 const disposeCursor = initCustomCursor();
 const disposeDetails = initDetailsMotion();

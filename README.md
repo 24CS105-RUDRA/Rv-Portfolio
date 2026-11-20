@@ -47,7 +47,7 @@ The website does not claim these prototypes are deployed client engagements.
 
 ## Interaction and accessibility
 
-- Wheel and trackpad input drive the opening through the liquid transition, the introduction, and selected work. Scrolling beyond the footer wraps to the live ink opening and alternates the light/dark theme on each circuit. Wheel overshoot is remembered while smooth scrolling settles; touch swipes and keyboard scrolling at the boundary also wrap. Reduced motion retains a regular document layout.
+- Wheel and trackpad input drive the opening through the liquid transition, the introduction, and selected work. At the footer, a short resisted pull (240 accumulated wheel/touch units, capped per event) releases a 1.65-second gathering animation. The single live ink canvas contracts scattered ink into the monogram, then rejoins the actual opening at scroll position zero in the opposite theme. There is no duplicate footer-logo section or eclipse overlay. Touch and keyboard boundary input use the same resistance; a short momentum guard prevents an accidental immediate second transition. Reduced motion retains a regular document layout.
 - The gallery wraps in both directions. Drag or swipe sideways, use the previous and next buttons, or press the arrow keys while focused on the gallery.
 - Case studies have shareable `#project/<slug>` addresses. Browser Back, Escape, and the work button return to the portfolio. Modified clicks on the gallery links still open the repository directly.
 - Reduced motion displays a static opening and a regular document layout. Gallery navigation becomes immediate.
@@ -99,12 +99,14 @@ To regenerate the raster branding assets on macOS with Pillow installed, run `py
 1. Inkling leaves short-lived footprints; angry movement creates heavier marks.
 2. Project transitions shed 18 border fragments that gather at the case-study title.
 3. The intro heading’s letters gently follow nearby pointer movement and spring home.
-4. A zooming monogram eclipse carries the alternating-theme seam into the next opening.
+4. The alternating-theme seam uses the live WebGL ink-gathering animation described above; the earlier zooming eclipse was removed.
 5. Inkling occasionally borrows a visible intro letter while its neighbours wobble; the letter returns after 3.2 seconds. Escape, theme changes, project navigation, tab hiding, and pet reset also return it. The accessible heading remains intact.
-6. The grid and footer logo stretch near a scroll boundary and settle elastically.
+6. The footer stretches slightly against continued scrolling before the ink gathers.
 7. Case studies include a technology constellation with keyboard/touch buttons, a role description, and matching feature highlighting. Node drift runs only while the constellation is in view.
 8. A capped debris field gathers at the contact words as the existing finale reveals them.
 9. Slow pointer movement over the opening creates ripples; fast movement creates a fading liquid wake alongside the existing fluid simulation.
 10. Occasional Inkling arrivals drop, squeeze, or emerge from the page’s visible surfaces.
 
-A shared canvas caps these decorative particles at 180 and limits pixel density to 1.5. Its ticker runs only while particles exist and stops in hidden tabs. Reduced motion removes the moving particle effects, theft, magnetic response, eclipse, elastic stretching, and floating nodes while retaining static technology controls. Cleanup removes generated markup, timers, observers, event handlers, and animation state during development reloads.
+A shared canvas caps these decorative particles at 180 and limits pixel density to 1.5. Its ticker runs only while particles exist and stops in hidden tabs. Reduced motion removes the moving particle effects, theft, magnetic response, ink gathering, elastic stretching, and floating nodes while retaining static technology controls. Cleanup removes generated markup, timers, observers, event handlers, and animation state during development reloads.
+
+The loop gathering state clears on completion, Escape, resize, tab hiding, reduced-motion changes, and development cleanup. WebGL-unavailable browsers use the same live opening container with a fading monogram fallback.
