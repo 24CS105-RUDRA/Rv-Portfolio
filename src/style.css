@@ -69,6 +69,16 @@ img { display: block; max-width: 100%; }
 .intro { position: absolute; inset: 0; display: grid; place-items: center; padding: var(--header-height) var(--gutter) 0; z-index: 1; pointer-events: none; }
 .intro-title { text-align: center; font-size: min(10.5vw, 18svh); line-height: .95; letter-spacing: -.03em; translate: 0 -7svh; }
 .intro-title .line-mask:first-child { translate: -4vw 0; }
+.intro-identity { display:block; margin-bottom:26px; font:400 clamp(12px,1.1vw,16px)/1.5 var(--mono); letter-spacing:.12em; }
+.intro-title .intro-identity + .line-mask { translate:-4vw 0; }
+.about-person { display:grid; grid-template-columns:1fr 1.2fr; gap:clamp(30px,7vw,100px); padding:clamp(65px,9vw,140px) var(--gutter); border-top:1px solid var(--line); }
+.about-kicker { font:14px/1.6 var(--mono); color:var(--muted); max-width:33ch; }
+.about-person h2 { font:500 clamp(40px,5vw,76px)/1.05 var(--body); letter-spacing:-.045em; margin-top:22px; }
+.about-alias { font:italic 20px/1.6 Georgia,serif; color:var(--muted); margin-top:14px; }
+.about-story p { font-size:18px; line-height:1.7; max-width:58ch; margin-bottom:18px; }
+.about-story a { text-decoration:underline; text-underline-offset:4px; }
+.about-work-link { display:inline-flex; min-height:44px; align-items:center; margin-top:8px; font:14px/1.5 var(--mono); }
+@media(max-width:700px) { .about-person { grid-template-columns:1fr; } .intro-identity { font-size:12px; margin-bottom:18px; } }
 .intro-title .line-mask:last-child { translate: 6vw 0; }
 .line-mask { display: block; overflow: hidden; padding: .04em .04em .08em; margin: -.04em -.04em -.08em; }
 .line-mask > span { display: block; }

@@ -152,3 +152,11 @@ Old route/mixer/lab hashes resolve to `#playground` for previously shared links.
 `src/inkling-rage.js` adds a reversible burgundy/ember wash, fractured edges and finite impact rings. Its classes do not change the ink loop’s theme state. Inkling gains a rounded angry silhouette, slanted eyes, brows and a glow. Reduced motion and the dedicated form page keep a mild static expression/tint without destruction or automatic scrolling. Escape, navigation, scrolling, tab hiding and motion changes still cancel the takeover.
 
 The anger event pauses ambient music independently of the effects mute/context state; reset resumes it only when enabled, running and visible. All charge/impact/crumble cues share existing mute, rate limits, compressor and voice cap. Reset stops their tails before the repair jingle begins. There is no continuous rumble loop or strobing flash.
+
+## Name and university search visibility
+
+The homepage now has visible profile text for Rudra Vaghela (also Rudra Raj Vaghela), B.Tech study at CHARUSAT, creative/student development, and openness to freelance projects and work. These facts are reflected in descriptive titles/social metadata and linked WebSite, ProfilePage and Person structured data; the contact page uses ContactPage data. University affiliation describes current study, not an awarded degree. There are no repeated keyword lists or hidden search-only pages.
+
+The preferred host remains `https://rv-portfolio-five.vercel.app/`: the November23,2026 check could not resolve `rudravaghela.in`. Once the custom domain is connected and serving this portfolio over HTTPS, update canonical URLs, structured IDs, social URLs, robots sitemap and sitemap locations together, and configure redirects to the preferred hostname. Do not canonicalise to a domain that is not serving the site.
+
+Owner action: verify the site in Google Search Console, submit `/sitemap.xml`, then inspect and request indexing for the homepage and `/idea/`. Account/domain verification cannot be completed from source code alone. Use the same name and portfolio link on real public profiles such as the linked GitHub account. Search indexing and rankings are controlled by search engines; metadata and query variants do not guarantee a position or inclusion.
