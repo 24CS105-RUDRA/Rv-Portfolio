@@ -25,9 +25,21 @@ export function initGallery() {
 
   let stops = [], period = 0, position = 0, target = 0;
   let pointer = null, suppressClick = false, wheelTimer;
-  let previousX = null, active = -1, slip = 0;
+  let previousX = null, active = -1;
+  let ticking = false, moving = false;
+  function setMoving(value) {
+    if (moving === value) return;
+    moving = value; gallery.classList.toggle('is-moving', value);
+    window.dispatchEvent(new CustomEvent('portfolio:gallery-motion', {detail: {moving: value}}));
+  }
+  function sleep() {gsap.ticker.remove(render); ticking = false;}
+  function wake() {
+    if (document.hidden) return;
+    if (!reduced.matches && Math.abs(position-target)>.05) setMoving(true);
+    if (!ticking) {ticking = true; gsap.ticker.add(render);}
+  }
   function render(_, delta = 16.67) {
-    if (!period) return;
+    if (!period || document.hidden) {sleep(); return;}
     const before = position;
     const dt = Math.min(delta / 1000, 0.05);
     position = reduced.matches ? target : damp(position, target, pointer ? 24 : 12, dt);
@@ -37,11 +49,6 @@ export function initGallery() {
       track.style.transform = `translate3d(${x}px, 0, 0)`;
       previousX = x;
     }
-    const nextSlip = reduced.matches || !dt ? 0 : Math.max(-9, Math.min(9, (position - before) * 0.24));
-    if (nextSlip !== slip) {
-      slip = nextSlip;
-      track.style.setProperty('--slide-slip', `${slip.toFixed(2)}px`);
-    }
     const local = wrap(closestStop(position, stops, period), period);
     const index = stops.reduce((best, stop, i) => Math.abs(stop - local) < Math.abs(stops[best] - local) ? i : best, 0);
     if (index !== active) {
@@ -49,6 +56,7 @@ export function initGallery() {
       active = index;
       count.textContent = `${String(index + 1).padStart(2, '0')} / ${String(cards.length).padStart(2, '0')}`;
     }
+    if (position === target) {if(!pointer?.dragging)setMoving(false); sleep();}
   }
   function measure() {
     const index = Math.max(active, 0);
@@ -64,9 +72,8 @@ export function initGallery() {
   const resize = new ResizeObserver(measure);
   resize.observe(gallery);
   measure();
-  gsap.ticker.add(render);
 
-  const move = direction => { target = nextStop(target, direction, stops, period); };
+  const move = direction => { target = nextStop(target, direction, stops, period); wake(); };
   document.querySelector('#gallery-prev').addEventListener('click', () => move(-1), {signal});
   document.querySelector('#gallery-next').addEventListener('click', () => move(1), {signal});
   gallery.addEventListener('keydown', event => {
@@ -75,6 +82,7 @@ export function initGallery() {
     if (event.key === 'Home') target = 0;
     else if (event.key === 'End') target = stops.at(-1);
     else move(event.key === 'ArrowRight' ? 1 : -1);
+    wake();
   }, {signal});
   gallery.addEventListener('focusin', event => {
     if (!event.target.matches(':focus-visible')) return;
@@ -106,6 +114,7 @@ export function initGallery() {
     pointer.lastX = event.clientX;
     pointer.time = event.timeStamp;
     target = pointer.start - dx;
+    wake();
   }, {signal});
   function release(event) {
     if (!pointer || event.pointerId !== pointer.id) return;
@@ -115,6 +124,7 @@ export function initGallery() {
       const velocity = event.timeStamp - released.time < 100 && event.type !== 'pointercancel' ? released.velocity : 0;
       target = closestStop(target + velocity * 150, stops, period);
       suppressClick = true;
+      wake();
     }
     gallery.classList.remove('is-dragging');
     if (gallery.hasPointerCapture(released.id)) gallery.releasePointerCapture(released.id);
@@ -132,9 +142,12 @@ export function initGallery() {
     if (!delta || (!event.shiftKey && Math.abs(delta) <= Math.abs(event.deltaY))) return;
     event.preventDefault();
     target += delta * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? gallery.clientWidth : 1);
+    wake();
     clearTimeout(wheelTimer);
-    wheelTimer = setTimeout(() => { target = closestStop(target, stops, period); }, 120);
+    wheelTimer = setTimeout(() => { target = closestStop(target, stops, period); wake(); }, 120);
   }, {passive: false, signal});
+  document.addEventListener('visibilitychange', () => {if(document.hidden){if(pointer)release({pointerId:pointer.id,type:'pointercancel',timeStamp:0});sleep();setMoving(false);}else wake();}, {signal});
+  reduced.addEventListener('change', wake, {signal});
 
   return {
     reveal(id) {
@@ -143,7 +156,7 @@ export function initGallery() {
       return cards[index]?.querySelector('[data-project]');
     },
     destroy() {
-      events.abort(); resize.disconnect(); gsap.ticker.remove(render); clearTimeout(wheelTimer);
+      events.abort(); resize.disconnect(); sleep(); clearTimeout(wheelTimer); setMoving(false);
       copies.forEach(copy => copy.remove());
       gallery.classList.remove('is-enhanced', 'is-dragging');
       track.style.removeProperty('transform');

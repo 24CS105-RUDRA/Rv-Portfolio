@@ -97,7 +97,7 @@ img { display: block; max-width: 100%; }
 .project-cover[data-project="silentguardian"] { --cover-bg: #172b44; }
 .project-cover[data-project="smoker-prediction"] { --cover-bg: #dce2ce; }
 .project-cover[data-project="brainy-beam"] { --cover-bg: #493749; }
-.project-cover img { width: 100%; height: min(calc(100svh - 158px), 77svh, 660px); object-fit: contain; translate: var(--slide-slip, 0px) 0; user-select: none; -webkit-user-drag: none; transition: scale .8s cubic-bezier(.2,.65,.2,1); }
+.project-cover img { width: 100%; height: min(calc(100svh - 158px), 77svh, 660px); object-fit: contain; user-select: none; -webkit-user-drag: none; transition: scale .8s cubic-bezier(.2,.65,.2,1); }
 .project:nth-child(even) .project-cover img { height: min(calc(96svh - 158px), 68svh, 570px); }
 .project-cover:hover > img, .project-cover:hover > .project-illustration { scale:1.035; }
 .project-caption { margin-top: 13px; display: flex; gap: 10px; align-items: baseline; }
@@ -308,11 +308,12 @@ img { display: block; max-width: 100%; }
 .flying-artwork { will-change: top, left, width, height; }
 
 /* Expressive gallery layers, scoped to visible cards. */
-.project { perspective: 1100px; }
-.project-cover { transform-style: preserve-3d; transform-origin: center; }
-.project-cover > img, .project-illustration { filter: var(--portal-filter, none); }
+.project-cover { transform-origin: center; }
 .project-cover.art-ready > img { opacity:0; }
-.project-illustration { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:hidden; translate:var(--slide-slip, 0px) 0; transition:scale .8s cubic-bezier(.2,.65,.2,1); }
+.gallery.is-moving .project-cover.art-ready > img { opacity:1; }
+.gallery.is-moving .project-illustration { visibility:hidden; }
+.gallery.is-moving .project-cover:hover > img, .gallery.is-moving .project-cover:hover > .project-illustration { scale:1; }
+.project-illustration { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:hidden; transition:scale .8s cubic-bezier(.2,.65,.2,1); }
 /* Each SVG contains the actual animated subject, rather than a shared overlay. */
 .project-cover:not(.is-live) .project-illustration *,
 .project-cover.is-art-paused .project-illustration * { animation-play-state:paused!important; }
