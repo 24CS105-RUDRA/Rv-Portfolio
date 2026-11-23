@@ -81,7 +81,7 @@ Audio unlocks after a trusted pointer or keyboard interaction. **Sound on/off** 
 
 ## Background music
 
-`src/music.js` supplies an original 72 BPM ambient soundtrack with four extended chords, soft bass, and sparse synth plucks. It loops on the audio clock with a short scheduling horizon and fades in gently. **Music on/off** is independent of sound effects, appears in case studies too, and remembers its setting. Music begins only after a visitor interaction, stops scheduling when muted or hidden, and restarts on the next interaction after returning to the tab. There are no downloaded songs or third-party music assets.
+`src/music.js` supplies an original ambient soundtrack with four extended chords, soft bass, and sparse synth plucks. Desktop retains 72 BPM and a 0.12 music bus; coarse-pointer devices use 84 BPM, a 0.28 bus, midrange chord voicing, harmonic bass and clearer plucks so phone speakers can reproduce it. The mobile fade-in is 0.55 seconds versus 1.5 on desktop. The existing compressor remains in the signal path and effect volume is unchanged. It loops on the audio clock with a short scheduling horizon and fades in gently. **Music on/off** is independent of sound effects, appears in case studies too, and remembers its setting. Music begins only after a visitor interaction, stops scheduling when muted or hidden, and restarts on the next interaction after returning to the tab. There are no downloaded songs or third-party music assets.
 
 ## Additional work, entrance, and sharing
 
@@ -161,3 +161,5 @@ The homepage now has visible profile text for Rudra Vaghela (also Rudra Raj Vagh
 The preferred host remains `https://rv-portfolio-five.vercel.app/`: the November23,2026 check could not resolve `rudravaghela.in`. Once the custom domain is connected and serving this portfolio over HTTPS, update canonical URLs, structured IDs, social URLs, robots sitemap and sitemap locations together, and configure redirects to the preferred hostname. Do not canonicalise to a domain that is not serving the site.
 
 Owner action: verify the site in Google Search Console, submit `/sitemap.xml`, then inspect and request indexing for the homepage and `/idea/`. Account/domain verification cannot be completed from source code alone. Use the same name and portfolio link on real public profiles such as the linked GitHub account. Search indexing and rankings are controlled by search engines; metadata and query variants do not guarantee a position or inclusion.
+
+Mobile audio resumes on the next trusted interaction from any non-running, non-closed AudioContext state, including interruption by the phone operating system. Music/effect mute preferences and rage ducking remain independent. Playback still requires an initial visitor interaction.

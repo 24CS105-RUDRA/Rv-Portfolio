@@ -1,9 +1,9 @@
-// Original 72 BPM ambient loop: warm extended chords, soft bass, sparse plucks.
-export function createAmbientMusic(context, destination) {
+// The phone mix moves energy into audible mids rather than boosting sub-bass.
+export function createAmbientMusic(context, destination, {mobile = globalThis.matchMedia?.('(pointer: coarse)').matches ?? false} = {}) {
   const bus=context.createGain();bus.gain.value=0;bus.connect(destination);
   const chords=[[50,57,60,64],[53,60,64,69],[48,55,59,64],[43,50,57,60]];
   const melody=[0,2,1,3,2,0,3,1];
-  const beatLength=60/72,voices=new Set();
+  const beatLength=60/(mobile?84:72),voices=new Set();
   let timer=null,beat=0,nextTime=0,disposed=false;
   const hz=midi=>440*2**((midi-69)/12);
   function note(midi,time,duration,level,type='sine',attack=.04,detune=0) {
@@ -21,21 +21,23 @@ export function createAmbientMusic(context, destination) {
     if(disposed||context.state!=='running')return;
     // Do not catch up a backlog after a stalled frame or sleeping device.
     if(nextTime<context.currentTime-.2)nextTime=context.currentTime+.05;
-    while(nextTime<context.currentTime+.25){
+    // Extra phone look-ahead keeps the beat scheduled during short UI stalls.
+    while(nextTime<context.currentTime+(mobile?.45:.25)){
       const chord=chords[Math.floor(beat/8)%chords.length],step=beat%8;
       if(step===0)chord.forEach((midi,index)=>{
-        note(midi,nextTime,8,.09,'sine',1.4,-3);
-        note(midi,nextTime,8,.045,'sine',1.65,3+index);
+        const pitch=midi+(mobile?12:0);
+        note(pitch,nextTime,mobile?6:8,mobile ? .075 : .09,'sine',mobile ? .4 : 1.4,-3);
+        note(pitch,nextTime,mobile?6:8,mobile ? .035 : .045,'sine',mobile ? .5 : 1.65,3+index);
       });
-      if(step===0||step===4)note(chord[0]-12,nextTime,2.6,.15,'sine',.09);
-      if(step%2===1)note(chord[melody[(beat>>1)%melody.length]]+12,nextTime,1.8,.075,'triangle',.025);
+      if(step===0||step===4)note(chord[0]-(mobile?0:12),nextTime,mobile?1.6:2.6,mobile ? .12 : .15,mobile?'triangle':'sine',.09);
+      if(step%2===1)note(chord[melody[(beat>>1)%melody.length]]+12,nextTime,mobile?1.4:1.8,mobile ? .105 : .075,'triangle',.025);
       beat=(beat+1)%32;nextTime+=beatLength;
     }
   }
   function start(){
     if(disposed||timer!==null||context.state!=='running')return;
     beat=0;nextTime=context.currentTime+.04;
-    bus.gain.cancelScheduledValues(context.currentTime);bus.gain.setValueAtTime(0,context.currentTime);bus.gain.linearRampToValueAtTime(.12,context.currentTime+1.5);
+    bus.gain.cancelScheduledValues(context.currentTime);bus.gain.setValueAtTime(0,context.currentTime);bus.gain.linearRampToValueAtTime(mobile ? .28 : .12,context.currentTime+(mobile ? .55 : 1.5));
     schedule();timer=setInterval(schedule,100);
   }
   function stop(){

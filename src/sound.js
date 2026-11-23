@@ -37,7 +37,7 @@ export function initSound() {
         noise=context.createBuffer(1,Math.ceil(context.sampleRate*1.6),context.sampleRate);
         const data=noise.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=Math.random()*2-1;
       }
-      if(context.state==='suspended')context.resume().then(()=>{if(musicEnabled&&!rageAudio&&!disposed&&!document.hidden)music.start();}).catch(()=>{});
+      if(context.state!=='running'&&context.state!=='closed')context.resume().then(()=>{if(musicEnabled&&!rageAudio&&!disposed&&!document.hidden)music.start();}).catch(()=>{});
       else if(musicEnabled&&!rageAudio)music.start();
     }catch{enabled=musicEnabled=false;update();}
   }
