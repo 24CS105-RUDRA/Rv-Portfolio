@@ -155,7 +155,7 @@ export function initScroll(setFlood, onTheme = () => {}, onGather = () => {}) {
         trigger: '#top', start: 'top top', end: 'bottom bottom', scrub: true,
         onUpdate: self => {
           controls.inert = self.progress > 0.095;
-          work.inert = self.progress < 0.80;
+          work.inert = self.progress < scene.workIn;
           if (self.isActive || self.progress === 0) setCurrent(self.progress >= 0.80 ? 'work' : null);
         },
       },

@@ -90,7 +90,7 @@ img { display: block; max-width: 100%; }
 .gallery::-webkit-scrollbar { display: none; }
 .gallery-track { display: flex; align-items: flex-start; gap: clamp(52px, 7.75vw, 130px); width: max-content; }
 .project { flex: 0 0 clamp(230px, 31.5vw, 510px); width: clamp(230px, 31.5vw, 510px); scroll-snap-align: start; scroll-margin-left: var(--gutter); }
-.project:nth-child(even) { flex-basis: clamp(280px, 38vw, 610px); width: clamp(280px, 38vw, 610px); margin-top: 4svh; }
+:is(.project.project-wide, .no-js .project:nth-child(even)) { flex-basis: clamp(280px, 38vw, 610px); width: clamp(280px, 38vw, 610px); margin-top: 4svh; }
 .project-cover { position: relative; display: block; overflow: hidden; background: var(--cover-bg, var(--black)); }
 .project-cover[data-project="nagardrishti"] { --cover-bg: #e65d43; }
 .project-cover[data-project="ai-sales"] { --cover-bg: #152820; }
@@ -108,7 +108,7 @@ img { display: block; max-width: 100%; }
 .project-cover[data-project="smoker-prediction"] { --cover-bg: #dce2ce; }
 .project-cover[data-project="brainy-beam"] { --cover-bg: #493749; }
 .project-cover img { width: 100%; height: min(calc(100svh - 158px), 77svh, 660px); object-fit: contain; user-select: none; -webkit-user-drag: none; transition: scale .8s cubic-bezier(.2,.65,.2,1); }
-.project:nth-child(even) .project-cover img { height: min(calc(96svh - 158px), 68svh, 570px); }
+:is(.project.project-wide, .no-js .project:nth-child(even)) .project-cover img { height: min(calc(96svh - 158px), 68svh, 570px); }
 .project-cover:hover > img, .project-cover:hover > .project-illustration { scale:1.035; }
 .project-caption { margin-top: 13px; display: flex; gap: 10px; align-items: baseline; }
 .project-caption > span { order: -1; }
@@ -121,7 +121,7 @@ img { display: block; max-width: 100%; }
 .gallery-footer button:hover { transform: translateX(3px); }
 .gallery-footer button:first-child:hover { transform: translateX(-3px); }
 .gallery-footer > span { margin-left: 10px; font-size: 10px; }
-.gallery.is-enhanced { overflow: clip; touch-action: pan-y; scroll-snap-type: none; }
+.gallery.is-enhanced { overflow: clip; touch-action: pan-y pinch-zoom; scroll-snap-type: none; }
 .gallery.is-enhanced .gallery-track { will-change: transform; }
 .gallery.is-dragging, .gallery.is-dragging a { cursor: grabbing; user-select: none; }
 .js:not(.reduced-motion) .intro, .js:not(.reduced-motion) .work-section { visibility: hidden; }
@@ -224,8 +224,8 @@ img { display: block; max-width: 100%; }
   .work-heading { top: 25px; }
   .gallery { top: 70px; bottom: 90px; }
   .gallery-track { gap: 28px; }
-  .project, .project:nth-child(even) { flex-basis: calc(100vw - 80px); width: calc(100vw - 80px); margin-top: 0; }
-  .project-cover img, .project:nth-child(even) .project-cover img { height: min(53svh, max(88px, calc(100svh - 276px)), 460px); }
+  .project, :is(.project.project-wide, .no-js .project:nth-child(even)) { flex-basis: calc(100vw - 80px); width: calc(100vw - 80px); margin-top: 0; }
+  .project-cover img, :is(.project.project-wide, .no-js .project:nth-child(even)) .project-cover img { height: min(53svh, max(88px, calc(100svh - 276px)), 460px); }
   .project-caption { margin-top: 18px; }
   .project-caption h3, .project-caption > span { font-size: 10px; }
   .project-type { font-size: 9px; letter-spacing: .07em; }
@@ -261,9 +261,9 @@ img { display: block; max-width: 100%; }
 @media (max-height: 600px) and (min-width: 601px) {
   .gallery { top: 42px; bottom: 50px; }
   .work-heading { top: 12px; font-size: 9px; }
-  .project:nth-child(even) { margin-top: 4svh; }
+  :is(.project.project-wide, .no-js .project:nth-child(even)) { margin-top: 4svh; }
   .project-cover img { height: min(65svh, max(70px, calc(100svh - 210px))); }
-  .project:nth-child(even) .project-cover img { height: min(59svh, max(60px, calc(96svh - 210px))); }
+  :is(.project.project-wide, .no-js .project:nth-child(even)) .project-cover img { height: min(59svh, max(60px, calc(96svh - 210px))); }
   .project-caption { margin-top: 10px; }
   .gallery-footer { bottom: 5px; }
   .intro-title { font-size: min(8vw, 17svh); }

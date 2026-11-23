@@ -11,6 +11,9 @@ export function initGallery() {
   const events = new AbortController();
   const signal = events.signal;
   const copies = [];
+  // Keep the same dimensions in all three loop copies, even with 15 cards.
+  const wideStates = cards.map(card => card.classList.contains('project-wide'));
+  cards.forEach((card,index) => card.classList.toggle('project-wide',index%2===1));
   const copyCard = card => {
     const copy = card.cloneNode(true);
     copy.dataset.loopCopy = '';
@@ -131,7 +134,9 @@ export function initGallery() {
   }
   window.addEventListener('pointerup', release, {signal});
   gallery.addEventListener('pointercancel', release, {signal});
-  gallery.addEventListener('lostpointercapture', release, {signal});
+  // Touch starts with implicit capture on the image/link. Its capture-loss
+  // bubbles when we take capture for dragging; that is not the end of a swipe.
+  gallery.addEventListener('lostpointercapture', event => {if(event.target===gallery)release(event);}, {signal});
   gallery.addEventListener('dragstart', event => event.preventDefault(), {signal});
   gallery.addEventListener('click', event => {
     if (suppressClick) { event.preventDefault(); event.stopPropagation(); suppressClick = false; }
@@ -139,8 +144,10 @@ export function initGallery() {
   gallery.addEventListener('wheel', event => {
     if (event.ctrlKey) return;
     const delta = event.shiftKey && !event.deltaX ? event.deltaY : event.deltaX;
-    if (!delta || (!event.shiftKey && Math.abs(delta) <= Math.abs(event.deltaY))) return;
+    if (!delta || (!event.shiftKey && (Math.abs(delta)<2 || Math.abs(delta)<Math.abs(event.deltaY)*.5))) return;
     event.preventDefault();
+    event.lenisStopPropagation = true;
+    event.stopPropagation();
     target += delta * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? gallery.clientWidth : 1);
     wake();
     clearTimeout(wheelTimer);
@@ -158,6 +165,7 @@ export function initGallery() {
     destroy() {
       events.abort(); resize.disconnect(); sleep(); clearTimeout(wheelTimer); setMoving(false);
       copies.forEach(copy => copy.remove());
+      cards.forEach((card,index)=>card.classList.toggle('project-wide',wideStates[index]));
       gallery.classList.remove('is-enhanced', 'is-dragging');
       track.style.removeProperty('transform');
       track.style.removeProperty('--slide-slip');
