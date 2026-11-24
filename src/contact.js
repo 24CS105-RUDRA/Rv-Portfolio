@@ -54,7 +54,7 @@ export function initContact(config = contactConfig) {
     }
     const payload = {name: name.value, email: email.value, message: message.value, interest: interest.value,
       _subject: `A portfolio idea · ${interest.value}`, _template: 'table', _honey: '',
-      _url: 'https://rv-portfolio-five.vercel.app/idea/'};
+      _url: 'https://portfolio.rudravaghel.in/idea/'};
     sending = true; submit.disabled = true; label.textContent = 'Sending your idea…';
     fields.forEach(field => {field.disabled = true;});
     form.setAttribute('aria-busy', 'true'); status.textContent = 'Sending. Keep this page open for a moment.';

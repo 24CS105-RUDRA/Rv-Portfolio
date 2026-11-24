@@ -83,7 +83,7 @@ export function renderMachine(parts, { compact = false } = {}) {
     ${moduleBox('route', 87, 320, 180, 107, collected.has('route'), drawRoute())}
     ${moduleBox('wheel', 294, 320, 136, 107, collected.has('wheel'), drawWheel())}
     ${moduleBox('interface', 478, 320, 171, 112, collected.has('interface'), drawInterface())}
-    <a class="machine-idea-socket" data-contact-socket="" href="https://rv-portfolio-five.vercel.app/idea/" aria-label="Your idea goes here — contact Rudra" transform="translate(766 213)" style="color:#a54e36">
+    <a class="machine-idea-socket" data-contact-socket="" href="https://portfolio.rudravaghel.in/idea/" aria-label="Your idea goes here — contact Rudra" transform="translate(766 213)" style="color:#a54e36">
       <rect x="0" y="0" width="182" height="145" rx="17" fill="var(--paper,#f6f5f2)" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 7"/>
       <circle cx="91" cy="59" r="24" fill="none" stroke="currentColor" stroke-width="1.3"/>
       <path d="M80 59h22M91 48v22" ${line}/>
@@ -107,7 +107,7 @@ export function downloadMachinePostcard(parts) {
     <svg x="50" y="186" width="1100" height="572" viewBox="0 0 1000 520" style="font-family:ui-monospace,SFMono-Regular,Consolas,monospace">${drawing.replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '')}</svg>
     <path d="M72 802h1056" fill="none" stroke="#171719" stroke-width="1.5"/>
     <text x="72" y="842" fill="#171719" font-family="Georgia,serif" font-style="italic" font-size="25">with Rudra.</text>
-    <text x="1128" y="840" text-anchor="end" fill="#171719" font-family="monospace" font-size="13">rv-portfolio-five.vercel.app</text>
+    <text x="1128" y="840" text-anchor="end" fill="#171719" font-family="monospace" font-size="13">portfolio.rudravaghel.in</text>
   </svg>`;
   const blob = new Blob([postcard], { type: 'image/svg+xml;charset=utf-8' });
   const url = URL.createObjectURL(blob);

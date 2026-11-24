@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://rv-portfolio-five.vercel.app/sitemap.xml
+
+Sitemap: https://portfolio.rudravaghel.in/sitemap.xml
