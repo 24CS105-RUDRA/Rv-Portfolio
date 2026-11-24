@@ -1,3 +1,4 @@
+import { initVisitorCounter } from './visitor-counter.js';
 import gsap from 'gsap';
 import { initMischief } from './mischief.js';
 import { initWorkshop } from './workshop.js';
@@ -46,6 +47,7 @@ function syncFluid() {
 root.classList.replace('no-js', 'js');
 syncFluid();
 const disposeSound = initSound();
+const disposeVisitorCounter = initVisitorCounter();
 let flood = 0;
 const scroll = initScroll(progress => { flood = progress; }, dark => {fluid?.setTheme(dark); try {sessionStorage.setItem('rudra-paper-theme', dark ? 'dark' : 'light');} catch {}}, progress => fluid?.setGatherProgress(progress));
 const gallery = initGallery();
@@ -71,6 +73,7 @@ reduced.addEventListener('change', () => {
 
 if (import.meta.hot) import.meta.hot.dispose(() => {
   events.abort();
+  disposeVisitorCounter();
   gsap.ticker.remove(renderFluid);
   disposeEntrance();
   disposeMischief();
